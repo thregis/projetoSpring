@@ -7,7 +7,6 @@ import com.example.demo.repository.ProgramaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,7 +33,7 @@ public class ProgramaService {
         return Optional.empty();
     }
 
-    public Optional<ProgramaDTO> addPrograma(ProgramaDTO programaDTO) {
+    public Optional<ProgramaDTO> criaPrograma(ProgramaDTO programaDTO) {
         programaDTO.setActive(true);
         return Optional.of(ProgramaMapper
                 .toProgramaDTO(programaRepository.save(ProgramaMapper.toPrograma(programaDTO))));

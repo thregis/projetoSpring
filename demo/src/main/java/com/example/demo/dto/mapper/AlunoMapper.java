@@ -1,9 +1,7 @@
 package com.example.demo.dto.mapper;
 
 import com.example.demo.dto.AlunoDTO;
-import com.example.demo.dto.MentorDTO;
 import com.example.demo.model.Aluno;
-import com.example.demo.model.Mentor;
 import com.example.demo.model.Programa;
 
 public class AlunoMapper {

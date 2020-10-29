@@ -51,8 +51,14 @@ public class AlunoController {
 
     @PutMapping("/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<String> updateAluno(@PathVariable Long id, @RequestBody Aluno aluno) throws Exception{
-        alunoService.alteraAluno(id, aluno);
+    public ResponseEntity<Optional<AlunoDTO>> updateAluno(@PathVariable Long id, @RequestBody AlunoDTO alunoDTO)/* throws Exception*/{
+        alunoService.alteraAluno(id, alunoDTO);
+        return ok().build();
+    }
+
+    @PutMapping("/reativacao/{id}")
+    public ResponseEntity<Optional<AlunoDTO>> reativaAluno(@PathVariable Long id){
+        alunoService.reativaAluno(id);
         return ok().build();
     }
 }

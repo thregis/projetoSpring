@@ -53,13 +53,24 @@ public class AlunoService {
         return Optional.of(AlunoMapper.toAlunoDTO(alunoRepository.save(aluno.get())));
     }
 
-    public void alteraAluno(Long id, Aluno aluno) throws Exception{
-        Optional<Aluno> alunoOpc = alunoRepository.findById(id);
-        if (!alunoOpc.isPresent()){
-            throw new Exception("id "+id+" não encontrado.");
+    public Optional<AlunoDTO> alteraAluno(Long id, AlunoDTO alunoDTO)/* throws Exception*/{
+        Optional<Aluno> aluno = alunoRepository.findById(id);
+        if (!aluno.isPresent()){
+            return Optional.empty();
         }
-        aluno.setId(id);
-        alunoRepository.save(aluno);
+        alunoDTO.setId(id);
+        alunoDTO.setActive(true);
+        return Optional.of(AlunoMapper
+                .toAlunoDTO(alunoRepository.save(AlunoMapper.toAluno(alunoDTO))));
+
+    }
+
+    public Optional<AlunoDTO> reativaAluno(Long id){
+        Optional<Aluno> aluno = alunoRepository.findById(id);
+        if (aluno.isPresent()){
+            aluno.get().setActive(true);
+        }
+        return Optional.of(AlunoMapper.toAlunoDTO(alunoRepository.save(aluno.get())));
     }
     }
 

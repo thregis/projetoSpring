@@ -9,7 +9,7 @@ import java.util.List;
 public class Programa {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //DEVIA SER IDENTITY MAS TÁ BUGANDO COM FALTA DE DEFAULT EM ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "programaId")
     private Long id;
 

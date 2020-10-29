@@ -5,6 +5,7 @@ import com.example.demo.dto.ProgramaDTO;
 import com.example.demo.model.Mentor;
 import com.example.demo.model.Programa;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,10 @@ public class ProgramaMapper {
     return programa;
     }
     private static List<Mentor> DTOToMentor(ProgramaDTO programaDTO) {
+        if(programaDTO.getMentores() ==null){
+            return Collections.emptyList();
+        }
+
         return programaDTO.getMentores()
                 .stream()
                 .map(MentorMapper::toMentor)

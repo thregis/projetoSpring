@@ -30,7 +30,7 @@ public class ProgramaController {
 
     @PostMapping
     public ResponseEntity<Optional<ProgramaDTO>> postPrograma(@RequestBody ProgramaDTO programaDTO){
-        programaService.addPrograma(programaDTO);
+        programaService.criaPrograma(programaDTO);
         return ResponseEntity.ok().build();
     }
 

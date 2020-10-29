@@ -21,8 +21,8 @@ public class MentorService {
     @Autowired
     private MentorRepository mentorRepository;
 
-    @Autowired
-    private ProgramaService programaservice;
+//    @Autowired
+//    private ProgramaService programaservice;
 
 
     public Optional<List<MentorDTO>> getMentores() {
@@ -41,9 +41,9 @@ public class MentorService {
 //        }
 //        return mentorDTO.get();
         if (mentorRepository.findById(id).get().getActive()){
-        return Optional.of(mentorRepository.findById(id)
-                                .map(MentorMapper::toMentorDTO))
-                                .orElse(Optional.empty());
+            return Optional.of(mentorRepository.findById(id)
+                    .map(MentorMapper::toMentorDTO))
+                    .orElse(Optional.empty());
         } else{
             return Optional.empty();
         }
