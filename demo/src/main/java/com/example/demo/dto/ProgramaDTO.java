@@ -2,6 +2,9 @@ package com.example.demo.dto;
 
 import com.example.demo.model.Mentor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -9,8 +12,11 @@ public class ProgramaDTO {
 
     private Long id;
 
+    @NotNull(message = "Nome precisa ser inserido")
+    @NotEmpty(message = "Nome precisa ser inserido")
     private String name;
 
+    @Past //valida se a data está no passado   @Future faz o inverso
     private LocalDate dataInicio;
 
     private LocalDate dataFinal;

@@ -3,9 +3,14 @@ package com.example.demo.dto.mapper;
 import com.example.demo.dto.AlunoDTO;
 import com.example.demo.model.Aluno;
 import com.example.demo.model.Programa;
+import org.mapstruct.DecoratedWith;
+import org.mapstruct.Mapper;
 
+//@Mapper   TEM QUE SER INTERFACE
+//@DecoratedWith(AlunoMapperDecorator.class)
 public class AlunoMapper {
 
+    //@Mapping(source="aluno.mentor.name", target = "mentorName")
     public static AlunoDTO toAlunoDTO(Aluno aluno){
         AlunoDTO alunoDTO = new AlunoDTO();
         alunoDTO.setId(aluno.getId());
@@ -13,8 +18,10 @@ public class AlunoMapper {
         alunoDTO.setClasse(aluno.getClasse());
         if (aluno.getPrograma() == null){
             alunoDTO.setProgramaId(null);
+            alunoDTO.setProgramaName(null);
         }else{
             alunoDTO.setProgramaId(aluno.getPrograma().getId());
+            alunoDTO.setProgramaName(aluno.getPrograma().getName());
         }
         alunoDTO.setActive(aluno.getActive());
         return alunoDTO;

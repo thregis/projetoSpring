@@ -6,6 +6,7 @@ import com.example.demo.service.MentorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class MentorController {
     }
 
     @PostMapping
-    public ResponseEntity<Optional<MentorDTO>> postMentor(@RequestBody MentorDTO mentorDTO) throws Exception{
+    public ResponseEntity<Optional<MentorDTO>> postMentor(@RequestBody @Validated MentorDTO mentorDTO) throws Exception{
         mentorService.criaMentor(mentorDTO);
         return ResponseEntity.ok().build();
     }
@@ -45,7 +46,7 @@ public class MentorController {
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<Optional<MentorDTO>> updateMentor(@PathVariable Long id, @RequestBody MentorDTO mentorDTO){
+    public ResponseEntity<Optional<MentorDTO>> updateMentor(@PathVariable Long id, @RequestBody @Validated MentorDTO mentorDTO){
         mentorService.alteraMentor(id, mentorDTO);
         return ResponseEntity.ok().build();
     }

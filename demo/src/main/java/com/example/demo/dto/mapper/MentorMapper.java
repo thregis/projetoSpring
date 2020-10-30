@@ -15,8 +15,10 @@ public class MentorMapper {
         mentorDTO.setEscola(mentor.getEscola());
         if (mentor.getPrograma() == null){
             mentorDTO.setProgramaId(null);
+            mentorDTO.setProgramaName(null);
         }else{
             mentorDTO.setProgramaId(mentor.getPrograma().getId());
+            mentorDTO.setProgramaName(mentor.getPrograma().getName());
         }
         mentorDTO.setActive(mentor.getActive());
         return mentorDTO;

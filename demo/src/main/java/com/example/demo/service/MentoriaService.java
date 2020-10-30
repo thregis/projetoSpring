@@ -7,11 +7,13 @@ import com.example.demo.repository.MentoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class MentoriaService {
 
     @Autowired
@@ -66,6 +68,13 @@ public class MentoriaService {
             mentoria.get().setActive(true);
         }
         return Optional.of(MentoriaMapper.toMentoriaDTO(mentoriaRepository.save(mentoria.get())));
+    }
+
+    public void setActiveByAluno(Boolean active, Long id){
+        mentoriaRepository.setActiveByAluno(active, id);
+    }
+    public void setActiveByMentor(Boolean active, Long id){
+        mentoriaRepository.setActiveByMentor(active, id);
     }
 
 }

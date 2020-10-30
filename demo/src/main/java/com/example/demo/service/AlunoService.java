@@ -9,16 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class AlunoService {
 
     @Autowired
     private AlunoRepository alunoRepository;
+
+    @Autowired
+    private MentoriaService mentoriaService;
 
     //private List<String> alunos = new ArrayList<String>(List.of("Paulo", "Paulo Amaral", "Paulo Silva", "Paulo Amaral Silva"));
 
@@ -49,6 +54,7 @@ public class AlunoService {
         Optional<Aluno> aluno = alunoRepository.findById(id);
         if(aluno.isPresent()){
             aluno.get().setActive(false);
+            mentoriaService.setActiveByAluno(false, id);
         }
         return Optional.of(AlunoMapper.toAlunoDTO(alunoRepository.save(aluno.get())));
     }

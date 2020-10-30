@@ -34,7 +34,7 @@ public class FirstMockTest {
 
     @Test
     public void testGetAluno(){
-        var id = 1L;
+        Long id = 1L;
         Programa programa = new Programa();
         programa.setId(2L);
 
@@ -84,7 +84,7 @@ public class FirstMockTest {
 
     @Test
     public void testGetAlunoParaRetornoNuloDoBanco(){
-        var id = 1L;
+        Long id = 1L;
         Mockito.when(alunoRepository.findById(id)).thenReturn(Optional.empty());
 //        AlunoDTO alunoByIndex = this.alunoService.getAlunoByIndex(id);
 //        Assertions.assertAll(

@@ -1,16 +1,21 @@
 package com.example.demo.dto;
 
-import com.example.demo.model.Programa;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class AlunoDTO {
 
     private Long id;
 
+    @NotNull(message = "Necessário inserir nome")
+    @NotEmpty(message = "Nome não pode ser vazio")
     private String name;
 
     private String classe;
 
     private Long programaId;
+    private String programaName; // aparecer nome também
 
     private Boolean active;
 
@@ -54,5 +59,13 @@ public class AlunoDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getProgramaName() {
+        return programaName;
+    }
+
+    public void setProgramaName(String programaName) {
+        this.programaName = programaName;
     }
 }

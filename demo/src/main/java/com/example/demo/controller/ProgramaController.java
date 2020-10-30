@@ -1,11 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ProgramaDTO;
-import com.example.demo.model.Programa;
 import com.example.demo.service.ProgramaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,14 +29,14 @@ public class ProgramaController {
     }
 
     @PostMapping
-    public ResponseEntity<Optional<ProgramaDTO>> postPrograma(@RequestBody ProgramaDTO programaDTO){
+    public ResponseEntity<Optional<ProgramaDTO>> postPrograma(@RequestBody @Validated ProgramaDTO programaDTO){
         programaService.criaPrograma(programaDTO);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<Optional<ProgramaDTO>> updatePrograma(@PathVariable Long id, @RequestBody ProgramaDTO programaDTO)/* throws Exception */{
+    public ResponseEntity<Optional<ProgramaDTO>> updatePrograma(@PathVariable Long id, @RequestBody @Validated ProgramaDTO programaDTO)/* throws Exception */{
         programaService.alteraPrograma(id, programaDTO);
         return ResponseEntity.ok().build();
     }

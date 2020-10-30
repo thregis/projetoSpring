@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class AlunoController {
     //se tivesse um outro endpoint no GetMapping, seria /aluno/novoendpoint
 
     @PostMapping
-    public ResponseEntity<AlunoDTO> criaAluno(@RequestBody AlunoDTO alunoDTO){
+    public ResponseEntity<AlunoDTO> criaAluno(@RequestBody @Validated AlunoDTO alunoDTO){
         alunoService.criaAluno(alunoDTO);
         return ok().build();
     }
@@ -51,7 +52,7 @@ public class AlunoController {
 
     @PutMapping("/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<Optional<AlunoDTO>> updateAluno(@PathVariable Long id, @RequestBody AlunoDTO alunoDTO)/* throws Exception*/{
+    public ResponseEntity<Optional<AlunoDTO>> updateAluno(@PathVariable Long id, @RequestBody @Validated AlunoDTO alunoDTO)/* throws Exception*/{
         alunoService.alteraAluno(id, alunoDTO);
         return ok().build();
     }

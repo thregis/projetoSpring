@@ -1,11 +1,14 @@
 package com.example.demo.dto;
 
-import com.example.demo.model.Programa;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class MentorDTO {
 
     private Long id;
 
+    @NotNull(message = "Nome precisa ser inserido")
+    @NotEmpty(message = "Nome precisa ser inserido")
     private String name;
 
     private int idade;
@@ -15,6 +18,7 @@ public class MentorDTO {
     private String escola;
 
     private Long programaId;
+    private String programaName;
 
     private Boolean active;
 
@@ -78,6 +82,14 @@ public class MentorDTO {
         this.active = active;
     }
 
-// colocar a classe mentor toda aqui e os objetos serão criados nos 2, pra lá ter a responsabilidade do banco de
+    public String getProgramaName() {
+        return programaName;
+    }
+
+    public void setProgramaName(String programaName) {
+        this.programaName = programaName;
+    }
+
+    // colocar a classe mentor toda aqui e os objetos serão criados nos 2, pra lá ter a responsabilidade do banco de
     // dados, e aqui ter a responsabilidade das chamadas de método. falta ajeitar.
 }

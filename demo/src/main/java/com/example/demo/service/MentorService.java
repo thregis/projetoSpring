@@ -8,18 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class MentorService {
 
    // private List<String> mentores = new ArrayList<String>(List.of("Jeremias"));
 
     @Autowired
     private MentorRepository mentorRepository;
+
+    @Autowired
+    private MentoriaService mentoriaService;
 
 //    @Autowired
 //    private ProgramaService programaservice;
@@ -73,6 +78,8 @@ public class MentorService {
         Optional<Mentor> mentor = mentorRepository.findById(id);
         if(mentor.isPresent()) {
             mentor.get().setActive(false);
+            mentoriaService.setActiveByMentor(false, id);
+
         }
 //        mentorRepository.findById(id).map(MentorMapper::toMentorDTO);
 //        if (!mentorDTO.isPresent()){
