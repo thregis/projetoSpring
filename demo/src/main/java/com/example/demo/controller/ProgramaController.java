@@ -23,6 +23,11 @@ public class ProgramaController {
         return new ResponseEntity<Optional<List<ProgramaDTO>>>(programaService.getProgramas(),HttpStatus.OK);
     }
 
+    @GetMapping("/reativacao")
+    public ResponseEntity<Optional<List<ProgramaDTO>>> getProgramasInativos(){
+        return new ResponseEntity<Optional<List<ProgramaDTO>>>(programaService.getProgramasInativos(),HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Optional<ProgramaDTO>> getPrograma(@PathVariable Long id)/* throws Exception */{
         return ResponseEntity.ok(programaService.getProgramaByIndex(id));

@@ -24,6 +24,11 @@ public class MentoriaController {
         return ResponseEntity.ok(mentoriaService.getMentorias());
     }
 
+    @GetMapping("/reativacao")
+    public ResponseEntity<Optional<List<MentoriaDTO>>> getMentoriasInativas(){
+        return ResponseEntity.ok(mentoriaService.getMentoriasInativas());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Optional<MentoriaDTO>> getMentoria(@PathVariable Long id){
         return ResponseEntity.ok().body(mentoriaService.getMentoriaByIndex(id));

@@ -27,6 +27,13 @@ public class DisciplinaService {
                 .collect(Collectors.toList()));
     }
 
+    public Optional<List<DisciplinaDTO>> getDisciplinasInativas() {
+        return Optional.of(disciplinaRepository.findByActive(false)
+                .stream()
+                .map(disciplinaMapper::toDisciplinaDTO)
+                .collect(Collectors.toList()));
+    }
+
     public Optional<DisciplinaDTO> getDisciplinaByIndex(Long id){
         if(disciplinaRepository.findById(id).get().getActive()){
             return Optional.of(disciplinaRepository.findById(id)

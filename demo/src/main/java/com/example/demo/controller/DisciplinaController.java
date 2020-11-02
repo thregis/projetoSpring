@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.DisciplinaDTO;
-import com.example.demo.dto.ProgramaDTO;
-import com.example.demo.model.Disciplina;
 import com.example.demo.service.DisciplinaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +21,10 @@ public class DisciplinaController {
     @GetMapping
     public ResponseEntity<Optional<List<DisciplinaDTO>>> getDisciplinas(){
         return new ResponseEntity<Optional<List<DisciplinaDTO>>>(disciplinaService.getDisciplinas(), HttpStatus.OK);
+    }
+    @GetMapping("/reativacao")
+    public ResponseEntity<Optional<List<DisciplinaDTO>>> getDisciplinasInativas(){
+        return new ResponseEntity<Optional<List<DisciplinaDTO>>>(disciplinaService.getDisciplinasInativas(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

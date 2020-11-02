@@ -27,6 +27,11 @@ public class MentorController {
         return ResponseEntity.ok(mentorService.getMentores());
     }
 
+    @GetMapping("/reativacao")
+    public ResponseEntity<Optional<List<MentorDTO>>> getMentoresInativos(){
+        return ResponseEntity.ok(mentorService.getMentoresInativos());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Optional<MentorDTO>> getMentor(@PathVariable Long id) throws Exception{
         return ResponseEntity.ok().body(mentorService.getMentorByIndex(id));

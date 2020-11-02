@@ -17,19 +17,29 @@ import java.util.stream.Collectors;
 public class MentoriaService {
 
     @Autowired
-    MentoriaRepository mentoriaRepository;
+    private MentoriaRepository mentoriaRepository;
+
+    @Autowired
+    private MentoriaMapper mentoriaMapper;
 
     public Optional<List<MentoriaDTO>> getMentorias(){
         return Optional.of(mentoriaRepository.findByActive(true)
                 .stream()
-                .map(MentoriaMapper::toMentoriaDTO)
+                .map(mentoriaMapper::toMentoriaDTO)
+                .collect(Collectors.toList()));
+    }
+
+    public Optional<List<MentoriaDTO>> getMentoriasInativas(){
+        return Optional.of(mentoriaRepository.findByActive(false)
+                .stream()
+                .map(mentoriaMapper::toMentoriaDTO)
                 .collect(Collectors.toList()));
     }
 
     public Optional<MentoriaDTO> getMentoriaByIndex(Long id){
         if (mentoriaRepository.findById(id).get().getActive()) {
             return Optional.of(mentoriaRepository.findById(id)
-                    .map(MentoriaMapper::toMentoriaDTO))
+                    .map(mentoriaMapper::toMentoriaDTO))
                     .orElse(Optional.empty());
         } else {
             return Optional.empty();
@@ -38,8 +48,8 @@ public class MentoriaService {
 
     public Optional<MentoriaDTO> criaMentoria(MentoriaDTO mentoriaDTO) {
         mentoriaDTO.setActive(true);
-        return Optional.of(MentoriaMapper
-                .toMentoriaDTO(mentoriaRepository.save(MentoriaMapper.toMentoria(mentoriaDTO))));
+        return Optional.of(mentoriaMapper
+                .toMentoriaDTO(mentoriaRepository.save(mentoriaMapper.toMentoria(mentoriaDTO))));
     }
 
     public Optional<MentoriaDTO> alteraMentoria(Long id, MentoriaDTO mentoriaDTO){
@@ -49,8 +59,8 @@ public class MentoriaService {
         }
         mentoriaDTO.setId(id);
         mentoriaDTO.setActive(true);
-        return Optional.of(MentoriaMapper
-                .toMentoriaDTO(mentoriaRepository.save(MentoriaMapper.toMentoria(mentoriaDTO))));
+        return Optional.of(mentoriaMapper
+                .toMentoriaDTO(mentoriaRepository.save(mentoriaMapper.toMentoria(mentoriaDTO))));
 
     }
 
@@ -59,7 +69,7 @@ public class MentoriaService {
         if(mentoria.isPresent()){
             mentoria.get().setActive(false);
         }
-        return Optional.of(MentoriaMapper.toMentoriaDTO(mentoriaRepository.save(mentoria.get())));
+        return Optional.of(mentoriaMapper.toMentoriaDTO(mentoriaRepository.save(mentoria.get())));
     }
 
     public Optional<MentoriaDTO> reativaMentoria(Long id) {
@@ -67,7 +77,7 @@ public class MentoriaService {
         if(mentoria.isPresent()){
             mentoria.get().setActive(true);
         }
-        return Optional.of(MentoriaMapper.toMentoriaDTO(mentoriaRepository.save(mentoria.get())));
+        return Optional.of(mentoriaMapper.toMentoriaDTO(mentoriaRepository.save(mentoria.get())));
     }
 
     public void setActiveByAluno(Boolean active, Long id){

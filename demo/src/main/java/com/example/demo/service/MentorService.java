@@ -26,16 +26,24 @@ public class MentorService {
     @Autowired
     private MentoriaService mentoriaService;
 
-//    @Autowired
-//    private ProgramaService programaservice;
+    @Autowired
+    private MentorMapper mentorMapper;
 
 
     public Optional<List<MentorDTO>> getMentores() {
 
         return Optional.of(mentorRepository.findByActive(true)
                                 .stream()
-                                .map(MentorMapper::toMentorDTO)
+                                .map(mentorMapper::toMentorDTO)
                                 .collect(Collectors.toList()));
+    }
+
+    public Optional<List<MentorDTO>> getMentoresInativos() {
+
+        return Optional.of(mentorRepository.findByActive(false)
+                .stream()
+                .map(mentorMapper::toMentorDTO)
+                .collect(Collectors.toList()));
     }
 
     public Optional<MentorDTO> getMentorByIndex(Long id)/*throws Exception*/{
@@ -47,7 +55,7 @@ public class MentorService {
 //        return mentorDTO.get();
         if (mentorRepository.findById(id).get().getActive()){
             return Optional.of(mentorRepository.findById(id)
-                    .map(MentorMapper::toMentorDTO))
+                    .map(mentorMapper::toMentorDTO))
                     .orElse(Optional.empty());
         } else{
             return Optional.empty();
@@ -56,22 +64,9 @@ public class MentorService {
 
     public Optional<MentorDTO> criaMentor(MentorDTO mentorDTO) throws Exception{
 
-//        if(programaservice.getProgramaByIndex(mentorDTO.getProgramaId())==null){
-//            mentorDTO.setProgramaId(null);
-//            mentorRepository.save(MentorMapper.toMentor(mentorDTO));
-//            throw new Exception("id de programa adicionado não é válido.");
-//        }else {
-//            mentorRepository.save(MentorMapper.toMentor(mentorDTO));
-//        }
-
-//        Mentor mentor = MentorMapper.toMentor(mentorDTO);
-//        Mentor savedMentor = mentorRepository.save(mentor);
-//        return MentorMapper.toMentorDTO(savedMentor);
-
-        //mentorRepository.save(MentorMapper.toMentor(mentorDTO));
         mentorDTO.setActive(true);
-        return Optional.of(MentorMapper
-                .toMentorDTO(mentorRepository.save(MentorMapper.toMentor(mentorDTO))));
+        return Optional.of(mentorMapper
+                .toMentorDTO(mentorRepository.save(mentorMapper.toMentor(mentorDTO))));
     }
 
     public Optional<MentorDTO> removeMentorByIndex(Long id){
@@ -81,11 +76,8 @@ public class MentorService {
             mentoriaService.setActiveByMentor(false, id);
 
         }
-//        mentorRepository.findById(id).map(MentorMapper::toMentorDTO);
-//        if (!mentorDTO.isPresent()){
-//            throw new Exception ("id "+id+" não encontrado.");
-//        }
-        return Optional.of(MentorMapper.toMentorDTO(mentorRepository.save(mentor.get())));// mentorRepository.deleteById(id);
+
+        return Optional.of(mentorMapper.toMentorDTO(mentorRepository.save(mentor.get())));// mentorRepository.deleteById(id);
     }
 
     public Optional<MentorDTO> alteraMentor(Long id, MentorDTO mentorDTO){
@@ -95,8 +87,8 @@ public class MentorService {
         }else{
             mentorDTO.setId(id);
             mentorDTO.setActive(true);
-            return Optional.of(MentorMapper
-                    .toMentorDTO(mentorRepository.save(MentorMapper.toMentor(mentorDTO))));
+            return Optional.of(mentorMapper
+                    .toMentorDTO(mentorRepository.save(mentorMapper.toMentor(mentorDTO))));
         }
     }
     public Optional<MentorDTO> reativaMentor(Long id){
@@ -104,7 +96,7 @@ public class MentorService {
         if(mentor.isPresent()) {
             mentor.get().setActive(true);
         }
-        return Optional.of(MentorMapper.toMentorDTO(mentorRepository.save(mentor.get())));
+        return Optional.of(mentorMapper.toMentorDTO(mentorRepository.save(mentor.get())));
     }
     }
 

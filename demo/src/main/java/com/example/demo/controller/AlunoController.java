@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.AlunoDTO;
 import com.example.demo.model.Aluno;
 import com.example.demo.service.AlunoService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
@@ -22,11 +23,15 @@ public class AlunoController {
     @Autowired
     private AlunoService alunoService;
 
-    @GetMapping//("/whatever")
+    @GetMapping
     public ResponseEntity<Optional<List<AlunoDTO>>> getAlunos(){
        return ResponseEntity.ok(alunoService.getAlunos());
     }
 
+    @GetMapping("/reativacao")
+    public ResponseEntity<Optional<List<AlunoDTO>>> getAlunosInativos(){
+        return ResponseEntity.ok(alunoService.getAlunosInativos());
+    }
     //O ResponseEntity não é necessário, mas permite passar outras respostas, ou header, etc
 
     @GetMapping("/{id}")
