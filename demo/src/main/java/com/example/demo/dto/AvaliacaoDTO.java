@@ -1,7 +1,5 @@
 package com.example.demo.dto;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class AvaliacaoDTO {
@@ -14,7 +12,7 @@ public class AvaliacaoDTO {
 
     private Long disciplinaId;
     private String disciplinaName;
-    
+
     private Double nota;
 
     private LocalDate data;

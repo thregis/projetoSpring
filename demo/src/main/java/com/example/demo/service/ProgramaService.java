@@ -68,6 +68,7 @@ public class ProgramaService {
         if(programa.isPresent()){
            programa.get().setActive(false);
         }
+        //Lançar exceção pra não deixar excluir se tiver alunos vinculados ao programa
         return Optional.of(programaMapper
                 .toProgramaDTO(programaRepository.save(programa.get())));
     }
