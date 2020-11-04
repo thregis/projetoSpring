@@ -14,7 +14,7 @@ public class Aluno {
     private Long id;
 
     @Column(name = "alunoName")
-    @Size(min = 3, max = 50)
+    @Size(min = 3, max = 50, message = "Mínimo de 3 caracteres, máximo de 50.")
     private String name;
 
     @Column(name = "alunoClasse")

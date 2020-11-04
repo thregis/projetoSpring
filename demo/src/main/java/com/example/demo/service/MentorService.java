@@ -2,14 +2,13 @@ package com.example.demo.service;
 
 import com.example.demo.dto.MentorDTO;
 import com.example.demo.dto.mapper.MentorMapper;
+import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Mentor;
 import com.example.demo.repository.MentorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,7 +61,7 @@ public class MentorService {
         }
     }
 
-    public Optional<MentorDTO> criaMentor(MentorDTO mentorDTO) throws Exception{
+    public Optional<MentorDTO> criaMentor(MentorDTO mentorDTO)/* throws Exception*/{
 
         mentorDTO.setActive(true);
         return Optional.of(mentorMapper
@@ -71,13 +70,15 @@ public class MentorService {
 
     public Optional<MentorDTO> removeMentorByIndex(Long id){
         Optional<Mentor> mentor = mentorRepository.findById(id);
+
         if(mentor.isPresent()) {
             mentor.get().setActive(false);
             mentoriaService.setActiveByMentor(false, id);
-
+            return Optional.of(mentorMapper.toMentorDTO(mentorRepository.save(mentor.get())));// mentorRepository.deleteById(id);
+        }else{
+            throw new NotFoundException();
         }
 
-        return Optional.of(mentorMapper.toMentorDTO(mentorRepository.save(mentor.get())));// mentorRepository.deleteById(id);
     }
 
     public Optional<MentorDTO> alteraMentor(Long id, MentorDTO mentorDTO){
@@ -99,17 +100,4 @@ public class MentorService {
         return Optional.of(mentorMapper.toMentorDTO(mentorRepository.save(mentor.get())));
     }
     }
-
-
-    //COM BANCO E DTO
-//    public MentorDTO getAlunoByIndex(Long id){
-//        Mentor mentor = alunoRepository.findById(id).orElse(null);
-//        MentorDTO mentorDTO = new MentorDTO();
-//        mentorDTO.setId(aluno.getId());
-//        mentorDTO.setClasse(aluno.getC.asse());
-//        mentorDTO.setName(aluno.getName());
-//        mentorDTO.setAlunoName(mentor.getAluno().getName()); // aqui é o inverso. ele tava fazendo em aluno pra mostrar os mentores etc
-//        return mentorDTO;
-//    }
-
 

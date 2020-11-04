@@ -30,6 +30,9 @@ public class AlunoServiceTest {
     AlunoService alunoService;
 
     @Mock
+    MentoriaService mentoriaService;
+
+    @Mock
     AlunoMapper alunoMapper;
 
 
@@ -212,77 +215,136 @@ public class AlunoServiceTest {
                 () -> Assertions.assertEquals(aluno.getPrograma().getId(), alunoSalvo.get().getProgramaId()),
                 () -> Assertions.assertEquals(aluno.getPrograma().getName(), alunoSalvo.get().getProgramaName())
         );
-//        Assertions.assertTrue(alunoSalvo.isPresent());
 
     }
 
 
     @Test
     public void testPutAluno() {
-//        Programa programa = new Programa();
-//        programa.setId(1L);
-//
-//        Aluno aluno = new Aluno();
+        Programa programa = new Programa();
+        programa.setId(1L);
+        programa.setName("testeteste");
+
+        Aluno aluno = new Aluno();
+        aluno.setId(1L);
+        aluno.setName("t");
+        aluno.setClasse("teste");
+        aluno.setActive(true);
+        aluno.setPrograma(programa);
+
+        AlunoDTO alunoDTO = new AlunoDTO();
+        alunoDTO.setId(1L);
+        alunoDTO.setName("t");
+        alunoDTO.setClasse("teste");
+        alunoDTO.setActive(true);
+        alunoDTO.setProgramaId(1L);
+        alunoDTO.setProgramaName("testeteste");
+
+//        Aluno aluno2 = new Aluno();
 //        aluno.setId(1L);
-//        aluno.setName("t");
-//        aluno.setClasse("teste");
+//        aluno.setName("f");
+//        aluno.setClasse("etset");
 //        aluno.setActive(true);
 //        aluno.setPrograma(programa);
 //
-//        AlunoDTO alunoDTO = alunoMapper.toAlunoDTO(aluno);
-//
-//        Mockito.when(alunoRepository.save(aluno)).thenReturn(aluno);
-//
-//        Optional<AlunoDTO> alunoSalvo = this.alunoService.criaAluno(alunoDTO);
-//
-//        Assertions.assertTrue(alunoSalvo.isPresent());
+//        AlunoDTO alunoDTO2 = new AlunoDTO();
+//        alunoDTO.setId(1L);
+//        alunoDTO.setName("f");
+//        alunoDTO.setClasse("etset");
+//        alunoDTO.setActive(true);
+//        alunoDTO.setProgramaId(1L);
+//        alunoDTO.setProgramaName("testeteste");
+
+        Mockito.when(alunoRepository.save(aluno)).thenReturn(aluno);
+        Mockito.when(alunoRepository.findById(1L)).thenReturn(Optional.of(aluno));
+        Mockito.when(alunoMapper.toAlunoDTO(aluno)).thenReturn(alunoDTO);
+        Mockito.when(alunoMapper.toAluno(alunoDTO)).thenReturn(aluno);
+//        Mockito.when(alunoMapper.toAlunoDTO(aluno2)).thenReturn(alunoDTO2);
+//        Mockito.when(alunoMapper.toAluno(alunoDTO2)).thenReturn(aluno2);
+
+        Optional<AlunoDTO> alunoAlterado = this.alunoService.alteraAluno(1L, alunoDTO);
+
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(alunoAlterado.isPresent()),
+                () -> Assertions.assertEquals(alunoDTO.getId(), alunoAlterado.get().getId())
+        );
+
+
     }
 
 
     @Test
     public void testDeleteAluno() {
 
-//        Long id = 1L;
-//
-//        Programa programa = new Programa();
-//        programa.setId(2L);
-//        programa.setName("testeteste");
-//
-//        Aluno aluno = new Aluno();
-//        aluno.setName("t");
-//        aluno.setClasse("teste");
-//        aluno.setId(1L);
-//        aluno.setActive(true);
-//        aluno.setPrograma(programa);
-//
-//        Mockito.when(alunoRepository.findById(id)).thenReturn(Optional.of(aluno));
-//
-//        Optional<AlunoDTO> alunoByIndex = this.alunoService.removeAluno(id); //CHAMADA DO MÉTODO A TESTAR
-//
-//        Assertions.assertTrue(alunoRepository.findByActive(false).contains(alunoByIndex));
+        Long id = 1L;
+
+        Programa programa = new Programa();
+        programa.setId(2L);
+        programa.setName("testeteste");
+
+        Aluno aluno = new Aluno();
+        aluno.setName("t");
+        aluno.setClasse("teste");
+        aluno.setId(id);
+        aluno.setActive(true);
+        aluno.setPrograma(programa);
+
+        AlunoDTO alunoDTO = new AlunoDTO();
+        alunoDTO.setName("t");
+        alunoDTO.setClasse("teste");
+        alunoDTO.setId(id);
+        alunoDTO.setActive(true);
+        alunoDTO.setProgramaId(2L);
+        alunoDTO.setProgramaName("testeteste");
+
+        Mockito.when(alunoRepository.findById(id)).thenReturn(Optional.of(aluno));
+        Mockito.when(alunoRepository.save(aluno)).thenReturn(aluno);
+        Mockito.when(alunoMapper.toAlunoDTO(aluno)).thenReturn(alunoDTO);
+        Mockito.doNothing().when(mentoriaService).setActiveByAluno(false, id);
+
+        Optional<AlunoDTO> alunoRemoval = this.alunoService.removeAluno(id); //CHAMADA DO MÉTODO A TESTAR
+
+        Mockito.verify(mentoriaService, Mockito.times(1)).setActiveByAluno(false, id);
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(false, aluno.getActive())
+        );
+
 
     }
 
     @Test
     public void testReativaAluno() {
 
-//        Long id = 1L;
-//
-//        Programa programa = new Programa();
-//        programa.setId(2L);
-//        programa.setName("testeteste");
-//
-//        Aluno aluno = new Aluno();
-//        aluno.setName("t");
-//        aluno.setClasse("teste");
-//        aluno.setId(1L);
-//        aluno.setActive(false);
-//        aluno.setPrograma(programa);
-//
-//        Mockito.when(alunoRepository.findById(id)).thenReturn(Optional.of(aluno));
-//
-//        Optional<AlunoDTO> alunoByIndex = this.alunoService.reativaAluno(id); //CHAMADA DO MÉTODO A TESTAR
-//
-//        Assertions.assertTrue(alunoRepository.findByActive(true).contains(alunoByIndex));
+        Long id = 1L;
+
+        Programa programa = new Programa();
+        programa.setId(2L);
+        programa.setName("testeteste");
+
+        Aluno aluno = new Aluno();
+        aluno.setName("t");
+        aluno.setClasse("teste");
+        aluno.setId(id);
+        aluno.setActive(false);
+        aluno.setPrograma(programa);
+
+        AlunoDTO alunoDTO = new AlunoDTO();
+        alunoDTO.setName("t");
+        alunoDTO.setClasse("teste");
+        alunoDTO.setId(id);
+        alunoDTO.setActive(false);
+        alunoDTO.setProgramaId(2L);
+        alunoDTO.setProgramaName("testeteste");
+
+        Mockito.when(alunoRepository.findById(id)).thenReturn(Optional.of(aluno));
+        Mockito.when(alunoRepository.save(aluno)).thenReturn(aluno);
+        Mockito.when(alunoMapper.toAlunoDTO(aluno)).thenReturn(alunoDTO);
+
+        Optional<AlunoDTO> alunoReactive = this.alunoService.reativaAluno(id); //CHAMADA DO MÉTODO A TESTAR
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(true, aluno.getActive())
+        );
     }
 }

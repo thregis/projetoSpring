@@ -45,8 +45,16 @@ public class MentorController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Mentor> deleteMentor(@PathVariable Long id){
-        mentorService.removeMentorByIndex(id);
-        return ResponseEntity.ok().build();
+            mentorService.removeMentorByIndex(id);  //COM A ANOTAÇÃO NÃO PRECISA TRATAR PORQUE SE DER A EXCEÇÃO ELE PEGA DIRETO DE LÁ.
+            return  ResponseEntity.accepted().build();
+
+        //        try {            SEM ANOTAÇÃO DE RESPONSESTATUS NA EXCEÇÃO
+//            mentorService.removeMentorByIndex(id);
+//            return ResponseEntity.accepted().build();
+////            return ResponseEntity.ok().build();
+//        } catch(MentorNotFoundException ex){
+//            return ResponseEntity.notFound().build();
+//        }
     }
 
     @PutMapping("/{id}")
