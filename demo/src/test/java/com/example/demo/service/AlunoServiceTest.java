@@ -187,14 +187,12 @@ public class AlunoServiceTest {
         aluno.setId(1L);
         aluno.setName("t");
         aluno.setClasse("teste");
-        aluno.setActive(true);
         aluno.setPrograma(programa);
 
         AlunoDTO alunoDTO = new AlunoDTO();
         alunoDTO.setId(1L);
         alunoDTO.setName("t");
         alunoDTO.setClasse("teste");
-        alunoDTO.setActive(true);
         alunoDTO.setProgramaId(1L);
         alunoDTO.setProgramaName("testeteste");
 
@@ -211,9 +209,10 @@ public class AlunoServiceTest {
                 () -> Assertions.assertEquals(aluno.getId(), alunoSalvo.get().getId()),
                 () -> Assertions.assertEquals(aluno.getName(), alunoSalvo.get().getName()),
                 () -> Assertions.assertEquals(aluno.getClasse(), alunoSalvo.get().getClasse()),
-                () -> Assertions.assertEquals(aluno.getActive(), alunoSalvo.get().getActive()),
                 () -> Assertions.assertEquals(aluno.getPrograma().getId(), alunoSalvo.get().getProgramaId()),
-                () -> Assertions.assertEquals(aluno.getPrograma().getName(), alunoSalvo.get().getProgramaName())
+                () -> Assertions.assertEquals(aluno.getPrograma().getName(), alunoSalvo.get().getProgramaName()),
+                () -> Assertions.assertEquals(true, alunoSalvo.get().getActive()),
+                () -> Assertions.assertFalse(aluno.getActive() == alunoSalvo.get().getActive())
         );
 
     }
@@ -240,27 +239,10 @@ public class AlunoServiceTest {
         alunoDTO.setProgramaId(1L);
         alunoDTO.setProgramaName("testeteste");
 
-//        Aluno aluno2 = new Aluno();
-//        aluno.setId(1L);
-//        aluno.setName("f");
-//        aluno.setClasse("etset");
-//        aluno.setActive(true);
-//        aluno.setPrograma(programa);
-//
-//        AlunoDTO alunoDTO2 = new AlunoDTO();
-//        alunoDTO.setId(1L);
-//        alunoDTO.setName("f");
-//        alunoDTO.setClasse("etset");
-//        alunoDTO.setActive(true);
-//        alunoDTO.setProgramaId(1L);
-//        alunoDTO.setProgramaName("testeteste");
-
         Mockito.when(alunoRepository.save(aluno)).thenReturn(aluno);
         Mockito.when(alunoRepository.findById(1L)).thenReturn(Optional.of(aluno));
         Mockito.when(alunoMapper.toAlunoDTO(aluno)).thenReturn(alunoDTO);
         Mockito.when(alunoMapper.toAluno(alunoDTO)).thenReturn(aluno);
-//        Mockito.when(alunoMapper.toAlunoDTO(aluno2)).thenReturn(alunoDTO2);
-//        Mockito.when(alunoMapper.toAluno(alunoDTO2)).thenReturn(aluno2);
 
         Optional<AlunoDTO> alunoAlterado = this.alunoService.alteraAluno(1L, alunoDTO);
 
@@ -268,7 +250,6 @@ public class AlunoServiceTest {
                 () -> Assertions.assertTrue(alunoAlterado.isPresent()),
                 () -> Assertions.assertEquals(alunoDTO.getId(), alunoAlterado.get().getId())
         );
-
 
     }
 

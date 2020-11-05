@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.MentorDTO;
+import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Mentor;
 import com.example.demo.service.MentorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,56 +17,56 @@ import java.util.Optional;
 @RequestMapping("/mentor")
 public class MentorController {
 
-   // @Autowired
+    // @Autowired
     //MentorRepository mentorRepository;
 
     @Autowired
     MentorService mentorService;
 
     @GetMapping
-    public ResponseEntity<Optional<List<MentorDTO>>> getMentores(){
+    public ResponseEntity<Optional<List<MentorDTO>>> getMentores() {
         return ResponseEntity.ok(mentorService.getMentores());
     }
 
     @GetMapping("/reativacao")
-    public ResponseEntity<Optional<List<MentorDTO>>> getMentoresInativos(){
+    public ResponseEntity<Optional<List<MentorDTO>>> getMentoresInativos() {
         return ResponseEntity.ok(mentorService.getMentoresInativos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<MentorDTO>> getMentor(@PathVariable Long id) throws Exception{
+    public ResponseEntity<Optional<MentorDTO>> getMentor(@PathVariable Long id) throws Exception {
         return ResponseEntity.ok().body(mentorService.getMentorByIndex(id));
     }
 
     @PostMapping
-    public ResponseEntity<Optional<MentorDTO>> postMentor(@RequestBody @Validated MentorDTO mentorDTO) throws Exception{
+    public ResponseEntity<Optional<MentorDTO>> postMentor(@RequestBody @Validated MentorDTO mentorDTO) throws Exception {
         mentorService.criaMentor(mentorDTO);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Mentor> deleteMentor(@PathVariable Long id){
+    public ResponseEntity<Mentor> deleteMentor(@PathVariable Long id) {
             mentorService.removeMentorByIndex(id);  //COM A ANOTAÇÃO NÃO PRECISA TRATAR PORQUE SE DER A EXCEÇÃO ELE PEGA DIRETO DE LÁ.
-            return  ResponseEntity.accepted().build();
+            return  ResponseEntity.ok().build();
 
-        //        try {            SEM ANOTAÇÃO DE RESPONSESTATUS NA EXCEÇÃO
+//        try {           // SEM ANOTAÇÃO DE RESPONSESTATUS NA EXCEÇÃO, OU SE QUISER PASSAR A MENSAGEM NO BODY DA RESPOSTA
 //            mentorService.removeMentorByIndex(id);
-//            return ResponseEntity.accepted().build();
-////            return ResponseEntity.ok().build();
-//        } catch(MentorNotFoundException ex){
-//            return ResponseEntity.notFound().build();
+//            return ResponseEntity.ok().build();
+//
+//        } catch (NotFoundException ex) {
+//            return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
 //        }
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<Optional<MentorDTO>> updateMentor(@PathVariable Long id, @RequestBody @Validated MentorDTO mentorDTO){
+    public ResponseEntity<Optional<MentorDTO>> updateMentor(@PathVariable Long id, @RequestBody @Validated MentorDTO mentorDTO) {
         mentorService.alteraMentor(id, mentorDTO);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/reativacao/{id}")
-    public ResponseEntity<Optional<MentorDTO>> reativaMentor(@PathVariable Long id){
+    public ResponseEntity<Optional<MentorDTO>> reativaMentor(@PathVariable Long id) {
         mentorService.reativaMentor(id);
         return ResponseEntity.ok().build();
     }

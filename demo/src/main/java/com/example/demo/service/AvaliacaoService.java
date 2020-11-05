@@ -79,4 +79,8 @@ public class AvaliacaoService {
         }
         return Optional.of(avaliacaoMapper.toAvaliacaoDTO(avaliacaoRepository.save(avaliacao.get())));
     }
+
+    public void setActiveByMentoria(Boolean active, Long id){
+        avaliacaoRepository.setActiveByMentoria(active, id);
+    }
 }

@@ -99,7 +99,7 @@ public class MentorServiceTest {
         mentor.setPais("teste");
         mentor.setIdade(1);
         mentor.setEscola("testeteste");
-        mentor.setActive(true);
+        mentor.setActive(false);
         mentor.setPrograma(programa);
 
         MentorDTO mentorDTO = new MentorDTO();
@@ -108,7 +108,7 @@ public class MentorServiceTest {
         mentorDTO.setPais("teste");
         mentorDTO.setIdade(1);
         mentorDTO.setEscola("testeteste");
-        mentorDTO.setActive(true);
+        mentorDTO.setActive(false);
         mentorDTO.setProgramaId(1L);
         mentorDTO.setProgramaName("testeteste");
 
@@ -118,7 +118,7 @@ public class MentorServiceTest {
         mentor2.setPais("testee");
         mentor2.setIdade(2);
         mentor2.setEscola("testeteste");
-        mentor2.setActive(true);
+        mentor2.setActive(false);
         mentor2.setPrograma(programa);
 
 
@@ -200,7 +200,6 @@ public class MentorServiceTest {
         mentor.setPais("teste");
         mentor.setIdade(1);
         mentor.setEscola("testeteste");
-        mentor.setActive(true);
         mentor.setPrograma(programa);
 
         MentorDTO mentorDTO = new MentorDTO();
@@ -209,7 +208,6 @@ public class MentorServiceTest {
         mentorDTO.setPais("teste");
         mentorDTO.setIdade(1);
         mentorDTO.setEscola("testeteste");
-        mentorDTO.setActive(true);
         mentorDTO.setProgramaId(1L);
         mentorDTO.setProgramaName("testeteste");
 
@@ -226,11 +224,12 @@ public class MentorServiceTest {
                 () -> Assertions.assertEquals(mentor.getName(), mentorSalvo.get().getName()),
                 () -> Assertions.assertEquals(mentor.getEscola(), mentorSalvo.get().getEscola()),
                 () -> Assertions.assertEquals(mentor.getId(), mentorSalvo.get().getId()),
-                () -> Assertions.assertEquals(mentor.getActive(), mentorSalvo.get().getActive()),
                 () -> Assertions.assertEquals(mentor.getIdade(), mentorSalvo.get().getIdade()),
                 () -> Assertions.assertEquals(mentor.getPais(), mentorSalvo.get().getPais()),
                 () -> Assertions.assertEquals(mentor.getPrograma().getId(), mentorSalvo.get().getProgramaId()),
-                () -> Assertions.assertEquals(mentor.getPrograma().getName(), mentorSalvo.get().getProgramaName())
+                () -> Assertions.assertEquals(mentor.getPrograma().getName(), mentorSalvo.get().getProgramaName()),
+                () -> Assertions.assertEquals(true, mentorSalvo.get().getActive()),
+                () -> Assertions.assertFalse(mentor.getActive() == mentorSalvo.get().getActive())
         );
 
     }
@@ -261,11 +260,13 @@ public class MentorServiceTest {
         mentorDTO.setProgramaId(1L);
         mentorDTO.setProgramaName("testeteste");
 
+
         Mockito.when(mentorRepository.save(mentor)).thenReturn(mentor);
         Mockito.when(mentorRepository.findById(1L)).thenReturn(Optional.of(mentor));
         Mockito.when(mentorMapper.toMentorDTO(mentor)).thenReturn(mentorDTO);
         Mockito.when(mentorMapper.toMentor(mentorDTO)).thenReturn(mentor);
 
+        Assertions.assertEquals("t", mentorRepository.findById(1L).get().getName());
 
         Optional<MentorDTO> mentorAlterado = this.mentorService.alteraMentor(1L, mentorDTO);
 
@@ -279,7 +280,7 @@ public class MentorServiceTest {
 
 
     @Test
-    public void testDeleteAluno() {
+    public void testDeleteMentor() {
 
         Long id = 1L;
 
@@ -337,7 +338,7 @@ public class MentorServiceTest {
         mentor.setPais("teste");
         mentor.setIdade(1);
         mentor.setEscola("testeteste");
-        mentor.setActive(true);
+        mentor.setActive(false);
         mentor.setPrograma(programa);
 
         MentorDTO mentorDTO = new MentorDTO();
@@ -346,7 +347,7 @@ public class MentorServiceTest {
         mentorDTO.setPais("teste");
         mentorDTO.setIdade(1);
         mentorDTO.setEscola("testeteste");
-        mentorDTO.setActive(true);
+        mentorDTO.setActive(false);
         mentorDTO.setProgramaId(1L);
         mentorDTO.setProgramaName("testeteste");
 

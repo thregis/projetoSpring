@@ -19,7 +19,7 @@ public interface MentoriaRepository extends JpaRepository<Mentoria, Long> {
 
 
     @Modifying
-    @Query(value = "update mentoria set mentoriaActive = ?1 where mentoriaMentor in (select mentorId from mentor where mentoriaId = ?2", nativeQuery = true)
+    @Query(value = "update mentoria set mentoriaActive = ?1 where mentoriaMentor in (select mentorId from mentor where mentoriaId = ?2)", nativeQuery = true)
     void setActiveByMentor(Boolean active, Long id);
 
 }

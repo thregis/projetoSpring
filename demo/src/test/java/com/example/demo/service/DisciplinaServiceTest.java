@@ -78,20 +78,20 @@ public class DisciplinaServiceTest {
         disciplina.setId(1L);
         disciplina.setName("t");
         disciplina.setDescricao("testeteste");
-        disciplina.setActive(true);
+        disciplina.setActive(false);
 
 
         DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
         disciplinaDTO.setId(1L);
         disciplinaDTO.setName("t");
         disciplinaDTO.setDescricao("testeteste");
-        disciplinaDTO.setActive(true);
+        disciplinaDTO.setActive(false);
 
         Disciplina disciplina2 = new Disciplina();
         disciplina2.setId(2L);
         disciplina2.setName("t2");
         disciplina2.setDescricao("testeteste2");
-        disciplina2.setActive(true);
+        disciplina2.setActive(false);
 
 
         List<Disciplina> disciplinas = new ArrayList<Disciplina>();
@@ -151,14 +151,12 @@ public class DisciplinaServiceTest {
         disciplina.setId(1L);
         disciplina.setName("t");
         disciplina.setDescricao("testeteste");
-        disciplina.setActive(true);
 
 
         DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
         disciplinaDTO.setId(1L);
         disciplinaDTO.setName("t");
         disciplinaDTO.setDescricao("testeteste");
-        disciplinaDTO.setActive(true);
 
 
 
@@ -174,7 +172,8 @@ public class DisciplinaServiceTest {
                 () -> Assertions.assertEquals(disciplina.getName(), disciplinaSalva.get().getName()),
                 () -> Assertions.assertEquals(disciplina.getDescricao(), disciplinaSalva.get().getDescricao()),
                 () -> Assertions.assertEquals(disciplina.getId(), disciplinaSalva.get().getId()),
-                () -> Assertions.assertEquals(disciplina.getActive(), disciplinaSalva.get().getActive())
+                () -> Assertions.assertEquals(true, disciplinaSalva.get().getActive()),
+                () -> Assertions.assertFalse(disciplina.getActive() == disciplinaSalva.get().getActive())
         );
 
     }
@@ -255,14 +254,14 @@ public class DisciplinaServiceTest {
         disciplina.setId(id);
         disciplina.setName("t");
         disciplina.setDescricao("testeteste");
-        disciplina.setActive(true);
+        disciplina.setActive(false);
 
 
         DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
         disciplinaDTO.setId(id);
         disciplinaDTO.setName("t");
         disciplinaDTO.setDescricao("testeteste");
-        disciplinaDTO.setActive(true);
+        disciplinaDTO.setActive(false);
 
 
         Mockito.when(disciplinaRepository.findById(id)).thenReturn(Optional.of(disciplina));
