@@ -1,10 +1,14 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.AlunoDTO;
+import com.example.demo.dto.MentorDTO;
 import com.example.demo.dto.MentoriaDTO;
 import com.example.demo.dto.mapper.MentoriaMapper;
 import com.example.demo.model.Aluno;
 import com.example.demo.model.Mentor;
 import com.example.demo.model.Mentoria;
+import com.example.demo.repository.AlunoRepository;
+import com.example.demo.repository.MentorRepository;
 import com.example.demo.repository.MentoriaRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -36,6 +40,11 @@ public class MentoriaServiceTest {
     @Mock
     MentoriaMapper mentoriaMapper;
 
+    @Mock
+    AlunoService alunoService;
+    @Mock
+    MentorService mentorService;
+
 
     @Test
     public void testGetMentoriasAtivas() {
@@ -44,11 +53,11 @@ public class MentoriaServiceTest {
 
         Aluno aluno = new Aluno();
         aluno.setId(id);
-        aluno.setName("t");
+        aluno.setName("teste");
 
         Mentor mentor = new Mentor();
         mentor.setId(id);
-        mentor.setName("tt");
+        mentor.setName("teste");
 
         Mentoria mentoria = new Mentoria();
         mentoria.setId(id);
@@ -190,11 +199,25 @@ public class MentoriaServiceTest {
 
         Aluno aluno = new Aluno();
         aluno.setId(id);
-        aluno.setName("t");
+//        aluno.setName("teste");
+//        aluno.setClasse("teste");
+
+        AlunoDTO alunoDTO = new AlunoDTO();
+        alunoDTO.setId(id);
+//        alunoDTO.setName("teste");
+//        alunoDTO.setClasse("teste");
 
         Mentor mentor = new Mentor();
         mentor.setId(id);
-        mentor.setName("tt");
+//        mentor.setName("teste");
+//        mentor.setPais("teste");
+//        mentor.setEscola("teste");
+
+        MentorDTO mentorDTO = new MentorDTO();
+        mentorDTO.setId(id);
+//        mentorDTO.setName("teste");
+//        mentorDTO.setPais("teste");
+//        mentorDTO.setEscola("teste");
 
         Mentoria mentoria = new Mentoria();
         mentoria.setId(id);
@@ -208,7 +231,8 @@ public class MentoriaServiceTest {
         mentoriaDTO.setMentorId(mentor.getId());
         mentoriaDTO.setMentorName(mentor.getName());
 
-
+        Mockito.when(alunoService.getAlunoByIndex(id)).thenReturn(Optional.of(alunoDTO));
+        Mockito.when(mentorService.getMentorByIndex(id)).thenReturn(Optional.of(mentorDTO));
         Mockito.when(mentoriaRepository.save(mentoria)).thenReturn(mentoria);
         Mockito.when(mentoriaMapper.toMentoriaDTO(mentoria)).thenReturn(mentoriaDTO);
         Mockito.when(mentoriaMapper.toMentoria(mentoriaDTO)).thenReturn(mentoria);
@@ -233,14 +257,35 @@ public class MentoriaServiceTest {
     public void testPutMentoria() {
 
         Long id = 1L;
+        Long id2 = 2L;
 
         Aluno aluno = new Aluno();
         aluno.setId(id);
         aluno.setName("t");
+        AlunoDTO alunoDTO = new AlunoDTO();
+        alunoDTO.setId(id);
+        alunoDTO.setName("t");
 
         Mentor mentor = new Mentor();
         mentor.setId(id);
         mentor.setName("tt");
+        MentorDTO mentorDTO = new MentorDTO();
+        mentorDTO.setId(id);
+        mentorDTO.setName("tt");
+
+        Aluno aluno2 = new Aluno();
+        aluno2.setId(id2);
+        aluno2.setName("t2");
+        AlunoDTO alunoDTO2 = new AlunoDTO();
+        alunoDTO2.setId(id2);
+        alunoDTO2.setName("t2");
+
+        Mentor mentor2 = new Mentor();
+        mentor2.setId(id2);
+        mentor2.setName("tt2");
+        MentorDTO mentorDTO2 = new MentorDTO();
+        mentorDTO2.setId(id2);
+        mentorDTO2.setName("tt2");
 
         Mentoria mentoria = new Mentoria();
         mentoria.setId(id);
@@ -257,18 +302,45 @@ public class MentoriaServiceTest {
         mentoriaDTO.setActive(true);
 
 
+        Mockito.when(alunoService.getAlunoByIndex(id)).thenReturn(Optional.of(alunoDTO));
+        Mockito.when(mentorService.getMentorByIndex(id)).thenReturn(Optional.of(mentorDTO));
+//        Mockito.when(alunoService.getAlunoByIndex(id2)).thenReturn(Optional.of(alunoDTO2));
+        Mockito.when(mentorService.getMentorByIndex(id2)).thenReturn(Optional.of(mentorDTO2));
         Mockito.when(mentoriaRepository.save(mentoria)).thenReturn(mentoria);
         Mockito.when(mentoriaRepository.findById(id)).thenReturn(Optional.of(mentoria));
         Mockito.when(mentoriaMapper.toMentoriaDTO(mentoria)).thenReturn(mentoriaDTO);
         Mockito.when(mentoriaMapper.toMentoria(mentoriaDTO)).thenReturn(mentoria);
 
-        Assertions.assertEquals("t", mentoriaRepository.findById(id).get().getAluno().getName());
+        Optional<MentoriaDTO> mentoriaSalva = this.mentoriaService.criaMentoria(mentoriaDTO);
 
-        Optional<MentoriaDTO> mentoriaAlterada = this.mentoriaService.alteraMentoria(id, mentoriaDTO);
+        Mentoria mentoria2 = new Mentoria();
+        mentoria2.setId(id);
+        mentoria2.setAluno(aluno2);
+        mentoria2.setMentor(mentor2);
+        mentoria2.setActive(true);
+
+        MentoriaDTO mentoriaDTO2 = new MentoriaDTO();
+        mentoriaDTO2.setId(id);
+        mentoriaDTO2.setAlunoId(aluno2.getId());
+        mentoriaDTO2.setAlunoName(aluno2.getName());
+        mentoriaDTO2.setMentorId(mentor2.getId());
+        mentoriaDTO2.setMentorName(mentor2.getName());
+        mentoriaDTO2.setActive(true);
+
+        Mockito.when(mentoriaRepository.save(mentoria2)).thenReturn(mentoria2);
+        Mockito.when(mentoriaRepository.findById(id)).thenReturn(Optional.of(mentoria2));
+        Mockito.when(mentoriaMapper.toMentoriaDTO(mentoria2)).thenReturn(mentoriaDTO2);
+        Mockito.when(mentoriaMapper.toMentoria(mentoriaDTO2)).thenReturn(mentoria2);
+
+        Optional<MentoriaDTO> mentoriaAlterada = this.mentoriaService.alteraMentoria(id, mentoriaDTO2);
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(mentoriaAlterada.isPresent()),
-                () -> Assertions.assertEquals(mentoriaDTO.getId(), mentoriaAlterada.get().getId())
+                () -> Assertions.assertEquals(mentoriaSalva.get().getId(), mentoriaAlterada.get().getId()),
+                () -> Assertions.assertEquals("tt2", mentoriaAlterada.get().getMentorName()),
+                () -> Assertions.assertEquals("t2", mentoriaAlterada.get().getAlunoName()),
+                () -> Assertions.assertNotEquals(mentoriaSalva.get().getAlunoId(), mentoriaAlterada.get().getAlunoId()),
+                () -> Assertions.assertNotEquals(mentoriaSalva.get().getMentorId(), mentoriaAlterada.get().getMentorId())
         );
 
 
@@ -325,10 +397,12 @@ public class MentoriaServiceTest {
         Aluno aluno = new Aluno();
         aluno.setId(id);
         aluno.setName("t");
+        aluno.setActive(true);
 
         Mentor mentor = new Mentor();
         mentor.setId(id);
         mentor.setName("tt");
+        mentor.setActive(true);
 
         Mentoria mentoria = new Mentoria();
         mentoria.setId(id);

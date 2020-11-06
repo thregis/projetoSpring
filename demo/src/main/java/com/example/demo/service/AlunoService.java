@@ -83,7 +83,7 @@ public class AlunoService {
         Optional<Aluno> aluno = alunoRepository.findById(id);
 
         if (!aluno.isPresent() || !aluno.get().getActive()) {
-            throw new NotFoundException("Não há mentor ativo com o ID informado.");
+            throw new NotFoundException("Não há aluno ativo com o ID informado.");
         } else {
             if (alunoDTO.getName().length() < 3 || alunoDTO.getName().length() > 50 || alunoDTO.getClasse().length() > 50) {
                 throw new BadRequestException("Valores inválidos informados");

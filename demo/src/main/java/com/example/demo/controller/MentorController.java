@@ -65,7 +65,7 @@ public class MentorController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/reativacao/{id}")
+    @PostMapping("/reativacao/{id}")
     public ResponseEntity<Optional<MentorDTO>> reativaMentor(@PathVariable Long id) {
         mentorService.reativaMentor(id);
         return ResponseEntity.ok().build();

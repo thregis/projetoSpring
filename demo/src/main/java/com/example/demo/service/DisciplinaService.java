@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.dto.DisciplinaDTO;
 import com.example.demo.dto.mapper.DisciplinaMapper;
+import com.example.demo.exceptions.BadRequestException;
+import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Disciplina;
 import com.example.demo.repository.DisciplinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,48 +36,68 @@ public class DisciplinaService {
                 .collect(Collectors.toList()));
     }
 
-    public Optional<DisciplinaDTO> getDisciplinaByIndex(Long id){
-        if(disciplinaRepository.findById(id).get().getActive()){
+    public Optional<DisciplinaDTO> getDisciplinaByIndex(Long id) {
+        if (disciplinaRepository.findById(id).isPresent() && disciplinaRepository.findById(id).get().getActive()) {
             return Optional.of(disciplinaRepository.findById(id)
-                    .map(disciplinaMapper::toDisciplinaDTO))
-                    .orElse(Optional.empty());
+                    .map(disciplinaMapper::toDisciplinaDTO)).get();
+        } else {
+            throw new NotFoundException("Não há disciplina ativa com o ID informado.");
         }
-        return Optional.empty();
     }
 
     public Optional<DisciplinaDTO> criaDisciplina(DisciplinaDTO disciplinaDTO) {
-        disciplinaDTO.setActive(true);
-        return Optional.of(disciplinaMapper
-                .toDisciplinaDTO(disciplinaRepository.save(disciplinaMapper.toDisciplina(disciplinaDTO))));
-    }
+        if (disciplinaDTO.getName().length() < 2 || disciplinaDTO.getName().length() > 50 || disciplinaDTO.getDescricao().length() > 140) {
 
-    public Optional<DisciplinaDTO> alteraDisciplina(Long id, DisciplinaDTO disciplinaDTO){
-        Optional<Disciplina> disciplina = disciplinaRepository.findById(id);
-        if(!disciplina.isPresent()){
-            return Optional.empty();
-        }else {
-            disciplinaDTO.setId(id);
+            throw new BadRequestException("Valores inválidos informados.");
+
+        } else {
             disciplinaDTO.setActive(true);
             return Optional.of(disciplinaMapper
                     .toDisciplinaDTO(disciplinaRepository.save(disciplinaMapper.toDisciplina(disciplinaDTO))));
+        }
+
+    }
+
+    public Optional<DisciplinaDTO> alteraDisciplina(Long id, DisciplinaDTO disciplinaDTO) {
+        Optional<Disciplina> disciplina = disciplinaRepository.findById(id);
+
+        if (!disciplina.isPresent() || !disciplina.get().getActive()) {
+            throw new NotFoundException("Não há disciplina ativa com o ID informado.");
+        } else {
+            if (disciplinaDTO.getName().length() < 2 || disciplinaDTO.getName().length() > 50 || disciplinaDTO.getDescricao().length() > 140) {
+                throw new BadRequestException("Valores inválidos informados");
+            }else {
+                disciplinaDTO.setId(id);
+                disciplinaDTO.setActive(true);
+                return Optional.of(disciplinaMapper
+                        .toDisciplinaDTO(disciplinaRepository.save(disciplinaMapper.toDisciplina(disciplinaDTO))));
+            }
         }
     }
 
     public Optional<DisciplinaDTO> removeDisciplina(Long id) {
         Optional<Disciplina> disciplina = disciplinaRepository.findById(id);
-        if(disciplina.isPresent()){
+
+        if (disciplina.isPresent() && disciplina.get().getActive()) {
             disciplina.get().setActive(false);
+            return Optional.of(disciplinaMapper
+                    .toDisciplinaDTO(disciplinaRepository.save(disciplina.get())));
+        }else{
+            throw new NotFoundException("Não há disciplina ativa com o ID informado.");
         }
-        return Optional.of(disciplinaMapper
-                .toDisciplinaDTO(disciplinaRepository.save(disciplina.get())));
+
     }
 
-    public Optional<DisciplinaDTO> reativaDisciplina(Long id){
+    public Optional<DisciplinaDTO> reativaDisciplina(Long id) {
         Optional<Disciplina> disciplina = disciplinaRepository.findById(id);
-        if(disciplina.isPresent()){
+
+        if (disciplina.isPresent() && !disciplina.get().getActive()) {
             disciplina.get().setActive(true);
+            return Optional.of(disciplinaMapper
+                    .toDisciplinaDTO(disciplinaRepository.save(disciplina.get())));
+        }else{
+            throw new NotFoundException("Não há disciplina inativa com o ID informado.");
         }
-        return Optional.of(disciplinaMapper
-                .toDisciplinaDTO(disciplinaRepository.save(disciplina.get())));
+
     }
 }

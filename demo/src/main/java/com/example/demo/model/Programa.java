@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class Programa {
     private Long id;
 
     @Column(name = "programaName")
+    @Size(min = 3, max = 50, message = "Mínimo de 3 caracteres, máximo de 50.")
     private String name;
 
     @Column(name = "programaInicio")

@@ -50,8 +50,7 @@ public class MentoriaService {
     public Optional<MentoriaDTO> getMentoriaByIndex(Long id) {
         if (mentoriaRepository.findById(id).isPresent() && mentoriaRepository.findById(id).get().getActive()) {
             return Optional.of(mentoriaRepository.findById(id)
-                    .map(mentoriaMapper::toMentoriaDTO))
-                    .orElse(Optional.empty());
+                    .map(mentoriaMapper::toMentoriaDTO)).get();
         } else {
             throw new NotFoundException("Não há mentoria ativa com o ID informado.");
         }
@@ -87,6 +86,7 @@ public class MentoriaService {
 
     public Optional<MentoriaDTO> removeMentoria(Long id) {
         Optional<Mentoria> mentoria = mentoriaRepository.findById(id);
+
         if (mentoria.isPresent() && mentoria.get().getActive()) {
             mentoria.get().setActive(false);
             avaliacaoService.setActiveByMentoria(false, id);
@@ -99,10 +99,12 @@ public class MentoriaService {
 
     public Optional<MentoriaDTO> reativaMentoria(Long id) {
         Optional<Mentoria> mentoria = mentoriaRepository.findById(id);
-        if (mentoria.isPresent() && !mentoria.get().getActive()) {
+        if (mentoria.isPresent() && !mentoria.get().getActive() && mentoria.get().getMentor().getActive() && mentoria.get().getAluno().getActive()) {
             mentoria.get().setActive(true);
             return Optional.of(mentoriaMapper.toMentoriaDTO(mentoriaRepository.save(mentoria.get())));
-        } else {
+        } else if(mentoria.isPresent() && !mentoria.get().getActive() && (!mentoria.get().getMentor().getActive() || !mentoria.get().getMentor().getActive())){
+            throw new BadRequestException("Aluno ou mentor inválidos.");
+        } else{
             throw new NotFoundException("Não há mentoria inativa com o ID informado");
         }
 

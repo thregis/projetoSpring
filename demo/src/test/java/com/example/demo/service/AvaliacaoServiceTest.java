@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.AvaliacaoDTO;
+import com.example.demo.dto.DisciplinaDTO;
+import com.example.demo.dto.MentoriaDTO;
 import com.example.demo.dto.mapper.AvaliacaoMapper;
 import com.example.demo.model.*;
 import com.example.demo.repository.AvaliacaoRepository;
@@ -30,6 +32,10 @@ public class AvaliacaoServiceTest {
 
     @Mock
     AvaliacaoMapper avaliacaoMapper;
+    @Mock
+    MentoriaService mentoriaService;
+    @Mock
+    DisciplinaService disciplinaService;
 
 
     @Test
@@ -242,10 +248,23 @@ public class AvaliacaoServiceTest {
         mentoria.setMentor(mentor);
         mentoria.setActive(true);
 
+        MentoriaDTO mentoriaDTO = new MentoriaDTO();
+        mentoriaDTO.setId(id);
+        mentoriaDTO.setAlunoId(id);
+        mentoriaDTO.setAlunoName("t");
+        mentoriaDTO.setMentorId(id);
+        mentoriaDTO.setMentorName("tt");
+        mentoriaDTO.setActive(true);
+
         Disciplina disciplina = new Disciplina();
         disciplina.setId(id);
         disciplina.setName("teste");
         disciplina.setActive(true);
+
+        DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
+        disciplinaDTO.setId(id);
+        disciplinaDTO.setName("teste");
+        disciplinaDTO.setActive(true);
 
         Avaliacao avaliacao = new Avaliacao();
         avaliacao.setId(id);
@@ -262,7 +281,8 @@ public class AvaliacaoServiceTest {
         avaliacaoDTO.setDisciplinaName("teste");
         avaliacaoDTO.setNota(0.0);
 
-
+        Mockito.when(mentoriaService.getMentoriaByIndex(id)).thenReturn(Optional.of(mentoriaDTO));
+        Mockito.when(disciplinaService.getDisciplinaByIndex(id)).thenReturn(Optional.of(disciplinaDTO));
         Mockito.when(avaliacaoRepository.save(avaliacao)).thenReturn(avaliacao);
         Mockito.when(avaliacaoMapper.toAvaliacaoDTO(avaliacao)).thenReturn(avaliacaoDTO);
         Mockito.when(avaliacaoMapper.toAvaliacao(avaliacaoDTO)).thenReturn(avaliacao);
@@ -280,7 +300,6 @@ public class AvaliacaoServiceTest {
         );
 
     }
-
 
     @Test
     public void testPutAvaliacao() {
@@ -301,10 +320,23 @@ public class AvaliacaoServiceTest {
         mentoria.setMentor(mentor);
         mentoria.setActive(true);
 
+        MentoriaDTO mentoriaDTO = new MentoriaDTO();
+        mentoriaDTO.setId(id);
+        mentoriaDTO.setAlunoId(id);
+        mentoriaDTO.setAlunoName("t");
+        mentoriaDTO.setMentorId(id);
+        mentoriaDTO.setMentorName("tt");
+        mentoriaDTO.setActive(true);
+
         Disciplina disciplina = new Disciplina();
         disciplina.setId(id);
         disciplina.setName("teste");
         disciplina.setActive(true);
+
+        DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
+        disciplinaDTO.setId(id);
+        disciplinaDTO.setName("teste");
+        disciplinaDTO.setActive(true);
 
         Avaliacao avaliacao = new Avaliacao();
         avaliacao.setId(id);
@@ -323,20 +355,44 @@ public class AvaliacaoServiceTest {
         avaliacaoDTO.setActive(true);
         avaliacaoDTO.setNota(0.0);
 
-
+        Mockito.when(mentoriaService.getMentoriaByIndex(id)).thenReturn(Optional.of(mentoriaDTO));
+        Mockito.when(disciplinaService.getDisciplinaByIndex(id)).thenReturn(Optional.of(disciplinaDTO));
         Mockito.when(avaliacaoRepository.save(avaliacao)).thenReturn(avaliacao);
         Mockito.when(avaliacaoRepository.findById(id)).thenReturn(Optional.of(avaliacao));
         Mockito.when(avaliacaoMapper.toAvaliacaoDTO(avaliacao)).thenReturn(avaliacaoDTO);
         Mockito.when(avaliacaoMapper.toAvaliacao(avaliacaoDTO)).thenReturn(avaliacao);
 
-        Assertions.assertEquals("t", avaliacaoRepository.findById(id).get().getMentoria().getAluno().getName());
-        Assertions.assertEquals("teste", avaliacaoRepository.findById(id).get().getDisciplina().getName());
+        Optional<AvaliacaoDTO> avaliacaoSalva = this.avaliacaoService.criaAvaliacao(avaliacaoDTO);
 
-        Optional<AvaliacaoDTO> avaliacaoAlterada = this.avaliacaoService.alteraAvaliacao(id, avaliacaoDTO);
+        Avaliacao avaliacao2 = new Avaliacao();
+        avaliacao2.setId(id);
+        avaliacao2.setMentoria(mentoria);
+        avaliacao2.setDisciplina(disciplina);
+        avaliacao2.setActive(true);
+        avaliacao2.setNota(8.0);
+
+        AvaliacaoDTO avaliacaoDTO2 = new AvaliacaoDTO();
+        avaliacaoDTO2.setId(id);
+        avaliacaoDTO2.setMentoriaId(id);
+        avaliacaoDTO2.setMentoriaMentorName("tt");
+        avaliacaoDTO2.setMentoriaAlunoName("t");
+        avaliacaoDTO2.setDisciplinaId(id);
+        avaliacaoDTO2.setDisciplinaName("teste");
+        avaliacaoDTO2.setActive(true);
+        avaliacaoDTO2.setNota(8.0);
+
+        Mockito.when(avaliacaoRepository.save(avaliacao2)).thenReturn(avaliacao2);
+        Mockito.when(avaliacaoRepository.findById(id)).thenReturn(Optional.of(avaliacao2));
+        Mockito.when(avaliacaoMapper.toAvaliacaoDTO(avaliacao2)).thenReturn(avaliacaoDTO2);
+        Mockito.when(avaliacaoMapper.toAvaliacao(avaliacaoDTO2)).thenReturn(avaliacao2);
+
+        Optional<AvaliacaoDTO> avaliacaoAlterada = this.avaliacaoService.alteraAvaliacao(id, avaliacaoDTO2);
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(avaliacaoAlterada.isPresent()),
-                () -> Assertions.assertEquals(avaliacaoDTO.getId(), avaliacaoAlterada.get().getId())
+                () -> Assertions.assertEquals(avaliacaoDTO.getId(), avaliacaoAlterada.get().getId()),
+                () -> Assertions.assertEquals("tt", avaliacaoAlterada.get().getMentoriaMentorName()),
+                () -> Assertions.assertNotEquals(avaliacaoSalva.get().getNota(), avaliacaoAlterada.get().getNota())
         );
 
 

@@ -62,7 +62,7 @@ public class AlunoController {
         return ok().build();
     }
 
-    @PutMapping("/reativacao/{id}")
+    @PostMapping("/reativacao/{id}")
     public ResponseEntity<Optional<AlunoDTO>> reativaAluno(@PathVariable Long id){
         alunoService.reativaAluno(id);
         return ok().build();

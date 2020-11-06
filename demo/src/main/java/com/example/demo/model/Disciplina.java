@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "disciplina")
@@ -12,6 +13,7 @@ public class Disciplina {
     private Long id;
 
     @Column(name = "disciplinaName")
+    @Size(min = 2, max = 50, message = "Mínimo de 2 caracteres, máximo de 50.")
     private String name;
 
     @Column(name = "disciplinaDescricao")

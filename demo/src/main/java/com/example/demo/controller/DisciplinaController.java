@@ -50,7 +50,7 @@ public class DisciplinaController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/reativacao/{id}")
+    @PostMapping("/reativacao/{id}")
     public ResponseEntity<Optional<DisciplinaDTO>> reativaDisciplina(@PathVariable Long id){
         disciplinaService.reativaDisciplina(id);
         return ResponseEntity.ok().build();

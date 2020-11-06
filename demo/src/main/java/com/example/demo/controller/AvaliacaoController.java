@@ -51,7 +51,7 @@ public class AvaliacaoController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/reativacao/{id}")
+    @PostMapping("/reativacao/{id}")
     public ResponseEntity<Optional<AvaliacaoDTO>> reativaAvaliacao(@PathVariable Long id){
         avaliacaoService.reativaAvaliacao(id);
         return ResponseEntity.ok().build();

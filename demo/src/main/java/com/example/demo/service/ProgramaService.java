@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.dto.ProgramaDTO;
 import com.example.demo.dto.mapper.ProgramaMapper;
+import com.example.demo.exceptions.BadRequestException;
+import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Programa;
 import com.example.demo.repository.ProgramaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +24,15 @@ public class ProgramaService {
     @Autowired
     private ProgramaMapper programaMapper;
 
+    @Autowired
+    private MentorService mentorService;
+
     public Optional<List<ProgramaDTO>> getProgramas() {
+
         return Optional.of(programaRepository.findByActive(true)
-                                .stream()
-                                .map(programaMapper::toProgramaDTO)
-                                .collect(Collectors.toList()));
+                .stream()
+                .map(programaMapper::toProgramaDTO)
+                .collect(Collectors.toList()));
     }
 
     public Optional<List<ProgramaDTO>> getProgramasInativos() {
@@ -36,49 +42,66 @@ public class ProgramaService {
                 .collect(Collectors.toList()));
     }
 
-    public Optional<ProgramaDTO> getProgramaByIndex(Long id)/* throws Exception */{
-        if(programaRepository.findById(id).get().getActive()){
+    public Optional<ProgramaDTO> getProgramaByIndex(Long id)/* throws Exception */ {
+        if (programaRepository.findById(id).isPresent() && programaRepository.findById(id).get().getActive()) {
             return Optional.of(programaRepository.findById(id)
-                            .map(programaMapper::toProgramaDTO))
-                            .orElse(Optional.empty());
+                    .map(programaMapper::toProgramaDTO)).get();
+        } else {
+            throw new NotFoundException("Não há programa ativo com o ID informado.");
         }
-        return Optional.empty();
     }
 
     public Optional<ProgramaDTO> criaPrograma(ProgramaDTO programaDTO) {
-        programaDTO.setActive(true);
-        return Optional.of(programaMapper
-                .toProgramaDTO(programaRepository.save(programaMapper.toPrograma(programaDTO))));
-    }
+        if (programaDTO.getName().length() < 3 || programaDTO.getName().length() > 50) {
 
-    public Optional<ProgramaDTO> alteraPrograma(Long id, ProgramaDTO programaDTO)/* throws Exception */{
-        Optional<Programa> programa = programaRepository.findById(id);
-        if(!programa.isPresent()){
-            return Optional.empty();
-        }else {
-            programaDTO.setId(id);
+            throw new BadRequestException("Valores inválidos informados");
+        } else {
             programaDTO.setActive(true);
             return Optional.of(programaMapper
                     .toProgramaDTO(programaRepository.save(programaMapper.toPrograma(programaDTO))));
+        }
+
+    }
+
+    public Optional<ProgramaDTO> alteraPrograma(Long id, ProgramaDTO programaDTO)/* throws Exception */ {
+        Optional<Programa> programa = programaRepository.findById(id);
+
+        if (!programa.isPresent() || !programa.get().getActive()) {
+            throw new NotFoundException("Não há programa ativo com o ID informado");
+        } else {
+            if(programaDTO.getName().length()<3 || programaDTO.getName().length()>50){
+                throw new BadRequestException("Valores inválidos informados");
+            }else{
+                programaDTO.setId(id);
+                programaDTO.setActive(true);
+                return Optional.of(programaMapper
+                        .toProgramaDTO(programaRepository.save(programaMapper.toPrograma(programaDTO))));
+            }
         }
     }
 
     public Optional<ProgramaDTO> removePrograma(Long id) {
         Optional<Programa> programa = programaRepository.findById(id);
-        if(programa.isPresent()){
-           programa.get().setActive(false);
+
+        if (programa.isPresent() && programa.get().getActive()/* && programa.get().getMentores()==null*/) {
+            programa.get().setActive(false);
+            return Optional.of(programaMapper
+                    .toProgramaDTO(programaRepository.save(programa.get())));
+        }else{
+            throw new NotFoundException("Não há programa ativo com o ID informado");
         }
         //Lançar exceção pra não deixar excluir se tiver alunos vinculados ao programa
-        return Optional.of(programaMapper
-                .toProgramaDTO(programaRepository.save(programa.get())));
+
     }
 
-    public Optional<ProgramaDTO> reativaPrograma(Long id){
+    public Optional<ProgramaDTO> reativaPrograma(Long id) {
         Optional<Programa> programa = programaRepository.findById(id);
-        if(programa.isPresent()){
+        if (programa.isPresent() && !programa.get().getActive()) {
             programa.get().setActive(true);
+            return Optional.of(programaMapper
+                    .toProgramaDTO(programaRepository.save(programa.get())));
+        }else{
+            throw new NotFoundException("Não há programa inativo com o ID informado");
         }
-        return Optional.of(programaMapper
-                .toProgramaDTO(programaRepository.save(programa.get())));
     }
 }

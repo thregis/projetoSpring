@@ -53,7 +53,7 @@ public class MentoriaController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/reativacao/{id}")
+    @PostMapping("/reativacao/{id}")
     public ResponseEntity<Optional<MentoriaDTO>> reativaMentoria(@PathVariable Long id){
         mentoriaService.reativaMentoria(id);
         return ResponseEntity.ok().build();

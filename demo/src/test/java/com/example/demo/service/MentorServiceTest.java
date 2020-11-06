@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.dto.MentorDTO;
 import com.example.demo.dto.mapper.MentorMapper;
+import com.example.demo.exceptions.BadRequestException;
+import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Mentor;
 import com.example.demo.model.Programa;
 import com.example.demo.repository.MentorRepository;
@@ -38,34 +40,36 @@ public class MentorServiceTest {
     @Test
     public void testGetMentoresAtivos() {
 
+        Long id = 1L;
+        Integer idade = 20;
         Programa programa = new Programa();
-        programa.setId(1L);
+        programa.setId(id);
         programa.setName("testeteste");
 
         Mentor mentor = new Mentor();
-        mentor.setId(1L);
-        mentor.setName("t");
+        mentor.setId(id);
+        mentor.setName("teste");
         mentor.setPais("teste");
-        mentor.setIdade(1);
+        mentor.setIdade(idade);
         mentor.setEscola("testeteste");
         mentor.setActive(true);
         mentor.setPrograma(programa);
 
         MentorDTO mentorDTO = new MentorDTO();
-        mentorDTO.setId(1L);
-        mentorDTO.setName("t");
+        mentorDTO.setId(id);
+        mentorDTO.setName("teste");
         mentorDTO.setPais("teste");
-        mentorDTO.setIdade(1);
+        mentorDTO.setIdade(idade);
         mentorDTO.setEscola("testeteste");
         mentorDTO.setActive(true);
-        mentorDTO.setProgramaId(1L);
+        mentorDTO.setProgramaId(id);
         mentorDTO.setProgramaName("testeteste");
 
         Mentor mentor2 = new Mentor();
         mentor2.setId(2L);
-        mentor2.setName("te");
-        mentor2.setPais("testee");
-        mentor2.setIdade(2);
+        mentor2.setName("teste2");
+        mentor2.setPais("teste2");
+        mentor2.setIdade(idade);
         mentor2.setEscola("testeteste");
         mentor2.setActive(true);
         mentor2.setPrograma(programa);
@@ -89,34 +93,36 @@ public class MentorServiceTest {
 
     @Test
     public void testGetMentoresInativos() {
+        Long id = 1L;
+        Integer idade = 20;
         Programa programa = new Programa();
-        programa.setId(1L);
+        programa.setId(id);
         programa.setName("testeteste");
 
         Mentor mentor = new Mentor();
-        mentor.setId(1L);
-        mentor.setName("t");
+        mentor.setId(id);
+        mentor.setName("teste");
         mentor.setPais("teste");
-        mentor.setIdade(1);
+        mentor.setIdade(idade);
         mentor.setEscola("testeteste");
         mentor.setActive(false);
         mentor.setPrograma(programa);
 
         MentorDTO mentorDTO = new MentorDTO();
-        mentorDTO.setId(1L);
-        mentorDTO.setName("t");
+        mentorDTO.setId(id);
+        mentorDTO.setName("teste");
         mentorDTO.setPais("teste");
-        mentorDTO.setIdade(1);
+        mentorDTO.setIdade(idade);
         mentorDTO.setEscola("testeteste");
         mentorDTO.setActive(false);
-        mentorDTO.setProgramaId(1L);
+        mentorDTO.setProgramaId(id);
         mentorDTO.setProgramaName("testeteste");
 
         Mentor mentor2 = new Mentor();
         mentor2.setId(2L);
-        mentor2.setName("te");
-        mentor2.setPais("testee");
-        mentor2.setIdade(2);
+        mentor2.setName("teste2");
+        mentor2.setPais("teste2");
+        mentor2.setIdade(idade);
         mentor2.setEscola("testeteste");
         mentor2.setActive(false);
         mentor2.setPrograma(programa);
@@ -141,28 +147,28 @@ public class MentorServiceTest {
     @Test
     public void testGetMentorById() {
         Long id = 1L;
-
+        Integer idade = 20;
         Programa programa = new Programa();
-        programa.setId(2L);
+        programa.setId(id);
         programa.setName("testeteste");
 
         Mentor mentor = new Mentor();
-        mentor.setId(1L);
-        mentor.setName("t");
+        mentor.setId(id);
+        mentor.setName("teste");
         mentor.setPais("teste");
-        mentor.setIdade(1);
+        mentor.setIdade(idade);
         mentor.setEscola("testeteste");
         mentor.setActive(true);
         mentor.setPrograma(programa);
 
         MentorDTO mentorDTO = new MentorDTO();
-        mentorDTO.setId(1L);
-        mentorDTO.setName("t");
+        mentorDTO.setId(id);
+        mentorDTO.setName("teste");
         mentorDTO.setPais("teste");
-        mentorDTO.setIdade(1);
+        mentorDTO.setIdade(idade);
         mentorDTO.setEscola("testeteste");
         mentorDTO.setActive(true);
-        mentorDTO.setProgramaId(2L);
+        mentorDTO.setProgramaId(id);
         mentorDTO.setProgramaName("testeteste");
 
 
@@ -190,25 +196,27 @@ public class MentorServiceTest {
     @Test
     public void testPostMentor() {
 
+        Long id = 1L;
+        Integer idade = 20;
         Programa programa = new Programa();
-        programa.setId(1L);
+        programa.setId(id);
         programa.setName("testeteste");
 
         Mentor mentor = new Mentor();
-        mentor.setId(1L);
-        mentor.setName("t");
+        mentor.setId(id);
+        mentor.setName("teste");
         mentor.setPais("teste");
-        mentor.setIdade(1);
+        mentor.setIdade(idade);
         mentor.setEscola("testeteste");
         mentor.setPrograma(programa);
 
         MentorDTO mentorDTO = new MentorDTO();
-        mentorDTO.setId(1L);
-        mentorDTO.setName("t");
+        mentorDTO.setId(id);
+        mentorDTO.setName("teste");
         mentorDTO.setPais("teste");
-        mentorDTO.setIdade(1);
+        mentorDTO.setIdade(idade);
         mentorDTO.setEscola("testeteste");
-        mentorDTO.setProgramaId(1L);
+        mentorDTO.setProgramaId(id);
         mentorDTO.setProgramaName("testeteste");
 
 
@@ -237,42 +245,72 @@ public class MentorServiceTest {
 
     @Test
     public void testPutMentor() {
+        Long id = 1L;
+        Integer idade = 20;
+
         Programa programa = new Programa();
-        programa.setId(1L);
+        programa.setId(id);
         programa.setName("testeteste");
 
         Mentor mentor = new Mentor();
-        mentor.setId(1L);
-        mentor.setName("t");
+        mentor.setId(id);
+        mentor.setName("teste");
         mentor.setPais("teste");
-        mentor.setIdade(1);
+        mentor.setIdade(idade);
         mentor.setEscola("testeteste");
         mentor.setActive(true);
         mentor.setPrograma(programa);
 
         MentorDTO mentorDTO = new MentorDTO();
-        mentorDTO.setId(1L);
-        mentorDTO.setName("t");
+        mentorDTO.setId(id);
+        mentorDTO.setName("teste");
         mentorDTO.setPais("teste");
-        mentorDTO.setIdade(1);
+        mentorDTO.setIdade(idade);
         mentorDTO.setEscola("testeteste");
         mentorDTO.setActive(true);
-        mentorDTO.setProgramaId(1L);
+        mentorDTO.setProgramaId(id);
         mentorDTO.setProgramaName("testeteste");
-
 
         Mockito.when(mentorRepository.save(mentor)).thenReturn(mentor);
         Mockito.when(mentorRepository.findById(1L)).thenReturn(Optional.of(mentor));
         Mockito.when(mentorMapper.toMentorDTO(mentor)).thenReturn(mentorDTO);
         Mockito.when(mentorMapper.toMentor(mentorDTO)).thenReturn(mentor);
 
-        Assertions.assertEquals("t", mentorRepository.findById(1L).get().getName());
+        Optional<MentorDTO> mentorSalvo = this.mentorService.criaMentor(mentorDTO);
 
-        Optional<MentorDTO> mentorAlterado = this.mentorService.alteraMentor(1L, mentorDTO);
+        Mentor mentor2 = new Mentor();
+        mentor2.setId(id);
+        mentor2.setName("teste2");
+        mentor2.setPais("teste2");
+        mentor2.setIdade(idade);
+        mentor2.setEscola("testeteste2");
+        mentor2.setActive(true);
+        mentor2.setPrograma(programa);
+
+        MentorDTO mentorDTO2 = new MentorDTO();
+        mentorDTO2.setId(id);
+        mentorDTO2.setName("teste2");
+        mentorDTO2.setPais("teste2");
+        mentorDTO2.setIdade(idade);
+        mentorDTO2.setEscola("testeteste2");
+        mentorDTO2.setActive(true);
+        mentorDTO2.setProgramaId(id);
+        mentorDTO2.setProgramaName("testeteste");
+
+        Mockito.when(mentorRepository.save(mentor2)).thenReturn(mentor2);
+        Mockito.when(mentorRepository.findById(id)).thenReturn(Optional.of(mentor2));
+        Mockito.when(mentorMapper.toMentorDTO(mentor2)).thenReturn(mentorDTO2);
+        Mockito.when(mentorMapper.toMentor(mentorDTO2)).thenReturn(mentor2);
+
+        Optional<MentorDTO> mentorAlterado = this.mentorService.alteraMentor(id, mentorDTO2);
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(mentorAlterado.isPresent()),
-                () -> Assertions.assertEquals(mentorDTO.getId(), mentorAlterado.get().getId())
+                () -> Assertions.assertEquals(mentorDTO.getId(), mentorAlterado.get().getId()),
+                () -> Assertions.assertEquals("teste2", mentorAlterado.get().getName()),
+                () -> Assertions.assertEquals("teste2", mentorAlterado.get().getPais()),
+                () -> Assertions.assertEquals("testeteste2", mentorAlterado.get().getEscola()),
+                () -> Assertions.assertNotEquals(mentorAlterado.get().getName(), mentorSalvo.get().getName())
         );
 
 
@@ -283,28 +321,28 @@ public class MentorServiceTest {
     public void testDeleteMentor() {
 
         Long id = 1L;
-
+        Integer idade = 20;
         Programa programa = new Programa();
-        programa.setId(2L);
+        programa.setId(id);
         programa.setName("testeteste");
 
         Mentor mentor = new Mentor();
-        mentor.setId(1L);
-        mentor.setName("t");
+        mentor.setId(id);
+        mentor.setName("teste");
         mentor.setPais("teste");
-        mentor.setIdade(1);
+        mentor.setIdade(idade);
         mentor.setEscola("testeteste");
         mentor.setActive(true);
         mentor.setPrograma(programa);
 
         MentorDTO mentorDTO = new MentorDTO();
-        mentorDTO.setId(1L);
-        mentorDTO.setName("t");
+        mentorDTO.setId(id);
+        mentorDTO.setName("teste");
         mentorDTO.setPais("teste");
-        mentorDTO.setIdade(1);
+        mentorDTO.setIdade(idade);
         mentorDTO.setEscola("testeteste");
         mentorDTO.setActive(true);
-        mentorDTO.setProgramaId(1L);
+        mentorDTO.setProgramaId(id);
         mentorDTO.setProgramaName("testeteste");
 
         Mockito.when(mentorRepository.findById(id)).thenReturn(Optional.of(mentor));
@@ -327,28 +365,28 @@ public class MentorServiceTest {
     public void testReativaMentor() {
 
         Long id = 1L;
-
+        Integer idade = 20;
         Programa programa = new Programa();
-        programa.setId(2L);
+        programa.setId(id);
         programa.setName("testeteste");
 
         Mentor mentor = new Mentor();
-        mentor.setId(1L);
-        mentor.setName("t");
+        mentor.setId(id);
+        mentor.setName("teste");
         mentor.setPais("teste");
-        mentor.setIdade(1);
+        mentor.setIdade(idade);
         mentor.setEscola("testeteste");
         mentor.setActive(false);
         mentor.setPrograma(programa);
 
         MentorDTO mentorDTO = new MentorDTO();
-        mentorDTO.setId(1L);
-        mentorDTO.setName("t");
+        mentorDTO.setId(id);
+        mentorDTO.setName("teste");
         mentorDTO.setPais("teste");
-        mentorDTO.setIdade(1);
+        mentorDTO.setIdade(idade);
         mentorDTO.setEscola("testeteste");
         mentorDTO.setActive(false);
-        mentorDTO.setProgramaId(1L);
+        mentorDTO.setProgramaId(id);
         mentorDTO.setProgramaName("testeteste");
 
         Mockito.when(mentorRepository.findById(id)).thenReturn(Optional.of(mentor));
@@ -360,5 +398,156 @@ public class MentorServiceTest {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(true, mentor.getActive())
         );
+    }
+
+    // -------------------TESTES DE EXCEÇÕES-----------------------
+
+    @Test
+    public void testGetMentorByIdNotFound() {
+        Long id = 1L;
+
+        Mockito.when(mentorRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> mentorService.getMentorByIndex(id));
+
+    }
+
+    @Test
+    public void testPostMentorComValoresInvalidos() {
+
+        Long id = 1L;
+        Integer idade = 20;
+        Programa programa = new Programa();
+        programa.setId(id);
+        programa.setName("testeteste");
+
+        Mentor mentor = new Mentor();
+        mentor.setId(id);
+        mentor.setName("t");
+        mentor.setPais("teste");
+        mentor.setIdade(idade);
+        mentor.setEscola("testeteste");
+        mentor.setPrograma(programa);
+
+        MentorDTO mentorDTO = new MentorDTO();
+        mentorDTO.setId(id);
+        mentorDTO.setName("t");
+        mentorDTO.setPais("teste");
+        mentorDTO.setIdade(idade);
+        mentorDTO.setEscola("testeteste");
+        mentorDTO.setProgramaId(id);
+        mentorDTO.setProgramaName("testeteste");
+
+        Assertions.assertThrows(BadRequestException.class, () -> mentorService.criaMentor(mentorDTO));
+
+    }
+
+
+    @Test
+    public void testPutMentorNotFound() {
+        Long id = 1L;
+        Integer idade = 20;
+
+        Programa programa = new Programa();
+        programa.setId(id);
+        programa.setName("testeteste");
+
+        Mentor mentor = new Mentor();
+        mentor.setName("teste");
+        mentor.setPais("teste");
+        mentor.setIdade(idade);
+        mentor.setEscola("testeteste");
+        mentor.setActive(true);
+        mentor.setPrograma(programa);
+
+        MentorDTO mentorDTO = new MentorDTO();
+        mentorDTO.setName("teste");
+        mentorDTO.setPais("teste");
+        mentorDTO.setIdade(idade);
+        mentorDTO.setEscola("testeteste");
+        mentorDTO.setActive(true);
+        mentorDTO.setProgramaId(id);
+        mentorDTO.setProgramaName("testeteste");
+
+        Assertions.assertThrows(NotFoundException.class, () -> mentorService.alteraMentor(id, mentorDTO));
+
+    }
+
+    @Test
+    public void testPutMentorDadosInvalidos(){
+        Long id = 1L;
+        Integer idade = 20;
+
+        Programa programa = new Programa();
+        programa.setId(id);
+        programa.setName("testeteste");
+
+        Mentor mentor = new Mentor();
+        mentor.setId(id);
+        mentor.setName("teste");
+        mentor.setPais("teste");
+        mentor.setIdade(idade);
+        mentor.setEscola("testeteste");
+        mentor.setActive(true);
+        mentor.setPrograma(programa);
+
+        MentorDTO mentorDTO = new MentorDTO();
+        mentorDTO.setId(id);
+        mentorDTO.setName("teste");
+        mentorDTO.setPais("teste");
+        mentorDTO.setIdade(idade);
+        mentorDTO.setEscola("testeteste");
+        mentorDTO.setActive(true);
+        mentorDTO.setProgramaId(id);
+        mentorDTO.setProgramaName("testeteste");
+
+        Mockito.when(mentorRepository.save(mentor)).thenReturn(mentor);
+        Mockito.when(mentorRepository.findById(1L)).thenReturn(Optional.of(mentor));
+        Mockito.when(mentorMapper.toMentorDTO(mentor)).thenReturn(mentorDTO);
+        Mockito.when(mentorMapper.toMentor(mentorDTO)).thenReturn(mentor);
+
+        Optional<MentorDTO> mentorSalvo = this.mentorService.criaMentor(mentorDTO);
+
+        Mentor mentor2 = new Mentor();
+        mentor2.setId(id);
+        mentor2.setName("t");
+        mentor2.setPais("teste2");
+        mentor2.setIdade(idade);
+        mentor2.setEscola("testeteste2");
+        mentor2.setActive(true);
+        mentor2.setPrograma(programa);
+
+        MentorDTO mentorDTO2 = new MentorDTO();
+        mentorDTO2.setId(id);
+        mentorDTO2.setName("t");
+        mentorDTO2.setPais("teste2");
+        mentorDTO2.setIdade(idade);
+        mentorDTO2.setEscola("testeteste2");
+        mentorDTO2.setActive(true);
+        mentorDTO2.setProgramaId(id);
+        mentorDTO2.setProgramaName("testeteste");
+
+        Assertions.assertThrows(BadRequestException.class, () -> mentorService.alteraMentor(id, mentorDTO2));
+
+    }
+
+    @Test
+    public void testDeleteMentorNotFound() {
+
+        Long id = 1L;
+
+        Mockito.when(mentorRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> mentorService.removeMentorByIndex(id));
+    }
+
+    @Test
+    public void testReativaMentorNotFound() {
+
+        Long id = 1L;
+
+        Mockito.when(mentorRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> mentorService.reativaMentor(id));
     }
 }

@@ -43,13 +43,13 @@ public class ProgramaServiceTest {
         programa.setActive(true);
 
         ProgramaDTO programaDTO = new ProgramaDTO();
-        programaDTO.setId(1L);
+        programaDTO.setId(id);
         programaDTO.setName("testeteste");
         programaDTO.setActive(true);
 
         Programa programa2 = new Programa();
         programa2.setId(2L);
-        programa2.setName("t2");
+        programa2.setName("teste2");
         programa2.setActive(true);
 
         List<Programa> programas = new ArrayList<Programa>();
@@ -78,7 +78,7 @@ public class ProgramaServiceTest {
         programa.setActive(false);
 
         ProgramaDTO programaDTO = new ProgramaDTO();
-        programaDTO.setId(1L);
+        programaDTO.setId(id);
         programaDTO.setName("testeteste");
         programaDTO.setActive(false);
 
@@ -112,7 +112,7 @@ public class ProgramaServiceTest {
         programa.setActive(true);
 
         ProgramaDTO programaDTO = new ProgramaDTO();
-        programaDTO.setId(1L);
+        programaDTO.setId(id);
         programaDTO.setName("testeteste");
         programaDTO.setActive(true);
 
@@ -142,7 +142,7 @@ public class ProgramaServiceTest {
         programa.setName("testeteste");
 
         ProgramaDTO programaDTO = new ProgramaDTO();
-        programaDTO.setId(1L);
+        programaDTO.setId(id);
         programaDTO.setName("testeteste");
 
         Mockito.when(programaRepository.save(programa)).thenReturn(programa);
@@ -173,7 +173,7 @@ public class ProgramaServiceTest {
         programa.setActive(true);
 
         ProgramaDTO programaDTO = new ProgramaDTO();
-        programaDTO.setId(1L);
+        programaDTO.setId(id);
         programaDTO.setName("testeteste");
         programaDTO.setActive(true);
 
@@ -183,11 +183,30 @@ public class ProgramaServiceTest {
         Mockito.when(programaMapper.toProgramaDTO(programa)).thenReturn(programaDTO);
         Mockito.when(programaMapper.toPrograma(programaDTO)).thenReturn(programa);
 
-        Optional<ProgramaDTO> programaAlterado = this.programaService.alteraPrograma(id, programaDTO);
+        Optional<ProgramaDTO> programaSalvo = this.programaService.criaPrograma(programaDTO);
+
+        Programa programa2 = new Programa();
+        programa2.setId(id);
+        programa2.setName("testeteste2");
+        programa2.setActive(true);
+
+        ProgramaDTO programaDTO2 = new ProgramaDTO();
+        programaDTO2.setId(id);
+        programaDTO2.setName("testeteste2");
+        programaDTO2.setActive(true);
+
+        Mockito.when(programaRepository.save(programa2)).thenReturn(programa2);
+        Mockito.when(programaRepository.findById(id)).thenReturn(Optional.of(programa2));
+        Mockito.when(programaMapper.toProgramaDTO(programa2)).thenReturn(programaDTO2);
+        Mockito.when(programaMapper.toPrograma(programaDTO2)).thenReturn(programa2);
+
+        Optional<ProgramaDTO> programaAlterado = this.programaService.alteraPrograma(id, programaDTO2);
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(programaAlterado.isPresent()),
-                () -> Assertions.assertEquals(programaDTO.getId(), programaAlterado.get().getId())
+                () -> Assertions.assertEquals(programaDTO.getId(), programaAlterado.get().getId()),
+                () -> Assertions.assertEquals("testeteste2", programaAlterado.get().getName()),
+                () -> Assertions.assertNotEquals(programaAlterado.get().getName(), programaSalvo.get().getName())
         );
 
 
@@ -205,7 +224,7 @@ public class ProgramaServiceTest {
         programa.setActive(true);
 
         ProgramaDTO programaDTO = new ProgramaDTO();
-        programaDTO.setId(1L);
+        programaDTO.setId(id);
         programaDTO.setName("testeteste");
         programaDTO.setActive(true);
 
@@ -233,7 +252,7 @@ public class ProgramaServiceTest {
         programa.setActive(false);
 
         ProgramaDTO programaDTO = new ProgramaDTO();
-        programaDTO.setId(1L);
+        programaDTO.setId(id);
         programaDTO.setName("testeteste");
         programaDTO.setActive(false);
 

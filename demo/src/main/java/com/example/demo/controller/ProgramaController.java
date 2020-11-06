@@ -52,7 +52,7 @@ public class ProgramaController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/reativacao/{id}")
+    @PostMapping("/reativacao/{id}")
     public ResponseEntity<Optional<ProgramaDTO>> reativaPrograma(@PathVariable Long id){
         programaService.reativaPrograma(id);
         return ResponseEntity.ok().build();

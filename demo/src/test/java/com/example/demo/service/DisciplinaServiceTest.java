@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.dto.DisciplinaDTO;
 import com.example.demo.dto.mapper.DisciplinaMapper;
+import com.example.demo.exceptions.BadRequestException;
+import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Disciplina;
 import com.example.demo.repository.DisciplinaRepository;
 import org.junit.jupiter.api.Assertions;
@@ -18,6 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class DisciplinaServiceTest {
@@ -35,16 +38,17 @@ public class DisciplinaServiceTest {
     @Test
     public void testGetDisciplinasAtivas() {
 
+        Long id = 1L;
         Disciplina disciplina = new Disciplina();
-        disciplina.setId(1L);
-        disciplina.setName("t");
+        disciplina.setId(id);
+        disciplina.setName("tt");
         disciplina.setDescricao("testeteste");
         disciplina.setActive(true);
 
 
         DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
-        disciplinaDTO.setId(1L);
-        disciplinaDTO.setName("t");
+        disciplinaDTO.setId(id);
+        disciplinaDTO.setName("tt");
         disciplinaDTO.setDescricao("testeteste");
         disciplinaDTO.setActive(true);
 
@@ -74,16 +78,17 @@ public class DisciplinaServiceTest {
     @Test
     public void testGetDisciplinasInativas() {
 
+        Long id = 1L;
         Disciplina disciplina = new Disciplina();
-        disciplina.setId(1L);
-        disciplina.setName("t");
+        disciplina.setId(id);
+        disciplina.setName("tt");
         disciplina.setDescricao("testeteste");
         disciplina.setActive(false);
 
 
         DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
-        disciplinaDTO.setId(1L);
-        disciplinaDTO.setName("t");
+        disciplinaDTO.setId(id);
+        disciplinaDTO.setName("tt");
         disciplinaDTO.setDescricao("testeteste");
         disciplinaDTO.setActive(false);
 
@@ -116,14 +121,14 @@ public class DisciplinaServiceTest {
 
         Disciplina disciplina = new Disciplina();
         disciplina.setId(id);
-        disciplina.setName("t");
+        disciplina.setName("tt");
         disciplina.setDescricao("testeteste");
         disciplina.setActive(true);
 
 
         DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
         disciplinaDTO.setId(id);
-        disciplinaDTO.setName("t");
+        disciplinaDTO.setName("tt");
         disciplinaDTO.setDescricao("testeteste");
         disciplinaDTO.setActive(true);
 
@@ -147,15 +152,16 @@ public class DisciplinaServiceTest {
     @Test
     public void testPostDisciplina() {
 
+        Long id = 1L;
         Disciplina disciplina = new Disciplina();
-        disciplina.setId(1L);
-        disciplina.setName("t");
+        disciplina.setId(id);
+        disciplina.setName("tt");
         disciplina.setDescricao("testeteste");
 
 
         DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
-        disciplinaDTO.setId(1L);
-        disciplinaDTO.setName("t");
+        disciplinaDTO.setId(id);
+        disciplinaDTO.setName("tt");
         disciplinaDTO.setDescricao("testeteste");
 
 
@@ -185,14 +191,14 @@ public class DisciplinaServiceTest {
 
         Disciplina disciplina = new Disciplina();
         disciplina.setId(id);
-        disciplina.setName("t");
+        disciplina.setName("tt");
         disciplina.setDescricao("testeteste");
         disciplina.setActive(true);
 
 
         DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
         disciplinaDTO.setId(id);
-        disciplinaDTO.setName("t");
+        disciplinaDTO.setName("tt");
         disciplinaDTO.setDescricao("testeteste");
         disciplinaDTO.setActive(true);
 
@@ -202,11 +208,33 @@ public class DisciplinaServiceTest {
         Mockito.when(disciplinaMapper.toDisciplina(disciplinaDTO)).thenReturn(disciplina);
 
 
-        Optional<DisciplinaDTO> disciplinaAlterada = this.disciplinaService.alteraDisciplina(id, disciplinaDTO);
+        Optional<DisciplinaDTO> disciplinaSalva = this.disciplinaService.criaDisciplina(disciplinaDTO);
+
+        Disciplina disciplina2 = new Disciplina();
+        disciplina2.setId(id);
+        disciplina2.setName("tt2");
+        disciplina2.setDescricao("testeteste2");
+        disciplina2.setActive(true);
+
+
+        DisciplinaDTO disciplinaDTO2 = new DisciplinaDTO();
+        disciplinaDTO2.setId(id);
+        disciplinaDTO2.setName("tt2");
+        disciplinaDTO2.setDescricao("testeteste2");
+        disciplinaDTO2.setActive(true);
+
+        Mockito.when(disciplinaRepository.save(disciplina2)).thenReturn(disciplina2);
+        Mockito.when(disciplinaRepository.findById(id)).thenReturn(Optional.of(disciplina2));
+        Mockito.when(disciplinaMapper.toDisciplinaDTO(disciplina2)).thenReturn(disciplinaDTO2);
+        Mockito.when(disciplinaMapper.toDisciplina(disciplinaDTO2)).thenReturn(disciplina2);
+
+        Optional<DisciplinaDTO> disciplinaAlterada = this.disciplinaService.alteraDisciplina(id, disciplinaDTO2);
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(disciplinaAlterada.isPresent()),
-                () -> Assertions.assertEquals(disciplinaDTO.getId(), disciplinaAlterada.get().getId())
+                () -> Assertions.assertEquals(disciplinaDTO.getId(), disciplinaAlterada.get().getId()),
+                () -> Assertions.assertEquals("tt2", disciplinaAlterada.get().getName()),
+                () -> Assertions.assertNotEquals(disciplinaAlterada.get().getName(), disciplinaSalva.get().getName())
         );
 
 
@@ -220,14 +248,14 @@ public class DisciplinaServiceTest {
 
         Disciplina disciplina = new Disciplina();
         disciplina.setId(id);
-        disciplina.setName("t");
+        disciplina.setName("tt");
         disciplina.setDescricao("testeteste");
         disciplina.setActive(true);
 
 
         DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
         disciplinaDTO.setId(id);
-        disciplinaDTO.setName("t");
+        disciplinaDTO.setName("tt");
         disciplinaDTO.setDescricao("testeteste");
         disciplinaDTO.setActive(true);
 
@@ -252,14 +280,14 @@ public class DisciplinaServiceTest {
 
         Disciplina disciplina = new Disciplina();
         disciplina.setId(id);
-        disciplina.setName("t");
+        disciplina.setName("tt");
         disciplina.setDescricao("testeteste");
         disciplina.setActive(false);
 
 
         DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
         disciplinaDTO.setId(id);
-        disciplinaDTO.setName("t");
+        disciplinaDTO.setName("tt");
         disciplinaDTO.setDescricao("testeteste");
         disciplinaDTO.setActive(false);
 
@@ -273,5 +301,119 @@ public class DisciplinaServiceTest {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(true, disciplina.getActive())
         );
+    }
+
+    // -------------------TESTES DE EXCEÇÕES-----------------------
+
+    @Test
+    public void testGetDisciplinaByIdNotFound() {
+        Long id = 1L;
+
+        Mockito.when(disciplinaRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> disciplinaService.getDisciplinaByIndex(id));
+
+    }
+
+    @Test
+    public void testPostDisciplinaComValoresInvalidos() {
+
+        Long id = 1L;
+        Disciplina disciplina = new Disciplina();
+        disciplina.setId(id);
+        disciplina.setName("t");
+        disciplina.setDescricao("testeteste");
+
+
+        DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
+        disciplinaDTO.setId(id);
+        disciplinaDTO.setName("t");
+        disciplinaDTO.setDescricao("testeteste");
+
+        Assertions.assertThrows(BadRequestException.class, () -> disciplinaService.criaDisciplina(disciplinaDTO));
+    }
+
+    @Test
+    public void testPutDisciplinaNotFound() {
+        Long id = 1L;
+
+        Disciplina disciplina = new Disciplina();
+        disciplina.setName("tt");
+        disciplina.setDescricao("testeteste");
+        disciplina.setActive(true);
+
+
+        DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
+        disciplinaDTO.setName("tt");
+        disciplinaDTO.setDescricao("testeteste");
+        disciplinaDTO.setActive(true);
+
+        Assertions.assertThrows(NotFoundException.class, () -> disciplinaService.alteraDisciplina(id, disciplinaDTO));
+
+
+    }
+
+@Test
+    public void testPutDisciplinaComValoresInvalidos() {
+        Long id = 1L;
+
+        Disciplina disciplina = new Disciplina();
+        disciplina.setId(id);
+        disciplina.setName("tt");
+        disciplina.setDescricao("testeteste");
+        disciplina.setActive(true);
+
+
+        DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
+        disciplinaDTO.setId(id);
+        disciplinaDTO.setName("tt");
+        disciplinaDTO.setDescricao("testeteste");
+        disciplinaDTO.setActive(true);
+
+        Mockito.when(disciplinaRepository.save(disciplina)).thenReturn(disciplina);
+        Mockito.when(disciplinaRepository.findById(id)).thenReturn(Optional.of(disciplina));
+        Mockito.when(disciplinaMapper.toDisciplinaDTO(disciplina)).thenReturn(disciplinaDTO);
+        Mockito.when(disciplinaMapper.toDisciplina(disciplinaDTO)).thenReturn(disciplina);
+
+
+        Optional<DisciplinaDTO> disciplinaSalva = this.disciplinaService.criaDisciplina(disciplinaDTO);
+
+        Disciplina disciplina2 = new Disciplina();
+        disciplina2.setId(id);
+        disciplina2.setName("t");
+        disciplina2.setDescricao("testeteste2");
+        disciplina2.setActive(true);
+
+
+        DisciplinaDTO disciplinaDTO2 = new DisciplinaDTO();
+        disciplinaDTO2.setId(id);
+        disciplinaDTO2.setName("t");
+        disciplinaDTO2.setDescricao("testeteste2");
+        disciplinaDTO2.setActive(true);
+
+        Assertions.assertThrows(BadRequestException.class, () -> disciplinaService.alteraDisciplina(id, disciplinaDTO2));
+
+
+    }
+    @Test
+    public void testDeleteDisciplinaNotFound() {
+
+        Long id = 1L;
+
+        Mockito.when(disciplinaRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> disciplinaService.removeDisciplina(id));
+
+
+    }
+
+    @Test
+    public void testReativaDisciplinaNotFound() {
+
+        Long id = 1L;
+
+        Mockito.when(disciplinaRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> disciplinaService.reativaDisciplina(id));
     }
 }
