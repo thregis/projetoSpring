@@ -177,8 +177,6 @@ public class MentorServiceTest {
 
         Optional<MentorDTO> mentorByIndex = this.mentorService.getMentorByIndex(id); //CHAMADA DO MÉTODO A TESTAR
 
-        Assertions.assertTrue(mentorByIndex.isPresent());
-
         assertAll( //alt+enter static import
                 () -> Assertions.assertTrue(mentorByIndex.isPresent()),
                 () -> Assertions.assertEquals(mentor.getName(), mentorByIndex.get().getName()),

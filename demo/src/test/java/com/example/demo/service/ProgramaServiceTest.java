@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.dto.ProgramaDTO;
 import com.example.demo.dto.mapper.ProgramaMapper;
+import com.example.demo.exceptions.BadRequestException;
+import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Programa;
 import com.example.demo.repository.ProgramaRepository;
 import org.junit.jupiter.api.Assertions;
@@ -121,8 +123,6 @@ public class ProgramaServiceTest {
         Mockito.when(programaMapper.toProgramaDTO(programa)).thenReturn(programaDTO);
 
         Optional<ProgramaDTO> programaByIndex = this.programaService.getProgramaByIndex(id); //CHAMADA DO MÉTODO A TESTAR
-
-        Assertions.assertTrue(programaByIndex.isPresent());
 
         assertAll( //alt+enter static import
                 () -> Assertions.assertTrue(programaByIndex.isPresent()),
@@ -265,5 +265,112 @@ public class ProgramaServiceTest {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(true, programa.getActive())
         );
+    }
+
+    // -------------------TESTES DE EXCEÇÕES-----------------------
+
+    @Test
+    public void testGetProgramaByIdNotFound() {
+
+        Long id = 1L;
+
+        Mockito.when(programaRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> programaService.getProgramaByIndex(id));
+
+    }
+
+    @Test
+    public void testPostProgramaComValoresInvalidos() {
+
+        Long id = 1L;
+
+        Programa programa = new Programa();
+        programa.setId(id);
+        programa.setName("t");
+
+        ProgramaDTO programaDTO = new ProgramaDTO();
+        programaDTO.setId(id);
+        programaDTO.setName("t");
+
+        Assertions.assertThrows(BadRequestException.class, () -> programaService.criaPrograma(programaDTO));
+
+    }
+
+    @Test
+    public void testPutProgramaNotFound() {
+
+        Long id = 1L;
+
+        Programa programa = new Programa();
+        programa.setName("teste");
+
+
+        ProgramaDTO programaDTO = new ProgramaDTO();
+        programaDTO.setName("teste");
+
+        Assertions.assertThrows(NotFoundException.class, () -> programaService.alteraPrograma(id, programaDTO));
+
+
+    }
+
+@Test
+    public void testPutProgramaComValoresInvalidos() {
+
+        Long id = 1L;
+
+        Programa programa = new Programa();
+        programa.setId(id);
+        programa.setName("testeteste");
+        programa.setActive(true);
+
+        ProgramaDTO programaDTO = new ProgramaDTO();
+        programaDTO.setId(id);
+        programaDTO.setName("testeteste");
+        programaDTO.setActive(true);
+
+
+        Mockito.when(programaRepository.save(programa)).thenReturn(programa);
+        Mockito.when(programaRepository.findById(id)).thenReturn(Optional.of(programa));
+        Mockito.when(programaMapper.toProgramaDTO(programa)).thenReturn(programaDTO);
+        Mockito.when(programaMapper.toPrograma(programaDTO)).thenReturn(programa);
+
+        Optional<ProgramaDTO> programaSalvo = this.programaService.criaPrograma(programaDTO);
+
+        Programa programa2 = new Programa();
+        programa2.setId(id);
+        programa2.setName("t");
+        programa2.setActive(true);
+
+        ProgramaDTO programaDTO2 = new ProgramaDTO();
+        programaDTO2.setId(id);
+        programaDTO2.setName("t");
+        programaDTO2.setActive(true);
+
+        Assertions.assertThrows(BadRequestException.class, () -> programaService.alteraPrograma(id, programaDTO2));
+
+
+    }
+
+    @Test
+    public void testDeleteProgramaNotFound() {
+
+        Long id = 1L;
+
+        Mockito.when(programaRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> programaService.removePrograma(id));
+
+
+    }
+
+    @Test
+    public void testReativaProgramaNotFound() {
+
+        Long id = 1L;
+
+        Mockito.when(programaRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> programaService.reativaPrograma(id));
     }
 }

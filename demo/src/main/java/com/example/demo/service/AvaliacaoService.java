@@ -70,7 +70,7 @@ public class AvaliacaoService {
             throw new NotFoundException("Não há avaliação ativa com o ID informado.");
         }else{
             if(avaliacaoDTO.getNota()== null || !mentoriaService.getMentoriaByIndex(avaliacaoDTO.getMentoriaId()).isPresent() || !disciplinaService.getDisciplinaByIndex(avaliacaoDTO.getDisciplinaId()).isPresent()){
-                throw new BadRequestException("Nota da avaliação precisa ser inserida");
+                throw new BadRequestException("Dados inválidos foram inseridos");
             }else{
                 avaliacaoDTO.setId(id);
                 avaliacaoDTO.setActive(true);

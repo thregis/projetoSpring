@@ -4,11 +4,11 @@ import com.example.demo.dto.AlunoDTO;
 import com.example.demo.dto.MentorDTO;
 import com.example.demo.dto.MentoriaDTO;
 import com.example.demo.dto.mapper.MentoriaMapper;
+import com.example.demo.exceptions.BadRequestException;
+import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Aluno;
 import com.example.demo.model.Mentor;
 import com.example.demo.model.Mentoria;
-import com.example.demo.repository.AlunoRepository;
-import com.example.demo.repository.MentorRepository;
 import com.example.demo.repository.MentoriaRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -178,8 +178,6 @@ public class MentoriaServiceTest {
 
         Optional<MentoriaDTO> mentoriaByIndex = this.mentoriaService.getMentoriaByIndex(id); //CHAMADA DO MÉTODO A TESTAR
 
-        Assertions.assertTrue(mentoriaByIndex.isPresent());
-
         assertAll( //alt+enter static import
                 () -> Assertions.assertTrue(mentoriaByIndex.isPresent()),
                 () -> Assertions.assertEquals(mentoria.getId(), mentoriaByIndex.get().getId()),
@@ -199,25 +197,15 @@ public class MentoriaServiceTest {
 
         Aluno aluno = new Aluno();
         aluno.setId(id);
-//        aluno.setName("teste");
-//        aluno.setClasse("teste");
 
         AlunoDTO alunoDTO = new AlunoDTO();
         alunoDTO.setId(id);
-//        alunoDTO.setName("teste");
-//        alunoDTO.setClasse("teste");
 
         Mentor mentor = new Mentor();
         mentor.setId(id);
-//        mentor.setName("teste");
-//        mentor.setPais("teste");
-//        mentor.setEscola("teste");
 
         MentorDTO mentorDTO = new MentorDTO();
         mentorDTO.setId(id);
-//        mentorDTO.setName("teste");
-//        mentorDTO.setPais("teste");
-//        mentorDTO.setEscola("teste");
 
         Mentoria mentoria = new Mentoria();
         mentoria.setId(id);
@@ -304,7 +292,7 @@ public class MentoriaServiceTest {
 
         Mockito.when(alunoService.getAlunoByIndex(id)).thenReturn(Optional.of(alunoDTO));
         Mockito.when(mentorService.getMentorByIndex(id)).thenReturn(Optional.of(mentorDTO));
-//        Mockito.when(alunoService.getAlunoByIndex(id2)).thenReturn(Optional.of(alunoDTO2));
+        Mockito.when(alunoService.getAlunoByIndex(id2)).thenReturn(Optional.of(alunoDTO2));
         Mockito.when(mentorService.getMentorByIndex(id2)).thenReturn(Optional.of(mentorDTO2));
         Mockito.when(mentoriaRepository.save(mentoria)).thenReturn(mentoria);
         Mockito.when(mentoriaRepository.findById(id)).thenReturn(Optional.of(mentoria));
@@ -427,5 +415,149 @@ public class MentoriaServiceTest {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(true, mentoria.getActive())
         );
+    }
+
+    // -------------------TESTES DE EXCEÇÕES-----------------------
+
+
+    @Test
+    public void testGetMentoriaByIdNotFound() {
+
+        Long id = 1L;
+
+        Mockito.when(mentoriaRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> mentoriaService.getMentoriaByIndex(id));
+
+    }
+
+    @Test
+    public void testPostMentoriaComValoresInválidos() {
+
+        Long id = 1L;
+
+        Mentoria mentoria = new Mentoria();
+        mentoria.setId(id);
+
+        MentoriaDTO mentoriaDTO = new MentoriaDTO();
+        mentoriaDTO.setId(id);
+
+        Assertions.assertThrows(BadRequestException.class, () -> mentoriaService.criaMentoria(mentoriaDTO));
+
+    }
+
+    @Test
+    public void testPutMentoriaNotFound() {
+
+        Long id = 1L;
+
+        Aluno aluno = new Aluno();
+        aluno.setId(id);
+
+        Mentor mentor = new Mentor();
+        mentor.setId(id);
+
+
+        Mentoria mentoria = new Mentoria();
+        mentoria.setId(id);
+        mentoria.setAluno(aluno);
+        mentoria.setMentor(mentor);
+        mentoria.setActive(true);
+
+        MentoriaDTO mentoriaDTO = new MentoriaDTO();
+        mentoriaDTO.setId(id);
+        mentoriaDTO.setAlunoId(aluno.getId());
+        mentoriaDTO.setMentorId(mentor.getId());
+        mentoriaDTO.setActive(true);
+
+        Assertions.assertThrows(NotFoundException.class, () -> mentoriaService.alteraMentoria(id, mentoriaDTO));
+
+
+    }
+
+    @Test
+    public void testPutMentoriaComValoresInvalidos() {
+
+        Long id = 1L;
+        Long id2 = 2L;
+
+        Aluno aluno = new Aluno();
+        aluno.setId(id);
+        aluno.setName("t");
+        AlunoDTO alunoDTO = new AlunoDTO();
+        alunoDTO.setId(id);
+        alunoDTO.setName("t");
+
+        Mentor mentor = new Mentor();
+        mentor.setId(id);
+        mentor.setName("tt");
+        MentorDTO mentorDTO = new MentorDTO();
+        mentorDTO.setId(id);
+        mentorDTO.setName("tt");
+
+        Mentoria mentoria = new Mentoria();
+        mentoria.setId(id);
+        mentoria.setAluno(aluno);
+        mentoria.setMentor(mentor);
+        mentoria.setActive(true);
+
+        MentoriaDTO mentoriaDTO = new MentoriaDTO();
+        mentoriaDTO.setId(id);
+        mentoriaDTO.setAlunoId(aluno.getId());
+        mentoriaDTO.setAlunoName(aluno.getName());
+        mentoriaDTO.setMentorId(mentor.getId());
+        mentoriaDTO.setMentorName(mentor.getName());
+        mentoriaDTO.setActive(true);
+
+        Aluno aluno2 = new Aluno();
+        aluno2.setId(id2);
+
+        Mockito.when(alunoService.getAlunoByIndex(id)).thenReturn(Optional.of(alunoDTO));
+        Mockito.when(mentorService.getMentorByIndex(id)).thenReturn(Optional.of(mentorDTO));
+        Mockito.when(mentoriaRepository.save(mentoria)).thenReturn(mentoria);
+        Mockito.when(mentoriaRepository.findById(id)).thenReturn(Optional.of(mentoria));
+        Mockito.when(mentoriaMapper.toMentoriaDTO(mentoria)).thenReturn(mentoriaDTO);
+        Mockito.when(mentoriaMapper.toMentoria(mentoriaDTO)).thenReturn(mentoria);
+
+        Optional<MentoriaDTO> mentoriaSalva = this.mentoriaService.criaMentoria(mentoriaDTO);
+
+        Mentoria mentoria2 = new Mentoria();
+        mentoria2.setId(id);
+        mentoria2.setMentor(mentor);
+        mentoria2.setAluno(aluno2);
+        mentoria2.setActive(true);
+
+        MentoriaDTO mentoriaDTO2 = new MentoriaDTO();
+        mentoriaDTO2.setId(id);
+        mentoriaDTO2.setMentorId(mentor.getId());
+        mentoriaDTO2.setMentorName(mentor.getName());
+        mentoriaDTO2.setAlunoId(aluno2.getId());
+        mentoriaDTO2.setActive(true);
+
+        Assertions.assertThrows(BadRequestException.class, () -> mentoriaService.alteraMentoria(id, mentoriaDTO2));
+
+
+    }
+
+    @Test
+    public void testDeleteMentoriaNotFound() {
+
+        Long id = 1L;
+
+        Mockito.when(mentoriaRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> mentoriaService.removeMentoria(id));
+
+    }
+
+    @Test
+    public void testReativaMentoriaNotFound() {
+
+        Long id = 1L;
+
+        Mockito.when(mentoriaRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> mentoriaService.reativaMentoria(id));
+
     }
 }

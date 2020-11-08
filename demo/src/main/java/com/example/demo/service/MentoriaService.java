@@ -73,7 +73,7 @@ public class MentoriaService {
         if (!mentoria.isPresent() || !mentoria.get().getActive()) {
             throw new NotFoundException("Não há mentoria ativa com o ID informado.");
         } else {
-            if (alunoService.getAlunoByIndex(mentoriaDTO.getAlunoId()).isPresent() || mentorService.getMentorByIndex(mentoriaDTO.getMentorId()).isPresent()) {
+            if (alunoService.getAlunoByIndex(mentoriaDTO.getAlunoId()).isPresent() && mentorService.getMentorByIndex(mentoriaDTO.getMentorId()).isPresent()) {
                 mentoriaDTO.setId(id);
                 mentoriaDTO.setActive(true);
                 return Optional.of(mentoriaMapper

@@ -161,8 +161,6 @@ public class AlunoServiceTest {
 
         Optional<AlunoDTO> alunoByIndex = this.alunoService.getAlunoByIndex(id); //CHAMADA DO MÉTODO A TESTAR
 
-        Assertions.assertTrue(alunoByIndex.isPresent());
-
         assertAll( //alt+enter static import
                 () -> Assertions.assertTrue(alunoByIndex.isPresent()),
                 () -> Assertions.assertEquals(aluno.getName(), alunoByIndex.get().getName()),

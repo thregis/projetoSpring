@@ -4,6 +4,8 @@ import com.example.demo.dto.AvaliacaoDTO;
 import com.example.demo.dto.DisciplinaDTO;
 import com.example.demo.dto.MentoriaDTO;
 import com.example.demo.dto.mapper.AvaliacaoMapper;
+import com.example.demo.exceptions.BadRequestException;
+import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.*;
 import com.example.demo.repository.AvaliacaoRepository;
 import org.junit.jupiter.api.Assertions;
@@ -213,8 +215,6 @@ public class AvaliacaoServiceTest {
         Mockito.when(avaliacaoMapper.toAvaliacaoDTO(avaliacao)).thenReturn(avaliacaoDTO);
 
         Optional<AvaliacaoDTO> avaliacaoByIndex = this.avaliacaoService.getAvaliacaoByIndex(id); //CHAMADA DO MÉTODO A TESTAR
-
-        Assertions.assertTrue(avaliacaoByIndex.isPresent());
 
         assertAll( //alt+enter static import
                 () -> Assertions.assertTrue(avaliacaoByIndex.isPresent()),
@@ -502,5 +502,167 @@ public class AvaliacaoServiceTest {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(true, avaliacao.getActive())
         );
+    }
+
+    // -------------------TESTES DE EXCEÇÕES-----------------------
+
+    @Test
+    public void testGetAvaliacaoByIdNotFound() {
+
+        Long id = 1L;
+
+        Mockito.when(avaliacaoRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> avaliacaoService.getAvaliacaoByIndex(id));
+    }
+
+    @Test
+    public void testPostAvaliacaoComDadosInvalidos() {
+
+        Long id = 1L;
+
+        Mentoria mentoria = new Mentoria();
+        mentoria.setId(id);
+
+        Disciplina disciplina = new Disciplina();
+        disciplina.setId(id);
+
+        Avaliacao avaliacao = new Avaliacao();
+        avaliacao.setId(id);
+        avaliacao.setMentoria(mentoria);
+        avaliacao.setDisciplina(disciplina);
+
+        AvaliacaoDTO avaliacaoDTO = new AvaliacaoDTO();
+        avaliacaoDTO.setId(id);
+        avaliacaoDTO.setMentoriaId(id);
+        avaliacaoDTO.setDisciplinaId(id);
+
+        Assertions.assertThrows(BadRequestException.class, () -> avaliacaoService.criaAvaliacao(avaliacaoDTO));
+
+    }
+
+    @Test
+    public void testPutAvaliacaoNotFound() {
+
+        Long id = 1L;
+
+        Mentoria mentoria = new Mentoria();
+        mentoria.setId(id);
+
+
+        Disciplina disciplina = new Disciplina();
+        disciplina.setId(id);
+
+        Avaliacao avaliacao = new Avaliacao();
+        avaliacao.setMentoria(mentoria);
+        avaliacao.setDisciplina(disciplina);
+        avaliacao.setActive(true);
+        avaliacao.setNota(0.0);
+
+        AvaliacaoDTO avaliacaoDTO = new AvaliacaoDTO();
+        avaliacaoDTO.setMentoriaId(id);
+        avaliacaoDTO.setDisciplinaId(id);
+        avaliacaoDTO.setActive(true);
+        avaliacaoDTO.setNota(0.0);
+
+        Assertions.assertThrows(NotFoundException.class, () -> avaliacaoService.alteraAvaliacao(id, avaliacaoDTO));
+    }
+
+    @Test
+    public void testPutAvaliacaoComDadosInvalidos() {
+
+        Long id = 1L;
+
+        Aluno aluno = new Aluno();
+        aluno.setId(id);
+        aluno.setName("t");
+
+        Mentor mentor = new Mentor();
+        mentor.setId(id);
+        mentor.setName("tt");
+
+        Mentoria mentoria = new Mentoria();
+        mentoria.setId(id);
+        mentoria.setAluno(aluno);
+        mentoria.setMentor(mentor);
+        mentoria.setActive(true);
+
+        MentoriaDTO mentoriaDTO = new MentoriaDTO();
+        mentoriaDTO.setId(id);
+        mentoriaDTO.setAlunoId(id);
+        mentoriaDTO.setAlunoName("t");
+        mentoriaDTO.setMentorId(id);
+        mentoriaDTO.setMentorName("tt");
+        mentoriaDTO.setActive(true);
+
+        Disciplina disciplina = new Disciplina();
+        disciplina.setId(id);
+        disciplina.setName("teste");
+        disciplina.setActive(true);
+
+        DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
+        disciplinaDTO.setId(id);
+        disciplinaDTO.setName("teste");
+        disciplinaDTO.setActive(true);
+        Avaliacao avaliacao = new Avaliacao();
+        avaliacao.setId(id);
+        avaliacao.setMentoria(mentoria);
+        avaliacao.setDisciplina(disciplina);
+        avaliacao.setActive(true);
+        avaliacao.setNota(0.0);
+
+        AvaliacaoDTO avaliacaoDTO = new AvaliacaoDTO();
+        avaliacaoDTO.setId(id);
+        avaliacaoDTO.setMentoriaId(id);
+        avaliacaoDTO.setDisciplinaId(id);
+        avaliacaoDTO.setActive(true);
+        avaliacaoDTO.setNota(0.0);
+
+        Mockito.when(mentoriaService.getMentoriaByIndex(id)).thenReturn(Optional.of(mentoriaDTO));
+        Mockito.when(disciplinaService.getDisciplinaByIndex(id)).thenReturn(Optional.of(disciplinaDTO));
+        Mockito.when(avaliacaoRepository.save(avaliacao)).thenReturn(avaliacao);
+        Mockito.when(avaliacaoRepository.findById(id)).thenReturn(Optional.of(avaliacao));
+        Mockito.when(avaliacaoMapper.toAvaliacaoDTO(avaliacao)).thenReturn(avaliacaoDTO);
+        Mockito.when(avaliacaoMapper.toAvaliacao(avaliacaoDTO)).thenReturn(avaliacao);
+
+        Optional<AvaliacaoDTO> avaliacaoSalva = this.avaliacaoService.criaAvaliacao(avaliacaoDTO);
+
+        Avaliacao avaliacao2 = new Avaliacao();
+        avaliacao2.setId(id);
+        avaliacao2.setMentoria(mentoria);
+        avaliacao2.setDisciplina(disciplina);
+        avaliacao2.setActive(true);
+
+        AvaliacaoDTO avaliacaoDTO2 = new AvaliacaoDTO();
+        avaliacaoDTO2.setId(id);
+        avaliacaoDTO2.setMentoriaId(id);
+        avaliacaoDTO2.setMentoriaMentorName("tt");
+        avaliacaoDTO2.setMentoriaAlunoName("t");
+        avaliacaoDTO2.setDisciplinaId(id);
+        avaliacaoDTO2.setDisciplinaName("teste");
+        avaliacaoDTO2.setActive(true);
+
+        Assertions.assertThrows(BadRequestException.class, () -> avaliacaoService.alteraAvaliacao(id, avaliacaoDTO2));
+    }
+
+    @Test
+    public void testDeleteAvaliacaoNotFound() {
+
+        Long id = 1L;
+
+        Mockito.when(avaliacaoRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> avaliacaoService.removeAvaliacao(id));
+    }
+
+    @Test
+    public void testReativaAvaliacaoNotFound() {
+
+        Long id = 1L;
+
+        Mockito.when(avaliacaoRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> avaliacaoService.reativaAvaliacao(id));
+
     }
 }
