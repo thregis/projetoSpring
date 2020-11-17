@@ -34,6 +34,9 @@ public class MentorServiceTest {
     MentoriaService mentoriaService;
 
     @Mock
+    AvaliacaoService avaliacaoService;
+
+    @Mock
     MentorMapper mentorMapper;
 
 
@@ -347,6 +350,7 @@ public class MentorServiceTest {
         Mockito.when(mentorRepository.save(mentor)).thenReturn(mentor);
         Mockito.when(mentorMapper.toMentorDTO(mentor)).thenReturn(mentorDTO);
         Mockito.doNothing().when(mentoriaService).setActiveByMentor(false, id);
+        Mockito.doNothing().when(avaliacaoService).setActiveByMentor(false, id);
 
         Optional<MentorDTO> mentorRemoval = this.mentorService.removeMentorByIndex(id); //CHAMADA DO MÉTODO A TESTAR
 

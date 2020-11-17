@@ -8,14 +8,13 @@ import com.example.demo.model.Mentoria;
 import com.example.demo.repository.MentoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class MentoriaService {
 
     @Autowired
@@ -33,6 +32,7 @@ public class MentoriaService {
     @Autowired
     private MentorService mentorService;
 
+    @Transactional(readOnly = true)
     public Optional<List<MentoriaDTO>> getMentorias() {
         return Optional.of(mentoriaRepository.findByActive(true)
                 .stream()
@@ -40,6 +40,7 @@ public class MentoriaService {
                 .collect(Collectors.toList()));
     }
 
+    @Transactional(readOnly = true)
     public Optional<List<MentoriaDTO>> getMentoriasInativas() {
         return Optional.of(mentoriaRepository.findByActive(false)
                 .stream()
@@ -47,27 +48,26 @@ public class MentoriaService {
                 .collect(Collectors.toList()));
     }
 
+    @Transactional
     public Optional<MentoriaDTO> getMentoriaByIndex(Long id) {
         if (mentoriaRepository.findById(id).isPresent() && mentoriaRepository.findById(id).get().getActive()) {
             return Optional.of(mentoriaRepository.findById(id)
                     .map(mentoriaMapper::toMentoriaDTO)).get();
-        } else {
-            throw new NotFoundException("Não há mentoria ativa com o ID informado.");
         }
+        throw new NotFoundException("Não há mentoria ativa com o ID informado.");
     }
 
+    @Transactional
     public Optional<MentoriaDTO> criaMentoria(MentoriaDTO mentoriaDTO) {
         if (alunoService.getAlunoByIndex(mentoriaDTO.getAlunoId()).isPresent() && mentorService.getMentorByIndex(mentoriaDTO.getMentorId()).isPresent()) {
-
             mentoriaDTO.setActive(true);
             return Optional.of(mentoriaMapper
                     .toMentoriaDTO(mentoriaRepository.save(mentoriaMapper.toMentoria(mentoriaDTO))));
-        } else {
-            throw new BadRequestException("Valores inválidos inseridos.");
         }
-
+        throw new BadRequestException("Valores inválidos inseridos.");
     }
 
+    @Transactional
     public Optional<MentoriaDTO> alteraMentoria(Long id, MentoriaDTO mentoriaDTO) {
         Optional<Mentoria> mentoria = mentoriaRepository.findById(id);
         if (!mentoria.isPresent() || !mentoria.get().getActive()) {
@@ -84,6 +84,7 @@ public class MentoriaService {
 
     }
 
+    @Transactional
     public Optional<MentoriaDTO> removeMentoria(Long id) {
         Optional<Mentoria> mentoria = mentoriaRepository.findById(id);
 
@@ -91,29 +92,28 @@ public class MentoriaService {
             mentoria.get().setActive(false);
             avaliacaoService.setActiveByMentoria(false, id);
             return Optional.of(mentoriaMapper.toMentoriaDTO(mentoriaRepository.save(mentoria.get())));
-        } else {
-            throw new NotFoundException("Não há mentoria ativa com o ID informado.");
         }
-
+        throw new NotFoundException("Não há mentoria ativa com o ID informado.");
     }
 
+    @Transactional
     public Optional<MentoriaDTO> reativaMentoria(Long id) {
         Optional<Mentoria> mentoria = mentoriaRepository.findById(id);
         if (mentoria.isPresent() && !mentoria.get().getActive() && mentoria.get().getMentor().getActive() && mentoria.get().getAluno().getActive()) {
             mentoria.get().setActive(true);
             return Optional.of(mentoriaMapper.toMentoriaDTO(mentoriaRepository.save(mentoria.get())));
-        } else if(mentoria.isPresent() && !mentoria.get().getActive() && (!mentoria.get().getMentor().getActive() || !mentoria.get().getMentor().getActive())){
+        } else if (mentoria.isPresent() && !mentoria.get().getActive() && (!mentoria.get().getMentor().getActive() || !mentoria.get().getMentor().getActive())) {
             throw new BadRequestException("Aluno ou mentor inválidos.");
-        } else{
-            throw new NotFoundException("Não há mentoria inativa com o ID informado");
         }
-
+        throw new NotFoundException("Não há mentoria inativa com o ID informado");
     }
 
+    @Transactional
     public void setActiveByAluno(Boolean active, Long id) {
         mentoriaRepository.setActiveByAluno(active, id);
     }
 
+    @Transactional
     public void setActiveByMentor(Boolean active, Long id) {
         mentoriaRepository.setActiveByMentor(active, id);
     }

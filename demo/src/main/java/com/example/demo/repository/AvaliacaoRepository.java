@@ -14,6 +14,14 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
     List<Avaliacao> findByActive(Boolean active);
 
     @Modifying
-    @Query(value = "update avaliacao set avaliacaoActive = ?1 where avaliacaoMentoria in (select mentoriaId from mentoria where avaliacaoId = ?2)", nativeQuery = true)
+    @Query(value = "update avaliacao set avaliacaoActive = ?1 where avaliacaoMentoria in (select mentoriaId from mentoria where mentoriaId = ?2)", nativeQuery = true)
     void setActiveByMentoria(Boolean active, Long id);
+
+    @Modifying
+    @Query(value = "update avaliacao set avaliacaoActive = ?1 where avaliacaoMentoria in (select mentoriaId from mentoria where mentoriaAluno = ?2)", nativeQuery = true)
+    void setActiveByAluno(Boolean active, Long id);
+
+    @Modifying
+    @Query(value = "update avaliacao set avaliacaoActive = ?1 where avaliacaoMentoria in (select mentoriaId from mentoria where mentoriaMentor = ?2)", nativeQuery = true)
+    void setActiveByMentor(Boolean active, Long id);
 }

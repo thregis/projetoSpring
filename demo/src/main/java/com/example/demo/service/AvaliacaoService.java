@@ -8,14 +8,13 @@ import com.example.demo.model.Avaliacao;
 import com.example.demo.repository.AvaliacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class AvaliacaoService {
 
     @Autowired
@@ -30,80 +29,92 @@ public class AvaliacaoService {
     @Autowired
     private DisciplinaService disciplinaService;
 
-    public Optional<List<AvaliacaoDTO>> getAvaliacoes(){
+    @Transactional(readOnly = true)
+    public Optional<List<AvaliacaoDTO>> getAvaliacoes() {
         return Optional.of(avaliacaoRepository.findByActive(true)
                 .stream()
                 .map(avaliacaoMapper::toAvaliacaoDTO)
                 .collect(Collectors.toList()));
     }
 
-    public Optional<List<AvaliacaoDTO>> getAvaliacoesInativas(){
+    @Transactional(readOnly = true)
+    public Optional<List<AvaliacaoDTO>> getAvaliacoesInativas() {
         return Optional.of(avaliacaoRepository.findByActive(false)
                 .stream()
                 .map(avaliacaoMapper::toAvaliacaoDTO)
                 .collect(Collectors.toList()));
     }
 
-    public Optional<AvaliacaoDTO> getAvaliacaoByIndex(Long id){
+    @Transactional
+    public Optional<AvaliacaoDTO> getAvaliacaoByIndex(Long id) {
         if (avaliacaoRepository.findById(id).isPresent() && avaliacaoRepository.findById(id).get().getActive()) {
             return Optional.of(avaliacaoRepository.findById(id)
                     .map(avaliacaoMapper::toAvaliacaoDTO)).get();
-        } else {
-            throw new NotFoundException("Não há avaliação ativa com o ID informado");
         }
+        throw new NotFoundException("Não há avaliação ativa com o ID informado");
     }
 
+    @Transactional
     public Optional<AvaliacaoDTO> criaAvaliacao(AvaliacaoDTO avaliacaoDTO) {
-        if(avaliacaoDTO.getNota()== null || !mentoriaService.getMentoriaByIndex(avaliacaoDTO.getMentoriaId()).isPresent() || !disciplinaService.getDisciplinaByIndex(avaliacaoDTO.getDisciplinaId()).isPresent()){
+        if (avaliacaoDTO.getNota() == null || !mentoriaService.getMentoriaByIndex(avaliacaoDTO.getMentoriaId()).isPresent() || !disciplinaService.getDisciplinaByIndex(avaliacaoDTO.getDisciplinaId()).isPresent()) {
             throw new BadRequestException("Nota da avaliação precisa ser inserida");
-        }else{
+        }
+        avaliacaoDTO.setActive(true);
+        return Optional.of(avaliacaoMapper
+                .toAvaliacaoDTO(avaliacaoRepository.save(avaliacaoMapper.toAvaliacao(avaliacaoDTO))));
+    }
+
+    @Transactional
+    public Optional<AvaliacaoDTO> alteraAvaliacao(Long id, AvaliacaoDTO avaliacaoDTO) {
+        Optional<Avaliacao> avaliacao = avaliacaoRepository.findById(id);
+
+        if (!avaliacao.isPresent() || !avaliacao.get().getActive()) {
+            throw new NotFoundException("Não há avaliação ativa com o ID informado.");
+        } else {
+            if (avaliacaoDTO.getNota() == null || !mentoriaService.getMentoriaByIndex(avaliacaoDTO.getMentoriaId()).isPresent() || !disciplinaService.getDisciplinaByIndex(avaliacaoDTO.getDisciplinaId()).isPresent()) {
+                throw new BadRequestException("Dados inválidos foram inseridos");
+            }
+            avaliacaoDTO.setId(id);
             avaliacaoDTO.setActive(true);
             return Optional.of(avaliacaoMapper
                     .toAvaliacaoDTO(avaliacaoRepository.save(avaliacaoMapper.toAvaliacao(avaliacaoDTO))));
         }
     }
 
-    public Optional<AvaliacaoDTO> alteraAvaliacao(Long id, AvaliacaoDTO avaliacaoDTO){
-        Optional<Avaliacao> avaliacao = avaliacaoRepository.findById(id);
-
-        if (!avaliacao.isPresent()|| !avaliacao.get().getActive()){
-            throw new NotFoundException("Não há avaliação ativa com o ID informado.");
-        }else{
-            if(avaliacaoDTO.getNota()== null || !mentoriaService.getMentoriaByIndex(avaliacaoDTO.getMentoriaId()).isPresent() || !disciplinaService.getDisciplinaByIndex(avaliacaoDTO.getDisciplinaId()).isPresent()){
-                throw new BadRequestException("Dados inválidos foram inseridos");
-            }else{
-                avaliacaoDTO.setId(id);
-                avaliacaoDTO.setActive(true);
-                return Optional.of(avaliacaoMapper
-                        .toAvaliacaoDTO(avaliacaoRepository.save(avaliacaoMapper.toAvaliacao(avaliacaoDTO))));
-            }
-        }
-    }
-
+    @Transactional
     public Optional<AvaliacaoDTO> removeAvaliacao(Long id) {
         Optional<Avaliacao> avaliacao = avaliacaoRepository.findById(id);
 
-        if(avaliacao.isPresent() && avaliacao.get().getActive()){
+        if (avaliacao.isPresent() && avaliacao.get().getActive()) {
             avaliacao.get().setActive(false);
             return Optional.of(avaliacaoMapper.toAvaliacaoDTO(avaliacaoRepository.save(avaliacao.get())));
-        }else{
-            throw new NotFoundException("Não há avaliação ativa com o ID informado");
         }
+        throw new NotFoundException("Não há avaliação ativa com o ID informado");
     }
 
+    @Transactional
     public Optional<AvaliacaoDTO> reativaAvaliacao(Long id) {
         Optional<Avaliacao> avaliacao = avaliacaoRepository.findById(id);
 
-        if(avaliacao.isPresent() && !avaliacao.get().getActive() && avaliacao.get().getMentoria().getActive() && avaliacao.get().getDisciplina().getActive()){
+        if (avaliacao.isPresent() && !avaliacao.get().getActive() && avaliacao.get().getMentoria().getActive() && avaliacao.get().getDisciplina().getActive()) {
             avaliacao.get().setActive(true);
             return Optional.of(avaliacaoMapper.toAvaliacaoDTO(avaliacaoRepository.save(avaliacao.get())));
-        }else{
-            throw new NotFoundException("Não há avaliação inativa com o ID informado");
         }
-
+        throw new NotFoundException("Não há avaliação inativa com o ID informado");
     }
 
-    public void setActiveByMentoria(Boolean active, Long id){
+    @Transactional
+    public void setActiveByMentoria(Boolean active, Long id) {
         avaliacaoRepository.setActiveByMentoria(active, id);
+    }
+
+    @Transactional
+    public void setActiveByAluno(Boolean active, Long id){
+        avaliacaoRepository.setActiveByAluno(active, id);
+    }
+
+    @Transactional
+    public void setActiveByMentor(Boolean active, Long id){
+        avaliacaoRepository.setActiveByMentor(active, id);
     }
 }

@@ -3,7 +3,7 @@ package com.example.demo.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "mentoria")
+@Table(name = "mentoria"/*, uniqueConstraints = chave composta*/)
 public class Mentoria {
 
     @Id
