@@ -7,6 +7,7 @@ function Index() {
         <h1>Projeto escola</h1>
         <p>Apanhando do front como se não houvesse amanhã</p>
         <Link to="/aluno">Alunos</Link>
+        <Link to="/mentor">Mentores</Link>
         </>
     )
 

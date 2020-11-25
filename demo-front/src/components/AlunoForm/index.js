@@ -1,6 +1,6 @@
 import React from 'react'
 import Input from '../Input'
-import SelectPrograma from '../Select'
+import SelectPrograma from '../SelectPrograma'
 
 
 const AlunoForm = ({ initialValues, handleSubmit }) => {

@@ -28,7 +28,7 @@ class AlunoInativo extends React.Component{
 
     reactivateAluno = (id) => {
         console.log(id)
-        httpService.post(`/reativacao/${id}`)
+        httpService.post(`/aluno/reativacao/${id}`)
         .then(() => {
             const {alunos} = this.state
 

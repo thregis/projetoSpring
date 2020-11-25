@@ -57,7 +57,7 @@ class AlunoById extends React.Component {
                         <li>ID do programa: {this.state.aluno.programaId}</li>
                         <li>Nome do programa: {this.state.aluno.programaName}</li>
                     <Link to={`/aluno/${this.state.aluno.id}/update`}><button type="button">Alterar aluno</button></Link>
-                    <button onClick={ () => this.deleteAluno(this.state.aluno.id)}>Remover aluno</button>
+                    <Link to= {'/aluno'}><button onClick={ () => this.deleteAluno(this.state.aluno.id)}>Remover aluno</button></Link>
                     </ul>
                 </>
                 }

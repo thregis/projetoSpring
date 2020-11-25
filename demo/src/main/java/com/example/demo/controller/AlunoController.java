@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
 
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 @RequestMapping("/aluno")
 public class AlunoController {
