@@ -1,4 +1,4 @@
-import Aluno from './pages/Aluno/Index'
+import Aluno from './pages/Aluno/ListaAlunos'
 import AlunoInativo from './pages/Aluno/Inativos'
 import AlunoById from './pages/Aluno/AlunoById'
 import PutAluno from './pages/Aluno/AlunoById/PutAluno'
@@ -8,7 +8,7 @@ import {
   Route,
 } from "react-router-dom"
 import Index from './pages/Index'
-import AddAluno from './pages/PostAluno'
+import AddAluno from './pages/Aluno/PostAluno'
 
 function App() {
   return (

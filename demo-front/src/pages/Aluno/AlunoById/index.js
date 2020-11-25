@@ -2,7 +2,8 @@ import React from 'react'
 import httpService from '../../../services/httpService'
 import {
     Link,
-    withRouter
+    withRouter,
+    //useHistory
   } from "react-router-dom"
 
 
@@ -11,7 +12,7 @@ class AlunoById extends React.Component {
         super()
 
         this.state = {
-            aluno: []
+            aluno: []         //useState
         }
         this.deleteAluno = this.deleteAluno.bind(this)
     }
@@ -33,6 +34,8 @@ class AlunoById extends React.Component {
         httpService.delete(`/aluno/${id}`)
         .then(response => {
             alert('Success')
+            /*let history = useHistory()
+            history.push("/aluno")            se fosse hook */
         
         })
         .catch(error => {
@@ -53,7 +56,7 @@ class AlunoById extends React.Component {
                         <li>Classe: {this.state.aluno.classe}</li>
                         <li>ID do programa: {this.state.aluno.programaId}</li>
                         <li>Nome do programa: {this.state.aluno.programaName}</li>
-                    <button onClick={ () => this.updateAluno(this.state.aluno.id)}>Alterar aluno</button>
+                    <Link to={`/aluno/${this.state.aluno.id}/update`}><button type="button">Alterar aluno</button></Link>
                     <button onClick={ () => this.deleteAluno(this.state.aluno.id)}>Remover aluno</button>
                     </ul>
                 </>

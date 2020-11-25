@@ -1,52 +1,53 @@
 import React from 'react'
 import Input from '../Input'
+import SelectPrograma from '../Select'
 
 
-const AlunoForm = ({initialValues, handleSubmit}) => {
+const AlunoForm = ({ initialValues, handleSubmit }) => {
+    console.log(initialValues)
     const [aluno, setAluno] = React.useState(initialValues)
 
     const handleChange = (event) => {
-        const { input, value } = event.target
+        const { name, value } = event.target
 
         setAluno({
             ...aluno,
-            [input]: value
+            [name]: value
         })
     }
 
     const onSubmit = (event) => {
         event.preventDefault()
-
+        console.log(aluno)
         handleSubmit(aluno)
     }
 
-    return(
-                <form onSubmit={onSubmit}>
-                    <Input
-                        label="Name"
-                        id="aluno[name]"
-                        name="name"
-                        onChange={handleChange}
-                        value={aluno.name}
-                    />
+    return (
+        <form onSubmit={onSubmit}>
+            <Input
+                label="Name"
+                id="aluno[name]"
+                name="name"
+                onChange={handleChange}
+                value={aluno.name}
+            />
 
-                    <Input
-                        label="Classe"
-                        id="aluno[classe]"
-                        name="classe"
-                        onChange={handleChange}
-                        value={aluno.classe}
-                    />
+            <Input
+                label="Classe"
+                id="aluno[classe]"
+                name="classe"
+                onChange={handleChange}
+                value={aluno.classe}
+            />
 
-                    <Input
-                        label="Programa"
-                        id="aluno[programaId]"
-                        name="programaId"
-                        onChange={handleChange}
-                        value={aluno.programaId}
-                        type="number"
-                    />
-                    <input type="submit" value="Adicionar aluno" />
+            <SelectPrograma
+                label="Programa"
+                id="aluno[programaId]"
+                name="programaId"
+                onChange={handleChange}
+                value={aluno.programaId}
+            />
+                <input type="submit" value="Submeter" />
                 </form>
     )}
 

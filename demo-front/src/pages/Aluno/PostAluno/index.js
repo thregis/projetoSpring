@@ -1,8 +1,7 @@
 import { Component } from 'react'
-import httpService from '../../services/httpService'
-import Input from '../../components/Input'
+import httpService from '../../../services/httpService'
 import { Link } from 'react-router-dom'
-import AlunoForm from '../../components/AlunoForm'
+import AlunoForm from '../../../components/AlunoForm'
 
 class AddAluno extends Component {
     constructor() {
