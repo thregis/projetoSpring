@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import ButtonSubmit from '../Buttons/ButtonSubmit'
 import Input from '../Input'
 import SelectPrograma from '../SelectPrograma'
 
@@ -47,7 +49,7 @@ const AlunoForm = ({ initialValues, handleSubmit }) => {
                 onChange={handleChange}
                 value={aluno.programaId}
             />
-                <input type="submit" value="Submeter" />
+                <ButtonSubmit/>
                 </form>
     )}
 

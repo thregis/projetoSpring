@@ -1,11 +1,21 @@
+import { Typography } from '@material-ui/core'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { makeStyles } from '@material-ui/core/styles'
+
+const  useStyles = makeStyles({
+    projetoEscolaStyle: {
+        fontStyle: 'roboto',
+        color: 'black'
+    }
+})
 
 function Index() {
+    const classes = useStyles();
     return (
         <>
-        <h1>Projeto escola</h1>
-        <p>Apanhando do front como se não houvesse amanhã</p>
+        <Typography className={classes.projetoEscolaStyle} variant="h1" color="primary">Projeto escola</Typography>
+        <Typography color="secondary">Apanhando do front como se não houvesse amanhã</Typography>
         <Link to="/aluno">Alunos</Link>
         <Link to="/mentor">Mentores</Link>
         </>

@@ -1,52 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import httpService from '../../../services/httpService'
 import { Link } from 'react-router-dom'
+import { Button, withTheme } from '@material-ui/core'
+import AutorenewIcon from '@material-ui/icons/Autorenew';
+import ButtonAlunoHome from '../../../components/Buttons/ButtonAlunoHome';
 
+const AlunoInativo = () =>{
+    const [alunos, setAlunos] = useState([])
 
-class AlunoInativo extends React.Component{
-    constructor(){
-        super()
-
-        this.state = {
-            alunos: []
-        }
-        this.reactivateAluno = this.reactivateAluno.bind(this)
-
-    }
-
-    componentDidMount(){
+    useEffect (() => {
         httpService.get('/aluno/reativacao')
         .then(({data}) => {
-            console.log(data)
-
-            this.setState({alunos: data})
+            setAlunos(data)
         })
         .catch(error => {
             console.error(error)
         })
-    }
 
-    reactivateAluno = (id) => {
+    })
+    
+    const reactivateAluno = (id) => {
         console.log(id)
         httpService.post(`/aluno/reativacao/${id}`)
-        .then(() => {
-            const {alunos} = this.state
-
-            const updatedAlunos = this.state.alunos.filter(
-                aluno => aluno.id !== id
-            )
-
-            this.setState({
-                alunos: updatedAlunos
+        .then(response => {
+            console.log(response)
             })
-    }).catch(error => {
+    .catch(error => {
         console.error(error)
     })
 }
-
-
-    render(){
-        const {alunos} = this.state
         
         return(
             <div>
@@ -63,22 +45,22 @@ class AlunoInativo extends React.Component{
                     </thead>
                     <tbody>
                     {
-                        this.state.alunos.map(aluno =>
+                        alunos.map(aluno =>
                             <tr key={aluno.id}>
                                 <td>{aluno.name}</td>
                                 <td>{aluno.classe}</td>
                                 <td>{aluno.programaName}</td>
-                                <td><button onClick={ () => this.reactivateAluno(aluno.id)}>Reativar aluno</button></td>
+                                <td><Button variant="contained" color="default" onClick={ () => reactivateAluno(aluno.id)}><AutorenewIcon/></Button></td>
                             </tr>
                         )
                     }
                     </tbody>
                 </table>
-                <Link to="/aluno"><button type="button">Voltar para alunos ativos</button></Link>
+                <ButtonAlunoHome/>
 
             </div>
         )
     }
-}
+
 
 export default AlunoInativo

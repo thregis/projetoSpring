@@ -1,63 +1,58 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import httpService from '../../../services/httpService'
 import { Link } from 'react-router-dom'
+import { Button, Typography } from '@material-ui/core'
+import ButtonInspect from '../../../components/Buttons/ButtonInspect';
+import ButtonPersonAdd from '../../../components/Buttons/ButtonPersonAdd'
 
 
-class Aluno extends React.Component {
-    constructor() {
-        super()
+const Aluno = () => {
+    const [alunos, setAlunos] = useState([])
 
-        this.state = {
-            alunos: []
-        }
-    }
-
-    componentDidMount() {
+    useEffect(() => {
         httpService.get('/aluno')
             .then(({ data }) => {
-                console.log(data)
-
-                this.setState({ alunos: data })
+                setAlunos(data)
             })
             .catch(error => {
                 console.error(error)
             })
-    }
 
-    render() {
-        return (
-            <div>
-                <h1>Alunos ativos</h1>
+    })
 
-                <table>
-                    <thead>
+    return (
+        <div>
+            <Typography variant="h1" color="primary">Alunos ativos</Typography>
+
+            <table>
+                <thead>
                     <tr>
                         <th>Nome</th>
                         <th>Classe</th>
                         <th>Programa</th>
                         <th>Ver aluno</th>
                     </tr>
-                    </thead>
-                    <tbody>
+                </thead>
+                <tbody>
                     {
-                        this.state.alunos.map(aluno =>
+                        alunos.map(aluno =>
                             <tr key={aluno.id}>
                                 <td>{aluno.name}</td>
                                 <td>{aluno.classe}</td>
                                 <td>{aluno.programaName}</td>
                                 <td><Link to={`/aluno/${aluno.id}`}>
-                                    <button type="button">Inspecionar</button>
-                                    </Link></td>
+                                    <ButtonInspect />
+                                </Link></td>
                             </tr>
                         )
                     }
-                    </tbody>
-                </table>
-                <Link to="/aluno/reativacao"><button type="button">Alunos inativos</button></Link>
-                <Link to="/aluno/add"><button type="button">Novo aluno</button></Link>
-            </div>
-        )
-    }
+                </tbody>
+            </table>
+            <Link to="/aluno/reativacao"><Button variant="contained" color="primary">Alunos inativos</Button></Link>
+            <Link to="/aluno/add"><ButtonPersonAdd>Novo aluno</ButtonPersonAdd></Link>
+        </div>
+    )
 }
+
 
 export default Aluno

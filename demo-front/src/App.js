@@ -4,18 +4,17 @@ import AlunoInativo from './pages/Aluno/Inativos'
 import AlunoById from './pages/Aluno/AlunoById'
 import AddAluno from './pages/Aluno/PostAluno'
 import PutAluno from './pages/Aluno/AlunoById/PutAluno'
+import Mentor from './pages/Mentor/ListaMentores'
+import MentorInativo from './pages/Mentor/Inativos'
+import MentorById from './pages/Mentor/MentorById'
+import AddMentor from './pages/Mentor/PostMentor'
+import PutMentor from './pages/Mentor/PutMentor'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
 } from "react-router-dom"
-import Mentor from './pages/Mentor/ListaMentores'
-import MentorInativo from './pages/Mentor/Inativos'
-import MentorById from './pages/Mentor/MentorById'
-import AddMentor from './pages/Mentor/PostMentor'
-import PutMentor from './pages/Mentor/PutMentor'
-import { withTheme } from './components/Theme'
 
 function App() {
   return (
@@ -46,4 +45,4 @@ function App() {
   );
 }
 
-export default withTheme(App);
+export default App;

@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import httpService from '../../../services/httpService'
 import AlunoForm from '../../../components/AlunoForm'
+import { Button } from '@material-ui/core'
+import ButtonAlunoHome from '../../../components/Buttons/ButtonAlunoHome'
 
 
 const PutAluno = () => {
@@ -45,7 +47,7 @@ const PutAluno = () => {
                 handleSubmit={handleSubmit}
             />
         }
-        <Link to="/aluno"><button type="button">Voltar para alunos</button></Link>
+        <ButtonAlunoHome/>
 
     </div>
     )

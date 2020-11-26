@@ -1,36 +1,30 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import httpService from '../../../services/httpService'
 import {
     Link,
-    withRouter,
+    useParams,
     //useHistory
   } from "react-router-dom"
+import { Button} from '@material-ui/core'
+import DeleteIcon from '@material-ui/icons/Delete';
+import ButtonEdit from '../../../components/Buttons/ButtonEdit';
+import ButtonAlunoHome from '../../../components/Buttons/ButtonAlunoHome';
 
 
-class AlunoById extends React.Component {
-    constructor() {
-        super()
-
-        this.state = {
-            aluno: []         //useState
-        }
-        this.deleteAluno = this.deleteAluno.bind(this)
-    }
+const AlunoById = () => {
+    const [aluno, setAluno] = useState({})
     
-    componentDidMount() {
-        const {id} = this.props.match.params
+    const {id} = useParams()
+
+    useEffect(() => {
         httpService.get(`/aluno/${id}`)
         .then(({ data }) => {
-            console.log(data)
-            
-            this.setState({ aluno: data })
+            setAluno(data)
         })
-        .catch(error => {
-            console.error(error)
-        })
-    }
+    }, [id])
 
-    deleteAluno = (id) => {
+
+    const deleteAluno = (id) => {
         httpService.delete(`/aluno/${id}`)
         .then(response => {
             alert('Success')
@@ -42,31 +36,28 @@ class AlunoById extends React.Component {
             console.error(error)
         })
     }
+    return (
+        <div>
+            <h1>Análise de aluno</h1>
     
-    render() {
-        return (
-            <div>
-                <h1>Análise de Aluno</h1>
-
-                {
-                <> 
-                    <ul>
-                        <li>ID: {this.state.aluno.id}</li>
-                        <li>Nome: {this.state.aluno.name}</li>
-                        <li>Classe: {this.state.aluno.classe}</li>
-                        <li>ID do programa: {this.state.aluno.programaId}</li>
-                        <li>Nome do programa: {this.state.aluno.programaName}</li>
-                    <Link to={`/aluno/${this.state.aluno.id}/update`}><button type="button">Alterar aluno</button></Link>
-                    <Link to= {'/aluno'}><button onClick={ () => this.deleteAluno(this.state.aluno.id)}>Remover aluno</button></Link>
-                    </ul>
-                </>
-                }
-                <Link to="/aluno"><button type="button">Voltar para alunos</button></Link>
-            </div>
-        )
-    }
+            {
+            <> 
+                <ul>
+                    <li>ID: {aluno.id}</li>
+                    <li>Nome: {aluno.name}</li>
+                    <li>Classe: {aluno.classe}</li>
+                    <li>ID do programa: {aluno.programaId}</li>
+                    <li>Nome do programa: {aluno.programaName}</li>
+                <Link to={`/aluno/${aluno.id}/update`}><ButtonEdit>Alterar aluno</ButtonEdit></Link>
+                <Link to= {'/aluno'}><Button variant="contained" color="secondary" onClick={ () => deleteAluno(aluno.id)}><DeleteIcon/>Remover aluno</Button></Link>
+                </ul>
+            </>
+            }
+            <ButtonAlunoHome/>
+        </div>
+    )
 }
 
-export default withRouter(AlunoById)
+export default AlunoById
 
 // useParams para function, withRouter para classs component

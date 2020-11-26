@@ -1,3 +1,4 @@
+import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import httpService from "../../services/httpService";
 
@@ -12,15 +13,24 @@ const SelectPrograma = ({ value, onChange, id, label, name }) => {
 
   return (
     <div>
+      <FormControl variant="outlined">
       <label htmlFor={id}>
         {label}
       </label>
-      <select id={id} value={value} onChange={onChange} name={name}>
-      <option default>Selecione o programa</option>
+      {/*<InputLabel id="programa">Selecione o programa</InputLabel>*/}
+      {/*labelId="programa"*/}
+      <Select 
+      id={id} 
+      value={value} 
+      onChange={onChange} 
+      autoWidth
+      name={name}>
+      
         {programas.map((programa) => (
-          <option key={programa.id} value={programa.id}>{programa.name}</option>
+          <MenuItem key={programa.id} value={programa.id}>{programa.name}</MenuItem>
         ))}
-      </select>
+      </Select>
+      </FormControl>
     </div>
   );
 };

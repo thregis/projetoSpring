@@ -1,9 +1,12 @@
+import { TextField } from "@material-ui/core"
+
 const Input = ({ label, id, ...props }) => (
     <div>
         <label htmlFor={id}>
             {label}
         </label>
-        <input id={id} {...props} />
+        <TextField id={id} variant="outlined" {...props}/>
+        
     </div>
 
 )

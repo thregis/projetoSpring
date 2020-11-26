@@ -2,16 +2,12 @@ import { Component } from 'react'
 import httpService from '../../../services/httpService'
 import { Link } from 'react-router-dom'
 import AlunoForm from '../../../components/AlunoForm'
+import { Button, withTheme } from '@material-ui/core'
+import ButtonAlunoHome from '../../../components/Buttons/ButtonAlunoHome'
 
-class AddAluno extends Component {
-    constructor() {
-        super()
+const AddAluno = () =>{
 
-    }
-
-    
-
-    handleSubmit = (aluno) => {
+    const handleSubmit = (aluno) => {
     
         httpService.post('/aluno', aluno)
             .then(response => {
@@ -21,9 +17,7 @@ class AddAluno extends Component {
                 console.error(error)
             })
     }
-
-    render() {
-        
+    
         return (
             <>
                 <h1>Novo aluno</h1>
@@ -34,12 +28,11 @@ class AddAluno extends Component {
                         classe: "",
                         programaId: 0,
                     }}
-                    handleSubmit={this.handleSubmit}
+                    handleSubmit={handleSubmit}
                     />
-                <Link to="/aluno"><button type="button">Voltar para alunos</button></Link>
+                <ButtonAlunoHome/>
             </>
         )
     }
-}
 
 export default AddAluno
