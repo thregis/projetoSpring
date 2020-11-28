@@ -12,7 +12,7 @@ const theme = createMuiTheme({
           light: '#dd3333',
           dark: '#950000',
         },
-      },
+    },
     status: {
         danger: "orange",
     },

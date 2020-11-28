@@ -14,7 +14,7 @@ const Mentor = () => {
                 console.error(error)
             })
 
-    })
+    }, [])
 
         return (
             <div>

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Button, Typography } from '@material-ui/core'
 import ButtonInspect from '../../../components/Buttons/ButtonInspect';
 import ButtonPersonAdd from '../../../components/Buttons/ButtonPersonAdd'
+import TableAluno from '../../../components/Table/TableAluno';
 
 
 const Aluno = () => {
@@ -18,10 +19,11 @@ const Aluno = () => {
                 console.error(error)
             })
 
-    })
+    },[])
 
     return (
         <div>
+        {/*      
             <Typography variant="h1" color="primary">Alunos ativos</Typography>
 
             <table>
@@ -48,8 +50,15 @@ const Aluno = () => {
                     }
                 </tbody>
             </table>
+*/}
+
+            <TableAluno
+            data={alunos}
+        />
+   
+
             <Link to="/aluno/reativacao"><Button variant="contained" color="primary">Alunos inativos</Button></Link>
-            <Link to="/aluno/add"><ButtonPersonAdd>Novo aluno</ButtonPersonAdd></Link>
+            <Link to="/aluno/add"><ButtonPersonAdd/></Link>
         </div>
     )
 }

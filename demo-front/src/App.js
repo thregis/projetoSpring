@@ -15,16 +15,21 @@ import {
   Route,
   Link,
 } from "react-router-dom"
+import { Button, AppBar, IconButton, Toolbar} from '@material-ui/core/'
+import SchoolIcon from '@material-ui/icons/School';
 
 function App() {
   return (
     <div>
       <Router>
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/aluno">Alunos</Link>
-      <Link to="/mentor">Mentores</Link>
-      </nav>
+
+      <AppBar position="static">
+            <Toolbar>
+            <Link to="/"><IconButton edge="start" color="default" aria-label="menu"><SchoolIcon /></IconButton></Link>
+                <Link to="/aluno"><Button variant="contained" color="primary">Alunos</Button></Link>
+                <Link to="/mentor"><Button variant="contained" color="primary">Mentores</Button></Link>
+            </Toolbar>
+        </AppBar>
 
         <Switch>
           <Route path="/" exact component={Index} />

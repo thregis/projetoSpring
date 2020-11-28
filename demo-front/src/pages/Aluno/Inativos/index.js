@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import httpService from '../../../services/httpService'
-import { Link } from 'react-router-dom'
-import { Button, withTheme } from '@material-ui/core'
+import { IconButton} from '@material-ui/core'
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import ButtonAlunoHome from '../../../components/Buttons/ButtonAlunoHome';
 
@@ -17,7 +16,7 @@ const AlunoInativo = () =>{
             console.error(error)
         })
 
-    })
+    },[])
     
     const reactivateAluno = (id) => {
         console.log(id)
@@ -50,7 +49,7 @@ const AlunoInativo = () =>{
                                 <td>{aluno.name}</td>
                                 <td>{aluno.classe}</td>
                                 <td>{aluno.programaName}</td>
-                                <td><Button variant="contained" color="default" onClick={ () => reactivateAluno(aluno.id)}><AutorenewIcon/></Button></td>
+                                <td><IconButton color="primary" onClick={ () => reactivateAluno(aluno.id)}><AutorenewIcon/></IconButton></td>
                             </tr>
                         )
                     }

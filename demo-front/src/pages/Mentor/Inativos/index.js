@@ -13,7 +13,7 @@ const MentorInativo = () => {
             .catch(error => {
                 console.error(error)
             })
-    })
+    }, [])
 
     const reactivateMentor = (id) => {
         console.log(id)
