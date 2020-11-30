@@ -22,7 +22,6 @@ const theme = createMuiTheme({
             fontSize: "50px",
         },
     },
-    
   })
 
 /*const Theme = (props) => {

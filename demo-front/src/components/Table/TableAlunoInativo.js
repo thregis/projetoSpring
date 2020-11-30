@@ -1,16 +1,29 @@
 import React from 'react'
 import MaterialTable from 'material-table'
-import { Visibility } from '@material-ui/icons'
+import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { useHistory } from 'react-router-dom'
+import httpService from '../../services/httpService'
 
-const TableAluno = ({ data }) => {
+const TableAlunoInativo = ({ data }) => {
     let history = useHistory()
+
+    const reactivateAluno = (id) => {
+        console.log(id)
+        httpService.post(`/aluno/reativacao/${id}`)
+        .then(response => {
+            history.push("/aluno")
+            console.log(response)
+            })
+    .catch(error => {
+        console.error(error)
+    })
+}
     return (
 
         <MaterialTable title="Alunos ativos"
         localization={{
             header: {
-              actions: 'Ver aluno',
+              actions: 'Reativar aluno',
             }
           }}          
             data={data}
@@ -48,10 +61,10 @@ const TableAluno = ({ data }) => {
             }}
             actions={[
                 {
-                    icon: () => <Visibility color="primary" />,
-                    //icon: 'visibility',
-                    tooltip: 'Visualizar aluno',
-                    onClick: (event, rowData) => history.push(`/aluno/${rowData.id}`)
+                    icon: () => <AutorenewIcon color="primary" />,
+                    //icon: 'autorenew',
+                    tooltip: 'Reativar aluno',
+                    onClick: (event, rowData) => reactivateAluno(rowData.id)
                 }
             ]}
         />
@@ -59,4 +72,4 @@ const TableAluno = ({ data }) => {
 }
 
 
-export default TableAluno
+export default TableAlunoInativo

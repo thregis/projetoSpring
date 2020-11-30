@@ -3,7 +3,7 @@ import HowToRegIcon from '@material-ui/icons/HowToReg';
 
 const ButtonSubmit = () => {
     return(
-<Button variant="contained" color="primary" type="submit"><HowToRegIcon/>Submeter</Button>
+<Button style={{ margin: 8 }} variant="contained" color="primary" type="submit"><HowToRegIcon/>Submeter</Button>
 
     )
 }

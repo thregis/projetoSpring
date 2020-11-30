@@ -3,7 +3,7 @@ import {Button} from '@material-ui/core'
 
 const ButtonPersonAdd = () => {
     return(
-<Button variant="contained" color="primary"><PersonAddIcon/>Adicionar</Button>
+<Button variant="contained" color="primary" style={{ margin: 8 }} ><PersonAddIcon/>Adicionar</Button>
     )
 }
 

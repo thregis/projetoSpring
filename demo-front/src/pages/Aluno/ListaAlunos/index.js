@@ -57,7 +57,7 @@ const Aluno = () => {
         />
    
 
-            <Link to="/aluno/reativacao"><Button variant="contained" color="primary">Alunos inativos</Button></Link>
+            <Link to="/aluno/reativacao"><Button variant="contained" color="primary" style={{ margin: 8 }} >Alunos inativos</Button></Link>
             <Link to="/aluno/add"><ButtonPersonAdd/></Link>
         </div>
     )

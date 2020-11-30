@@ -5,13 +5,15 @@ import {
     useParams,
     //useHistory
   } from "react-router-dom"
-import { Button} from '@material-ui/core'
+import { Button, Typography, Card, CardActions, CardContent} from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete';
 import ButtonEdit from '../../../components/Buttons/ButtonEdit';
 import ButtonAlunoHome from '../../../components/Buttons/ButtonAlunoHome';
+import { useHistory } from 'react-router-dom'
 
 
 const AlunoById = () => {
+    let history = useHistory()
     const [aluno, setAluno] = useState({})
     
     const {id} = useParams()
@@ -28,8 +30,7 @@ const AlunoById = () => {
         httpService.delete(`/aluno/${id}`)
         .then(response => {
             alert('Success')
-            /*let history = useHistory()
-            history.push("/aluno")            se fosse hook */
+            history.push("/aluno")
         
         })
         .catch(error => {
@@ -42,15 +43,27 @@ const AlunoById = () => {
     
             {
             <> 
-                <ul>
-                    <li>ID: {aluno.id}</li>
+            <Card>
+                <CardContent>
+                <Typography color="primary">ID: {aluno.id}</Typography>
+                <Typography color="primary">Nome: {aluno.name}</Typography>
+                <Typography color="primary">ID do programa: {aluno.programaId}</Typography>
+                <Typography color="primary">Nome do programa: {aluno.programaName}</Typography>
+                </CardContent>
+                <CardActions>
+                <Link to={`/aluno/${aluno.id}/update`}><ButtonEdit >Alterar aluno</ButtonEdit></Link>
+                <Button style={{ margin: 8 }} variant="contained" color="secondary" onClick={ () => deleteAluno(aluno.id)}><DeleteIcon/>Remover aluno</Button>    
+                </CardActions>
+            </Card>
+               {/*} <ul>
+                    <li><Typography color="primary">ID: {aluno.id}</Typography></li>
                     <li>Nome: {aluno.name}</li>
                     <li>Classe: {aluno.classe}</li>
                     <li>ID do programa: {aluno.programaId}</li>
                     <li>Nome do programa: {aluno.programaName}</li>
-                <Link to={`/aluno/${aluno.id}/update`}><ButtonEdit>Alterar aluno</ButtonEdit></Link>
-                <Link to= {'/aluno'}><Button variant="contained" color="secondary" onClick={ () => deleteAluno(aluno.id)}><DeleteIcon/>Remover aluno</Button></Link>
-                </ul>
+                <Link to={`/aluno/${aluno.id}/update`}><ButtonEdit >Alterar aluno</ButtonEdit></Link>
+                <Button style={{ margin: 8 }} variant="contained" color="secondary" onClick={ () => deleteAluno(aluno.id)}><DeleteIcon/>Remover aluno</Button>
+            </ul> */}
             </>
             }
             <ButtonAlunoHome/>
