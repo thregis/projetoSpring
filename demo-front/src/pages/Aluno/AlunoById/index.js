@@ -3,13 +3,12 @@ import httpService from '../../../services/httpService'
 import {
     Link,
     useParams,
-    //useHistory
+    useHistory,
   } from "react-router-dom"
 import { Button, Typography, Card, CardActions, CardContent} from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete';
 import ButtonEdit from '../../../components/Buttons/ButtonEdit';
 import ButtonAlunoHome from '../../../components/Buttons/ButtonAlunoHome';
-import { useHistory } from 'react-router-dom'
 
 
 const AlunoById = () => {
@@ -39,11 +38,11 @@ const AlunoById = () => {
     }
     return (
         <div>
-            <h1>Análise de aluno</h1>
+            <Typography variant="h1" color="primary">Análise de aluno</Typography>
     
             {
             <> 
-            <Card>
+            <Card variant="outlined">
                 <CardContent>
                 <Typography color="primary">ID: {aluno.id}</Typography>
                 <Typography color="primary">Nome: {aluno.name}</Typography>

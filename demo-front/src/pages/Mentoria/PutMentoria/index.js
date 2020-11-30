@@ -1,30 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import httpService from '../../../services/httpService'
-import MentorForm from '../../../components/Form/MentorForm'
+import MentoriaForm from '../../../components/Form/MentoriaForm'
 import { Typography } from '@material-ui/core'
 
-const PutMentor = () => {
+const PutMentoria = () => {
     let history = useHistory()
-    const [mentor, setMentor] = useState({})
+    const [mentoria, setMentoria] = useState({})
     const [isFinished, setIsFinished] = useState(false)
 
     const { id } = useParams()
 
     useEffect(() => {
-        httpService(`/mentor/${id}`)
+        httpService(`/mentoria/${id}`)
             .then(({ data }) => {
-                setMentor(data)
+                setMentoria(data)
                 setIsFinished(true)
             })
     }, [id])
 
-    const handleSubmit = (mentor) => {
+    const handleSubmit = (mentoria) => {
 
-        httpService.put(`/mentor/${id}`, mentor)
+        httpService.put(`/mentoria/${id}`, mentoria)
             .then(response => {
                 alert('Success')
-                history.push("/mentor")
+                history.push("/mentoria")
                 console.log(response)
             })
             .catch(error => {
@@ -34,18 +34,15 @@ const PutMentor = () => {
 
     return (
         <div>
-            <Typography variant="h1" color="primary">Alterar mentor: {mentor.name}</Typography>
+            <Typography variant="h1" color="primary">Alterar mentoria: {mentoria.alunoName} - {mentoria.mentorName}</Typography>
 
             {!isFinished && <p>Carregando</p>}
 
             {isFinished &&
-                <MentorForm
+                <MentoriaForm
                     initialValues={{
-                        name: mentor.name,
-                        idade: mentor.idade,
-                        pais: mentor.pais,
-                        escola: mentor.escola,
-                        programaId: mentor.programaId,
+                        alunoId: mentoria.alunoId,
+                        mentorId: mentoria.mentorId,
                     }}
                     handleSubmit={handleSubmit}
                 />
@@ -53,5 +50,4 @@ const PutMentor = () => {
         </div>
     )
 }
-
-export default PutMentor
+export default PutMentoria

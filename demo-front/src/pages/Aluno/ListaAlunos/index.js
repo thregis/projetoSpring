@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { Button, Typography } from '@material-ui/core'
 import ButtonInspect from '../../../components/Buttons/ButtonInspect';
 import ButtonPersonAdd from '../../../components/Buttons/ButtonPersonAdd'
-import TableAluno from '../../../components/Table/TableAluno';
+import TableAluno from '../../../components/Table/TableAluno/TableAluno';
 
 
 const Aluno = () => {
@@ -51,6 +51,7 @@ const Aluno = () => {
                 </tbody>
             </table>
 */}
+            <Typography variant="h1" color="primary">Alunos ativos</Typography>
 
             <TableAluno
             data={alunos}

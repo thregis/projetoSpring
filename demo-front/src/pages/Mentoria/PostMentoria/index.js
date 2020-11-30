@@ -1,17 +1,17 @@
 import { Typography } from '@material-ui/core'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import MentorForm from '../../../components/Form/MentorForm'
+import MentoriaForm from '../../../components/Form/MentoriaForm'
 import httpService from '../../../services/httpService'
 
-const AddMentor = () => {
+const AddMentoria = () => {
     let history = useHistory()
-    const handleSubmit = (mentor) => {
+    const handleSubmit = (mentoria) => {
 
-        httpService.post('/mentor', mentor)
+        httpService.post('/mentoria', mentoria)
             .then(response => {
                 alert('Success')
-                history.push("/mentor")
+                history.push("/mentoria")
                 console.log(response)
             })
             .catch(error => {
@@ -21,20 +21,16 @@ const AddMentor = () => {
 
     return (
         <div>
-            <Typography variant="h1" color="primary">Novo mentor</Typography>
+            <Typography variant="h1" color="primary">Nova mentoria</Typography>
 
-            <MentorForm
+            <MentoriaForm
                 initialValues={{
-                    name: "",
-                    idade: 0,
-                    pais: "",
-                    escola: "",
-                    programaId: 0,
+                    alunoId: 0,
+                    mentorId: 0,  
                 }}
                 handleSubmit={handleSubmit}
             />
         </div>
     )
 }
-
-export default AddMentor
+export default AddMentoria

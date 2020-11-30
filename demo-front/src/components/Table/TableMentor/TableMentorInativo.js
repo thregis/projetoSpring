@@ -1,31 +1,32 @@
 import React from 'react'
 import MaterialTable from 'material-table'
-import AutorenewIcon from '@material-ui/icons/Autorenew';
+import AutoRenewIcon from '@material-ui/icons/Autorenew'
 import { useHistory } from 'react-router-dom'
-import httpService from '../../services/httpService'
+import httpService from '../../../services/httpService'
 
-const TableAlunoInativo = ({ data }) => {
+const TableMentorInativo = ({ data }) => {
     let history = useHistory()
 
-    const reactivateAluno = (id) => {
+    const reactivateMentor = (id) => {
         console.log(id)
-        httpService.post(`/aluno/reativacao/${id}`)
-        .then(response => {
-            history.push("/aluno")
-            console.log(response)
+        httpService.post(`/mentor/reativacao/${id}`)
+            .then(response => {
+                history.push("/mentor")
+                console.log(response)
             })
-    .catch(error => {
-        console.error(error)
-    })
-}
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
     return (
 
-        <MaterialTable title="Alunos ativos"
-        localization={{
-            header: {
-              actions: 'Reativar aluno',
-            }
-          }}          
+        <MaterialTable title="Lista de mentores"
+            localization={{
+                header: {
+                    actions: 'Reativar mentor',
+                }
+            }}
             data={data}
             columns={[
                 {
@@ -36,10 +37,18 @@ const TableAlunoInativo = ({ data }) => {
                 },
 
                 {
-                    title: 'Classe', field: 'classe',
+                    title: 'Idade', field: 'idade',
                     headerStyle: {
                         //backgroundColor: '#039be5',
                     }
+                },
+
+                {
+                    title: 'País', field: 'pais',
+                },
+
+                {
+                    title: 'Escola', field: 'escola',
                 },
 
                 {
@@ -52,7 +61,7 @@ const TableAlunoInativo = ({ data }) => {
             ]}
             options={{
                 //search: false,
-                paging: false,
+                //paging: false,
                 //filtering: true,
                 exportButton: true,
                 rowStyle: {
@@ -61,15 +70,12 @@ const TableAlunoInativo = ({ data }) => {
             }}
             actions={[
                 {
-                    icon: () => <AutorenewIcon color="primary" />,
-                    //icon: 'autorenew',
-                    tooltip: 'Reativar aluno',
-                    onClick: (event, rowData) => reactivateAluno(rowData.id)
+                    icon: () => <AutoRenewIcon color="primary" />,
+                    tooltip: 'Reativar mentor',
+                    onClick: (event, rowData) => reactivateMentor(rowData.id)
                 }
             ]}
         />
     )
 }
-
-
-export default TableAlunoInativo
+export default TableMentorInativo

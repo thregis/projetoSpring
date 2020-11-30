@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { useParams, Link, useHistory } from 'react-router-dom'
 import httpService from '../../../services/httpService'
-import AlunoForm from '../../../components/AlunoForm'
-import { Button } from '@material-ui/core'
+import AlunoForm from '../../../components/Form/AlunoForm'
+import { Button, Typography } from '@material-ui/core'
 import ButtonAlunoHome from '../../../components/Buttons/ButtonAlunoHome'
 
 
@@ -35,7 +35,7 @@ const PutAluno = () => {
     }
 
     return (<div>
-        <h1> Alterar aluno: {aluno.name}</h1>
+        <Typography variant="h1" color="primary"> Alterar aluno: {aluno.name}</Typography>
 
         {!isFinished && <p>Carregando...</p>}
 

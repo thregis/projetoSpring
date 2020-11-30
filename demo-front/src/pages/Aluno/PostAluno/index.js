@@ -1,8 +1,8 @@
 import { Component } from 'react'
 import httpService from '../../../services/httpService'
 import { Link, useHistory } from 'react-router-dom'
-import AlunoForm from '../../../components/AlunoForm'
-import { Button, withTheme } from '@material-ui/core'
+import AlunoForm from '../../../components/Form/AlunoForm'
+import { Button, Typography, withTheme } from '@material-ui/core'
 import ButtonAlunoHome from '../../../components/Buttons/ButtonAlunoHome'
 
 const AddAluno = () =>{
@@ -21,7 +21,7 @@ const AddAluno = () =>{
     
         return (
             <>
-                <h1>Novo aluno</h1>
+                <Typography variant="h1" color="primary">Novo aluno</Typography>
 
                 <AlunoForm
                     initialValues={{

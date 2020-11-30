@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import httpService from '../../../services/httpService'
-import { IconButton} from '@material-ui/core'
-import AutorenewIcon from '@material-ui/icons/Autorenew';
+import { Typography} from '@material-ui/core'
 import ButtonAlunoHome from '../../../components/Buttons/ButtonAlunoHome';
-import { useHistory } from 'react-router-dom'
-import TableAlunoInativo from '../../../components/Table/TableAlunoInativo';
+import TableAlunoInativo from '../../../components/Table/TableAluno/TableAlunoInativo';
 
 const AlunoInativo = () =>{
 
@@ -31,7 +29,7 @@ const AlunoInativo = () =>{
     .catch(error => {
         console.error(error)
     })
-}*/
+} transferido para a tabela de inativos*/
         
         return(
             /*
@@ -66,6 +64,7 @@ const AlunoInativo = () =>{
             */
            <div>
 
+            <Typography variant="h1" color="primary">Alunos inativos</Typography>
            <TableAlunoInativo
            data={alunos}
            />

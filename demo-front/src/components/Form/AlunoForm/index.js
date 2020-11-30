@@ -1,10 +1,10 @@
 import { FormControl } from '@material-ui/core'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import ButtonAlunoHome from '../Buttons/ButtonAlunoHome'
-import ButtonSubmit from '../Buttons/ButtonSubmit'
-import Input from '../Input'
-import SelectPrograma from '../SelectPrograma'
+import ButtonAlunoHome from '../../Buttons/ButtonAlunoHome'
+import ButtonSubmit from '../../Buttons/ButtonSubmit'
+import Input from '../../Input'
+import SelectPrograma from '../../Select/SelectPrograma'
 
 
 const AlunoForm = ({ initialValues, handleSubmit }) => {

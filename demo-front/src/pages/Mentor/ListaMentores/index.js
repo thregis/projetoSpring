@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import httpService from '../../../services/httpService'
 import { Link } from 'react-router-dom'
+import { Button, Typography } from '@material-ui/core'
+import TableMentor from '../../../components/Table/TableMentor/TableMentor'
+import ButtonPersonAdd from '../../../components/Buttons/ButtonPersonAdd'
 
 const Mentor = () => {
     const [mentores, setMentores] = useState([])
@@ -16,38 +19,16 @@ const Mentor = () => {
 
     }, [])
 
-        return (
-            <div>
-                <h1>Mentores ativos</h1>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Idade</th>
-                            <th>País</th>
-                            <th>Escola</th>
-                            <th>Programa</th>
-                            <th>Ver mentor</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {mentores.map(mentor =>
-                            <tr key={mentor.id}>
-                                <td>{mentor.name}</td>
-                                <td>{mentor.idade}</td>
-                                <td>{mentor.pais}</td>
-                                <td>{mentor.escola}</td>
-                                <td>{mentor.programaId}</td>
-                                <td><Link to={`mentor/${mentor.id}`}><button type="button">Inspecionar</button></Link></td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-                <Link to="/mentor/reativacao"><button type="button">Mentores inativos</button></Link>
-                <Link to="/mentor/add"><button type="button">Novo mentor</button></Link>
-            </div>
-        )
+    return (
+        <div>
+            <Typography variant="h1" color="primary">Mentores ativos</Typography>
+            <TableMentor
+                data={mentores}
+            />
+            <Link to="/mentor/reativacao"><Button variant="contained" color="primary" style={{ margin: 8 }} >Mentores inativos</Button></Link>
+            <Link to="/mentor/add"><ButtonPersonAdd /></Link>
+        </div>
+    )
 
 }
 
