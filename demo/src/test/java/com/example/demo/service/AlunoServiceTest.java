@@ -14,6 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,19 +77,23 @@ public class AlunoServiceTest {
         aluno3.setId(3L);
         aluno3.setName("teste3");
         aluno3.setActive(false);
+        Pageable pageable = PageRequest.of(0,5);
 
         List<Aluno> alunos = new ArrayList<Aluno>();
         alunos.add(aluno);
         alunos.add(aluno2);
 
-        Mockito.when(alunoRepository.findByActive(true)).thenReturn(alunos);
+        Page<Aluno> pageAlunos = new PageImpl<>(alunos);
+
+        Mockito.when(alunoRepository.findByActive(true, pageable)).thenReturn(pageAlunos);
         Mockito.when(alunoMapper.toAlunoDTO(aluno)).thenReturn(alunoDTO);
 
-        Optional<List<AlunoDTO>> all = this.alunoService.getAlunos();
+        Optional<Page<AlunoDTO>> all = this.alunoService.getAlunos(pageable);
 
         Assertions.assertTrue(all.isPresent());
-        Assertions.assertFalse(all.get().size() == 0);
-        Assertions.assertEquals(all, Optional.of(alunos.stream().map(alunoMapper::toAlunoDTO).collect(Collectors.toList())));
+        Assertions.assertFalse(all.get().getSize() == 0);
+        //Assertions.assertEquals(all, Optional.of(alunos.stream().map(alunoMapper::toAlunoDTO)));
+        Assertions.assertEquals(all, Optional.of(pageAlunos.map(alunoMapper::toAlunoDTO)));
 
     }
 
@@ -121,18 +129,22 @@ public class AlunoServiceTest {
         aluno3.setName("teste3");
         aluno3.setActive(true);
 
+        Pageable pageable = PageRequest.of(0,5);
+
         List<Aluno> alunos = new ArrayList<Aluno>();
         alunos.add(aluno);
         alunos.add(aluno2);
 
-        Mockito.when(alunoRepository.findByActive(false)).thenReturn(alunos);
+        Page<Aluno> pageAlunos = new PageImpl<>(alunos);
+
+        Mockito.when(alunoRepository.findByActive(false, pageable)).thenReturn(pageAlunos);
         Mockito.when(alunoMapper.toAlunoDTO(aluno)).thenReturn(alunoDTO);
 
-        Optional<List<AlunoDTO>> all = this.alunoService.getAlunosInativos();
+        Optional<Page<AlunoDTO>> all = this.alunoService.getAlunosInativos(pageable);
 
         Assertions.assertTrue(all.isPresent());
-        Assertions.assertFalse(all.get().size() == 0);
-        Assertions.assertEquals(all, Optional.of(alunos.stream().map(alunoMapper::toAlunoDTO).collect(Collectors.toList())));
+        Assertions.assertFalse(all.get().getSize() == 0);
+        Assertions.assertEquals(all, Optional.of(pageAlunos.map(alunoMapper::toAlunoDTO)));
     }
 
     @Test

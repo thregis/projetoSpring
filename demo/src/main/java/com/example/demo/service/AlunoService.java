@@ -7,6 +7,8 @@ import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Aluno;
 import com.example.demo.repository.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,14 +34,14 @@ public class AlunoService {
 
     //private List<String> alunos = new ArrayList<String>(List.of("Paulo", "Paulo Amaral", "Paulo Silva", "Paulo Amaral Silva"));
 
-    @Transactional(readOnly = true)
+    /*@Transactional(readOnly = true)
     public Optional<List<AlunoDTO>> getAlunos() {
 
         return Optional.of(alunoRepository.findByActive(true)
                 .stream()
                 .map(alunoMapper::toAlunoDTO)
                 .collect(Collectors.toList()));
-    }
+    } /*
 
     @Transactional(readOnly = true)
     public Optional<List<AlunoDTO>> getAlunosInativos() {
@@ -48,7 +50,23 @@ public class AlunoService {
                 .stream()
                 .map(alunoMapper::toAlunoDTO)
                 .collect(Collectors.toList()));
+    } pre-pageable*/
+
+    @Transactional(readOnly = true)
+    public Optional<Page<AlunoDTO>> getAlunos(Pageable pageable) {
+
+        return Optional.of(alunoRepository.findByActive(true, pageable)
+                .map(alunoMapper::toAlunoDTO));
+
     }
+
+    @Transactional(readOnly = true)
+    public Optional<Page<AlunoDTO>> getAlunosInativos(Pageable pageable) {
+
+        return Optional.of(alunoRepository.findByActive(false, pageable)
+                .map(alunoMapper::toAlunoDTO));
+    }
+
 
     @Transactional(readOnly = true)
     public Optional<AlunoDTO> getAlunoByIndex(Long id)/* throws Exception */ {

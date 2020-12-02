@@ -4,7 +4,7 @@ import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { useHistory } from 'react-router-dom'
 import httpService from '../../../services/httpService'
 
-const TableAlunoInativo = ({ data }) => {
+const TableAlunoInativo = () => {
     let history = useHistory()
 
     const reactivateAluno = (id) => {
@@ -26,7 +26,25 @@ const TableAlunoInativo = ({ data }) => {
               actions: 'Reativar aluno',
             }
           }}          
-            data={data}
+            data={
+                query => (
+                    new Promise((resolve, reject) => {
+                        httpService.get('/aluno/reativacao', {
+                            params: {
+                                page: query.page,
+                                size: query.pageSize
+                            }
+                        })
+                            .then(({ data }) => {
+                                resolve({
+                                    data: data.content,
+                                    page: data.pageable.pageNumber,
+                                    totalCount: data.totalElements,
+                                })
+                            })
+                    })
+                )
+            }
             columns={[
                 {
                     title: 'Nome', field: 'name',
@@ -51,7 +69,7 @@ const TableAlunoInativo = ({ data }) => {
 
             ]}
             options={{
-                //search: false,
+                search: false,
                 //paging: false,
                 //filtering: true,
                 exportButton: true,

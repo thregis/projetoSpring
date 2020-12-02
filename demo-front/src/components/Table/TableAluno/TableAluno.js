@@ -2,18 +2,38 @@ import React from 'react'
 import MaterialTable from 'material-table'
 import { Visibility } from '@material-ui/icons'
 import { useHistory } from 'react-router-dom'
+import httpService from '../../../services/httpService'
 
-const TableAluno = ({ data }) => {
+
+const TableAluno = () => {
     let history = useHistory()
     return (
 
         <MaterialTable title="Lista de alunos"
-        localization={{
-            header: {
-              actions: 'Ver aluno',
+            localization={{
+                header: {
+                    actions: 'Ver aluno',
+                }
+            }}
+            data={
+                query => (
+                    new Promise((resolve, reject) => {
+                        httpService.get('/aluno', {
+                            params: {
+                                page: query.page,
+                                size: query.pageSize
+                            }
+                        })
+                            .then(({ data }) => {
+                                resolve({
+                                    data: data.content,
+                                    page: data.pageable.pageNumber,
+                                    totalCount: data.totalElements,
+                                })
+                            })
+                    })
+                )
             }
-          }}          
-            data={data}
             columns={[
                 {
                     title: 'Nome', field: 'name',
@@ -38,7 +58,7 @@ const TableAluno = ({ data }) => {
 
             ]}
             options={{
-                //search: false,
+                search: false,
                 //paging: false,
                 //filtering: true,
                 exportButton: true,

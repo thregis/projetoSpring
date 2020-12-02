@@ -5,6 +5,10 @@ import com.example.demo.model.Aluno;
 import com.example.demo.service.AlunoService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +29,13 @@ public class AlunoController {
     private AlunoService alunoService;
 
     @GetMapping
-    public ResponseEntity<Optional<List<AlunoDTO>>> getAlunos(){
-       return ResponseEntity.ok(alunoService.getAlunos());
+    public ResponseEntity<Optional<Page<AlunoDTO>>> getAlunos(@PageableDefault(size=5, sort="name", direction= Sort.Direction.ASC) Pageable pageable){
+       return ResponseEntity.ok(alunoService.getAlunos(pageable));
     }
 
     @GetMapping("/reativacao")
-    public ResponseEntity<Optional<List<AlunoDTO>>> getAlunosInativos(){
-        return ResponseEntity.ok(alunoService.getAlunosInativos());
+    public ResponseEntity<Optional<Page<AlunoDTO>>> getAlunosInativos(@PageableDefault(size=5, sort="name", direction=Sort.Direction.ASC) Pageable pageable){
+        return ResponseEntity.ok(alunoService.getAlunosInativos(pageable));
     }
     //O ResponseEntity não é necessário, mas permite passar outras respostas, ou header, etc
 

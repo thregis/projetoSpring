@@ -5,7 +5,7 @@ import ButtonAlunoHome from '../../../components/Buttons/ButtonAlunoHome';
 import TableAlunoInativo from '../../../components/Table/TableAluno/TableAlunoInativo';
 
 const AlunoInativo = () =>{
-
+/*
     const [alunos, setAlunos] = useState([])
 
     useEffect (() => {
@@ -18,7 +18,7 @@ const AlunoInativo = () =>{
         })
 
     },[])
-    /*
+    
     const reactivateAluno = (id) => {
         console.log(id)
         httpService.post(`/aluno/reativacao/${id}`)
@@ -66,7 +66,7 @@ const AlunoInativo = () =>{
 
             <Typography variant="h1" color="primary">Alunos inativos</Typography>
            <TableAlunoInativo
-           data={alunos}
+           //data={alunos}
            />
            <ButtonAlunoHome/>
            </div>

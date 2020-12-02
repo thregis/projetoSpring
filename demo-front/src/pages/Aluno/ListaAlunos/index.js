@@ -8,18 +8,25 @@ import TableAluno from '../../../components/Table/TableAluno/TableAluno';
 
 
 const Aluno = () => {
-    const [alunos, setAlunos] = useState([])
+    //const [alunos, setAlunos] = useState([])
+    //const [alunosPerPage, setAlunosPerPage] = useState(5)
+    //const [currentPage, setCurrentPage] = useState()
+    //const [totalPages, setTotalPages] = useState()
+    //const [totalElements, setTotalElements] = useState()
 
-    useEffect(() => {
-        httpService.get('/aluno')
+    /*useEffect(() => {
+        httpService.get(`/aluno`)
             .then(({ data }) => {
-                setAlunos(data)
+                setAlunos(data.content)
+                //totalPages(data.totalPages)
+                //totalElements(data.totalElements)
+
             })
             .catch(error => {
                 console.error(error)
             })
 
-    },[])
+    },[])*/
 
     return (
         <div>
@@ -50,12 +57,12 @@ const Aluno = () => {
                     }
                 </tbody>
             </table>
-*/}
+                */}
             <Typography variant="h1" color="primary">Alunos ativos</Typography>
 
-            <TableAluno
-            data={alunos}
-        />
+            <TableAluno 
+            //data={data}
+            />
    
 
             <Link to="/aluno/reativacao"><Button variant="contained" color="primary" style={{ margin: 8 }} >Alunos inativos</Button></Link>
