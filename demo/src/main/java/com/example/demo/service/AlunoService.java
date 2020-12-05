@@ -56,8 +56,20 @@ public class AlunoService {
     public Optional<Page<AlunoDTO>> getAlunos(Pageable pageable) {
 
         return Optional.of(alunoRepository.findByActive(true, pageable)
-                .map(alunoMapper::toAlunoDTO));
+                //.stream()
+                .map(alunoMapper::toAlunoDTO))
+                //.collect(Collectors.toList()))
+                ;
 
+    }
+
+  @Transactional(readOnly = true)
+    public Optional<List<AlunoDTO>> getAlunosList() {
+
+        return Optional.of(alunoRepository.findListByActive(true)
+                .stream()
+                .map(alunoMapper::toAlunoDTO)
+                .collect(Collectors.toList()));
     }
 
     @Transactional(readOnly = true)

@@ -77,6 +77,7 @@ public class AlunoServiceTest {
         aluno3.setId(3L);
         aluno3.setName("teste3");
         aluno3.setActive(false);
+
         Pageable pageable = PageRequest.of(0,5);
 
         List<Aluno> alunos = new ArrayList<Aluno>();
@@ -94,6 +95,54 @@ public class AlunoServiceTest {
         Assertions.assertFalse(all.get().getSize() == 0);
         //Assertions.assertEquals(all, Optional.of(alunos.stream().map(alunoMapper::toAlunoDTO)));
         Assertions.assertEquals(all, Optional.of(pageAlunos.map(alunoMapper::toAlunoDTO)));
+
+    }
+
+    @Test
+    public void testGetAlunosAtivosList() {
+
+        Long id = 1L;
+        Programa programa = new Programa();
+        programa.setId(id);
+        programa.setName("testeteste");
+
+        Aluno aluno = new Aluno();
+        aluno.setId(id);
+        aluno.setName("teste");
+        aluno.setClasse("teste");
+        aluno.setActive(true);
+        aluno.setPrograma(programa);
+
+        AlunoDTO alunoDTO = new AlunoDTO();
+        alunoDTO.setId(id);
+        alunoDTO.setName("teste");
+        alunoDTO.setClasse("teste");
+        alunoDTO.setActive(true);
+        alunoDTO.setProgramaId(id);
+        alunoDTO.setProgramaName("testeteste");
+
+        Aluno aluno2 = new Aluno();
+        aluno2.setId(2L);
+        aluno2.setName("teste2");
+        aluno2.setActive(true);
+
+        Aluno aluno3 = new Aluno();
+        aluno3.setId(3L);
+        aluno3.setName("teste3");
+        aluno3.setActive(false);
+
+        List<Aluno> alunos = new ArrayList<Aluno>();
+        alunos.add(aluno);
+        alunos.add(aluno2);
+
+        Mockito.when(alunoRepository.findListByActive(true)).thenReturn(alunos);
+        Mockito.when(alunoMapper.toAlunoDTO(aluno)).thenReturn(alunoDTO);
+
+        Optional<List<AlunoDTO>> all = this.alunoService.getAlunosList();
+
+        Assertions.assertTrue(all.isPresent());
+        Assertions.assertFalse(all.get().size() == 0);
+        Assertions.assertEquals(all, Optional.of(alunos.stream().map(alunoMapper::toAlunoDTO).collect(Collectors.toList())));
 
     }
 

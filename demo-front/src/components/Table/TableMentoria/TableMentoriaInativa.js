@@ -4,7 +4,7 @@ import AutoRenewIcon from '@material-ui/icons/Autorenew'
 import { useHistory } from 'react-router-dom'
 import httpService from '../../../services/httpService'
 
-const TableMentoriaInativa = ({ data }) => {
+const TableMentoriaInativa = () => {
     let history = useHistory()
 
     const reactivateMentoria = (id) => {
@@ -27,7 +27,25 @@ const TableMentoriaInativa = ({ data }) => {
                     actions: 'Reativar mentoria',
                 }
             }}
-            data={data}
+            data={
+                query => (
+                    new Promise((resolve, reject) => {
+                        httpService.get('/mentoria/reativacao', {
+                            params: {
+                                page: query.page,
+                                size: query.pageSize
+                            }
+                        })
+                            .then(({ data }) => {
+                                resolve({
+                                    data: data.content,
+                                    page: data.pageable.pageNumber,
+                                    totalCount: data.totalElements,
+                                })
+                            })
+                    })
+                )
+            }
             columns={[
                 {
                     title: 'Aluno', field: 'alunoName',
@@ -43,6 +61,7 @@ const TableMentoriaInativa = ({ data }) => {
 
             ]}
             options={{
+                search: false,
                 exportButton: true,
                 rowStyle: {
                     backgroundColor: '#EEE',

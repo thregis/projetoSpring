@@ -14,7 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -77,14 +80,72 @@ public class MentorServiceTest {
         mentor2.setActive(true);
         mentor2.setPrograma(programa);
 
+        Pageable pageable = PageRequest.of(0, 5);
+
         List<Mentor> mentores = new ArrayList<Mentor>();
         mentores.add(mentor);
         mentores.add(mentor2);
 
-        Mockito.when(mentorRepository.findByActive(true)).thenReturn(mentores);
+        Page<Mentor> pageMentores = new PageImpl<>(mentores);
+
+        Mockito.when(mentorRepository.findByActive(true, pageable)).thenReturn(pageMentores);
         Mockito.when(mentorMapper.toMentorDTO(mentor)).thenReturn(mentorDTO);
 
-        Optional<List<MentorDTO>> all = this.mentorService.getMentores();
+        Optional<Page<MentorDTO>> all = this.mentorService.getMentores(pageable);
+
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(all.isPresent()),
+                () -> Assertions.assertFalse(all.get().getSize() == 0),
+                () -> Assertions.assertEquals(all, Optional.of(pageMentores.map(mentorMapper::toMentorDTO)))
+        );
+
+    }
+
+    @Test
+    public void testGetMentoresAtivosList() {
+
+        Long id = 1L;
+        Integer idade = 20;
+        Programa programa = new Programa();
+        programa.setId(id);
+        programa.setName("testeteste");
+
+        Mentor mentor = new Mentor();
+        mentor.setId(id);
+        mentor.setName("teste");
+        mentor.setPais("teste");
+        mentor.setIdade(idade);
+        mentor.setEscola("testeteste");
+        mentor.setActive(true);
+        mentor.setPrograma(programa);
+
+        MentorDTO mentorDTO = new MentorDTO();
+        mentorDTO.setId(id);
+        mentorDTO.setName("teste");
+        mentorDTO.setPais("teste");
+        mentorDTO.setIdade(idade);
+        mentorDTO.setEscola("testeteste");
+        mentorDTO.setActive(true);
+        mentorDTO.setProgramaId(id);
+        mentorDTO.setProgramaName("testeteste");
+
+        Mentor mentor2 = new Mentor();
+        mentor2.setId(2L);
+        mentor2.setName("teste2");
+        mentor2.setPais("teste2");
+        mentor2.setIdade(idade);
+        mentor2.setEscola("testeteste");
+        mentor2.setActive(true);
+        mentor2.setPrograma(programa);
+
+        List<Mentor> mentores = new ArrayList<Mentor>();
+        mentores.add(mentor);
+        mentores.add(mentor2);
+
+        Mockito.when(mentorRepository.findListByActive(true)).thenReturn(mentores);
+        Mockito.when(mentorMapper.toMentorDTO(mentor)).thenReturn(mentorDTO);
+
+        Optional<List<MentorDTO>> all = this.mentorService.getMentoresList();
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(all.isPresent()),
@@ -130,20 +191,23 @@ public class MentorServiceTest {
         mentor2.setActive(false);
         mentor2.setPrograma(programa);
 
+        Pageable pageable = PageRequest.of(0, 5);
 
         List<Mentor> mentores = new ArrayList<Mentor>();
         mentores.add(mentor);
         mentores.add(mentor2);
 
-        Mockito.when(mentorRepository.findByActive(false)).thenReturn(mentores);
+        Page<Mentor> pageMentores = new PageImpl<>(mentores);
+
+        Mockito.when(mentorRepository.findByActive(false, pageable)).thenReturn(pageMentores);
         Mockito.when(mentorMapper.toMentorDTO(mentor)).thenReturn(mentorDTO);
 
-        Optional<List<MentorDTO>> all = this.mentorService.getMentoresInativos();
+        Optional<Page<MentorDTO>> all = this.mentorService.getMentoresInativos(pageable);
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(all.isPresent()),
-                () -> Assertions.assertFalse(all.get().size() == 0),
-                () -> Assertions.assertEquals(all, Optional.of(mentores.stream().map(mentorMapper::toMentorDTO).collect(Collectors.toList())))
+                () -> Assertions.assertFalse(all.get().getSize() == 0),
+                () -> Assertions.assertEquals(all, Optional.of(pageMentores.map(mentorMapper::toMentorDTO)))
                 );
     }
 

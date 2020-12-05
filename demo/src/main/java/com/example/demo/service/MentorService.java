@@ -7,6 +7,8 @@ import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Mentor;
 import com.example.demo.repository.MentorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,21 +35,26 @@ public class MentorService {
 
 
     @Transactional(readOnly = true)
-    public Optional<List<MentorDTO>> getMentores() {
+    public Optional<Page<MentorDTO>> getMentores(Pageable pageable) {
 
-        return Optional.of(mentorRepository.findByActive(true)
+        return Optional.of(mentorRepository.findByActive(true, pageable)
+                .map(mentorMapper::toMentorDTO));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<List<MentorDTO>> getMentoresList(){
+
+        return Optional.of(mentorRepository.findListByActive(true)
                 .stream()
                 .map(mentorMapper::toMentorDTO)
                 .collect(Collectors.toList()));
     }
 
     @Transactional(readOnly = true)
-    public Optional<List<MentorDTO>> getMentoresInativos() {
+    public Optional<Page<MentorDTO>> getMentoresInativos(Pageable pageable) {
 
-        return Optional.of(mentorRepository.findByActive(false)
-                .stream()
-                .map(mentorMapper::toMentorDTO)
-                .collect(Collectors.toList()));
+        return Optional.of(mentorRepository.findByActive(false, pageable)
+                .map(mentorMapper::toMentorDTO));
     }
 
     @Transactional

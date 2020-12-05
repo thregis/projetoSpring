@@ -28,7 +28,7 @@ const MentorForm = ({ initialValues, handleSubmit }) => {
         <form onSubmit={onSubmit}>
             <FormControl style={{ minWidth: 120 }}>
                 <Input
-                    label="Name"
+                    label="Nome"
                     id="mentor[name]"
                     name="name"
                     onChange={handleChange}

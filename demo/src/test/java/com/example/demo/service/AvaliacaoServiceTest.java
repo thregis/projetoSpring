@@ -15,6 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,19 +92,23 @@ public class AvaliacaoServiceTest {
         avaliacao2.setActive(true);
         avaliacao2.setNota(0.0);
 
+        Pageable pageable = PageRequest.of(0,5);
+
         List<Avaliacao> avaliacoes = new ArrayList<Avaliacao>();
         avaliacoes.add(avaliacao);
         avaliacoes.add(avaliacao2);
 
-        Mockito.when(avaliacaoRepository.findByActive(true)).thenReturn(avaliacoes);
+        Page<Avaliacao> pageAvaliacoes = new PageImpl<>(avaliacoes);
+
+        Mockito.when(avaliacaoRepository.findByActive(true, pageable)).thenReturn(pageAvaliacoes);
         Mockito.when(avaliacaoMapper.toAvaliacaoDTO(avaliacao)).thenReturn(avaliacaoDTO);
 
-        Optional<List<AvaliacaoDTO>> all = this.avaliacaoService.getAvaliacoes();
+        Optional<Page<AvaliacaoDTO>> all = this.avaliacaoService.getAvaliacoes(pageable);
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(all.isPresent()),
-                () -> Assertions.assertFalse(all.get().size() == 0),
-                () -> Assertions.assertEquals(all, Optional.of(avaliacoes.stream().map(avaliacaoMapper::toAvaliacaoDTO).collect(Collectors.toList())))
+                () -> Assertions.assertFalse(all.get().getSize() == 0),
+                () -> Assertions.assertEquals(all, Optional.of(pageAvaliacoes.map(avaliacaoMapper::toAvaliacaoDTO)))
         );
 
     }
@@ -153,19 +161,23 @@ public class AvaliacaoServiceTest {
         avaliacao2.setActive(false);
         avaliacao2.setNota(0.0);
 
+        Pageable pageable = PageRequest.of(0, 5);
+
         List<Avaliacao> avaliacoes = new ArrayList<Avaliacao>();
         avaliacoes.add(avaliacao);
         avaliacoes.add(avaliacao2);
 
-        Mockito.when(avaliacaoRepository.findByActive(false)).thenReturn(avaliacoes);
+        Page<Avaliacao> pageAvaliacoes = new PageImpl<>(avaliacoes);
+
+        Mockito.when(avaliacaoRepository.findByActive(false, pageable)).thenReturn(pageAvaliacoes);
         Mockito.when(avaliacaoMapper.toAvaliacaoDTO(avaliacao)).thenReturn(avaliacaoDTO);
 
-        Optional<List<AvaliacaoDTO>> all = this.avaliacaoService.getAvaliacoesInativas();
+        Optional<Page<AvaliacaoDTO>> all = this.avaliacaoService.getAvaliacoesInativas(pageable);
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(all.isPresent()),
-                () -> Assertions.assertFalse(all.get().size() == 0),
-                () -> Assertions.assertEquals(all, Optional.of(avaliacoes.stream().map(avaliacaoMapper::toAvaliacaoDTO).collect(Collectors.toList())))
+                () -> Assertions.assertFalse(all.get().getSize() == 0),
+                () -> Assertions.assertEquals(all, Optional.of(pageAvaliacoes.map(avaliacaoMapper::toAvaliacaoDTO)))
         );
 
     }

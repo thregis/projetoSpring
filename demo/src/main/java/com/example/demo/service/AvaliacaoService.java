@@ -7,6 +7,8 @@ import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Avaliacao;
 import com.example.demo.repository.AvaliacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,19 +32,15 @@ public class AvaliacaoService {
     private DisciplinaService disciplinaService;
 
     @Transactional(readOnly = true)
-    public Optional<List<AvaliacaoDTO>> getAvaliacoes() {
-        return Optional.of(avaliacaoRepository.findByActive(true)
-                .stream()
-                .map(avaliacaoMapper::toAvaliacaoDTO)
-                .collect(Collectors.toList()));
+    public Optional<Page<AvaliacaoDTO>> getAvaliacoes(Pageable pageable) {
+        return Optional.of(avaliacaoRepository.findByActive(true, pageable)
+                .map(avaliacaoMapper::toAvaliacaoDTO));
     }
 
     @Transactional(readOnly = true)
-    public Optional<List<AvaliacaoDTO>> getAvaliacoesInativas() {
-        return Optional.of(avaliacaoRepository.findByActive(false)
-                .stream()
-                .map(avaliacaoMapper::toAvaliacaoDTO)
-                .collect(Collectors.toList()));
+    public Optional<Page<AvaliacaoDTO>> getAvaliacoesInativas(Pageable pageable) {
+        return Optional.of(avaliacaoRepository.findByActive(false, pageable)
+                .map(avaliacaoMapper::toAvaliacaoDTO));
     }
 
     @Transactional

@@ -7,6 +7,8 @@ import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Programa;
 import com.example.demo.repository.ProgramaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,19 +29,23 @@ public class ProgramaService {
     private MentorService mentorService;
 
     @Transactional(readOnly = true)
-    public Optional<List<ProgramaDTO>> getProgramas() {
-        return Optional.of(programaRepository.findByActive(true)
+    public Optional<Page<ProgramaDTO>> getProgramas(Pageable pageable) {
+        return Optional.of(programaRepository.findByActive(true, pageable)
+                .map(programaMapper::toProgramaDTO));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<List<ProgramaDTO>> getProgramasList(){
+        return Optional.of(programaRepository.findListByActive(true)
                 .stream()
                 .map(programaMapper::toProgramaDTO)
                 .collect(Collectors.toList()));
     }
 
     @Transactional(readOnly = true)
-    public Optional<List<ProgramaDTO>> getProgramasInativos() {
-        return Optional.of(programaRepository.findByActive(false)
-                .stream()
-                .map(programaMapper::toProgramaDTO)
-                .collect(Collectors.toList()));
+    public Optional<Page<ProgramaDTO>> getProgramasInativos(Pageable pageable) {
+        return Optional.of(programaRepository.findByActive(false, pageable)
+                .map(programaMapper::toProgramaDTO));
     }
 
     @Transactional

@@ -49,18 +49,19 @@
 			<version>3.0.0</version>
 		</dependency>
 
-		<!-- swagger -->
+		<!-- swagger
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
 			<version>3.0.0</version>
-		</dependency>
+		</dependency> -->
 
 		<!-- swagger ui -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>3.0.0</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<!--  PARA PODER USAR @NOTNULL E @NOTEMPTY-->

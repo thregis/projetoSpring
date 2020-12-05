@@ -13,6 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,14 +58,53 @@ public class ProgramaServiceTest {
         programa2.setName("teste2");
         programa2.setActive(true);
 
+        Pageable pageable = PageRequest.of(0,5);
+
         List<Programa> programas = new ArrayList<Programa>();
         programas.add(programa);
         programas.add(programa2);
 
-        Mockito.when(programaRepository.findByActive(true)).thenReturn(programas);
+        Page<Programa> pageProgramas = new PageImpl<>(programas);
+
+        Mockito.when(programaRepository.findByActive(true, pageable)).thenReturn(pageProgramas);
         Mockito.when(programaMapper.toProgramaDTO(programa)).thenReturn(programaDTO);
 
-        Optional<List<ProgramaDTO>> all = this.programaService.getProgramas();
+        Optional<Page<ProgramaDTO>> all = this.programaService.getProgramas(pageable);
+
+        Assertions.assertTrue(all.isPresent());
+        Assertions.assertFalse(all.get().getSize() == 0);
+        Assertions.assertEquals(all, Optional.of(pageProgramas.map(programaMapper::toProgramaDTO)));
+
+    }
+
+    @Test
+    public void testGetProgramasAtivosList() {
+
+        Long id = 1L;
+
+        Programa programa = new Programa();
+        programa.setId(id);
+        programa.setName("testeteste");
+        programa.setActive(true);
+
+        ProgramaDTO programaDTO = new ProgramaDTO();
+        programaDTO.setId(id);
+        programaDTO.setName("testeteste");
+        programaDTO.setActive(true);
+
+        Programa programa2 = new Programa();
+        programa2.setId(2L);
+        programa2.setName("teste2");
+        programa2.setActive(true);
+
+        List<Programa> programas = new ArrayList<Programa>();
+        programas.add(programa);
+        programas.add(programa2);
+
+        Mockito.when(programaRepository.findListByActive(true)).thenReturn(programas);
+        Mockito.when(programaMapper.toProgramaDTO(programa)).thenReturn(programaDTO);
+
+        Optional<List<ProgramaDTO>> all = this.programaService.getProgramasList();
 
         Assertions.assertTrue(all.isPresent());
         Assertions.assertFalse(all.get().size() == 0);
@@ -89,18 +132,22 @@ public class ProgramaServiceTest {
         programa2.setName("t2");
         programa2.setActive(false);
 
+        Pageable pageable = PageRequest.of(0,5);
+
         List<Programa> programas = new ArrayList<Programa>();
         programas.add(programa);
         programas.add(programa2);
 
-        Mockito.when(programaRepository.findByActive(false)).thenReturn(programas);
+        Page<Programa> pageProgramas = new PageImpl<>(programas);
+
+        Mockito.when(programaRepository.findByActive(false, pageable)).thenReturn(pageProgramas);
         Mockito.when(programaMapper.toProgramaDTO(programa)).thenReturn(programaDTO);
 
-        Optional<List<ProgramaDTO>> all = this.programaService.getProgramasInativos();
+        Optional<Page<ProgramaDTO>> all = this.programaService.getProgramasInativos(pageable);
 
         Assertions.assertTrue(all.isPresent());
-        Assertions.assertFalse(all.get().size() == 0);
-        Assertions.assertEquals(all, Optional.of(programas.stream().map(programaMapper::toProgramaDTO).collect(Collectors.toList())));
+        Assertions.assertFalse(all.get().getSize() == 0);
+        Assertions.assertEquals(all, Optional.of(pageProgramas.map(programaMapper::toProgramaDTO)));
     }
 
     @Test

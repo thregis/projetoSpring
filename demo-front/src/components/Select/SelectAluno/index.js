@@ -6,7 +6,7 @@ const SelectAluno = ({ value, onChange, id, label, name }) => {
   const [alunos, setAlunos] = useState([]);
 
   useEffect(() => {
-    httpService.get("/aluno").then(({ data }) => {
+    httpService.get("/aluno/lista").then(({ data }) => {
       setAlunos(data);
     });
   }, []);

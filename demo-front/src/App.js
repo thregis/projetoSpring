@@ -22,6 +22,15 @@ import MentoriaInativa from './pages/Mentoria/Inativas'
 import AddMentoria from './pages/Mentoria/PostMentoria'
 import MentoriaById from './pages/Mentoria/MentoriaById'
 import PutMentoria from './pages/Mentoria/PutMentoria'
+import DisciplinaById from './pages/Disciplina/DisciplinaById'
+import Disciplina from './pages/Disciplina/ListaDisciplina'
+import DisciplinaInativa from './pages/Disciplina/Inativas'
+import AddDisciplina from './pages/Disciplina/PostDisciplina'
+import PutDisciplina from './pages/Disciplina/PutDisciplina'
+import Programa from './pages/Programa/ListaProgramas'
+import ProgramaInativo from './pages/Programa/Inativos'
+import AddPrograma from './pages/Programa/PostPrograma'
+import ProgramaById from './pages/Programa/ProgramaById'
 
 function App() {
   return (
@@ -34,11 +43,14 @@ function App() {
                 <Link to="/aluno"><Button variant="contained" color="primary">Alunos</Button></Link>
                 <Link to="/mentor"><Button variant="contained" color="primary">Mentores</Button></Link>
                 <Link to="/mentoria"><Button variant="contained" color="primary">Mentorias</Button></Link>
+                <Link to="/disciplina"><Button variant="contained" color="primary">Disciplinas</Button></Link>
+                <Link to="/programa"><Button variant="contained" color="primary">Programas</Button></Link>
             </Toolbar>
         </AppBar>
 
         <Switch>
           <Route path="/" exact component={Index} />
+
           <Route path="/aluno" exact component={Aluno} />
           <Route path="/aluno/reativacao" exact component={AlunoInativo} />
           <Route path="/aluno/add" exact component={AddAluno} />
@@ -56,6 +68,17 @@ function App() {
           <Route path="/mentoria/add" exact component={AddMentoria} />
           <Route path="/mentoria/:id" exact component={MentoriaById} />
           <Route path="/mentoria/:id/update" exact component={PutMentoria} />
+
+          <Route path="/disciplina" exact component={Disciplina} />
+          <Route path="/disciplina/reativacao" exact component={DisciplinaInativa} />
+          <Route path="/disciplina/add" exact component={AddDisciplina} />
+          <Route path="/disciplina/:id" exact component={DisciplinaById} />
+          <Route path="/disciplina/:id/update" exact component={PutDisciplina} />
+
+          <Route path="/programa" exact component={Programa} />
+          <Route path="/programa/reativacao" exact component={ProgramaInativo} />
+          <Route path="/programa/add" exact component={AddPrograma} />
+          <Route path="/programa/:id" exact component={ProgramaById} />
         </Switch>
       </Router>
     </div>

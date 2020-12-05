@@ -2,8 +2,10 @@ import React from 'react'
 import MaterialTable from 'material-table'
 import { Visibility } from '@material-ui/icons'
 import { useHistory } from 'react-router-dom'
+import httpService from '../../../services/httpService'
 
-const TableMentoria = ({ data }) => {
+
+const TableMentoria = () => {
     let history = useHistory()
     return (
 
@@ -13,22 +15,41 @@ const TableMentoria = ({ data }) => {
               actions: 'Ver mentoria',
             }
           }}          
-            data={data}
+            data={
+                query => (
+                    new Promise((resolve, reject) => {
+                        httpService.get('/mentoria', {
+                            params: {
+                                page: query.page,
+                                size: query.pageSize
+                            }
+                        })
+                            .then(({ data }) => {
+                                resolve({
+                                    data: data.content,
+                                    page: data.pageable.pageNumber,
+                                    totalCount: data.totalElements,
+                                })
+                            })
+                    })
+                )
+            }
             columns={[
                 {
                     title: 'Aluno', field: 'alunoName',
                     headerStyle: {
                     }
                 },
-
                 {
                     title: 'Mentor', field: 'mentorName',
                     headerStyle: {
                     }
                 },
 
+
             ]}
             options={{
+                search: false,
                 exportButton: true,
                 rowStyle: {
                     backgroundColor: '#EEE',

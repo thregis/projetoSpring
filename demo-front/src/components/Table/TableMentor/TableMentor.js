@@ -2,8 +2,9 @@ import React from 'react'
 import MaterialTable from 'material-table'
 import { Visibility } from '@material-ui/icons'
 import { useHistory } from 'react-router-dom'
+import httpService from '../../../services/httpService'
 
-const TableMentor = ({ data }) => {
+const TableMentor = () => {
     let history = useHistory()
     return (
 
@@ -13,7 +14,25 @@ const TableMentor = ({ data }) => {
               actions: 'Ver mentor',
             }
           }}          
-            data={data}
+            data={
+                query => (
+                    new Promise((resolve, reject) => {
+                        httpService.get('/mentor', {
+                            params: {
+                                page: query.page,
+                                size: query.pageSize
+                            }
+                        })
+                            .then(({ data }) => {
+                                resolve({
+                                    data: data.content,
+                                    page: data.pageable.pageNumber,
+                                    totalCount: data.totalElements,
+                                })
+                            })
+                    })
+                )
+            }
             columns={[
                 {
                     title: 'Nome', field: 'name',
@@ -46,7 +65,7 @@ const TableMentor = ({ data }) => {
 
             ]}
             options={{
-                //search: false,
+                search: false,
                 //paging: false,
                 //filtering: true,
                 exportButton: true,

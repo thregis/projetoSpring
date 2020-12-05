@@ -1,6 +1,8 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.Mentoria;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +13,8 @@ import java.util.List;
 @Repository
 public interface MentoriaRepository extends JpaRepository<Mentoria, Long> {
 
-    List<Mentoria> findByActive(Boolean active);
+    //List<Mentoria> findByActive(Boolean active);
+    Page<Mentoria> findByActive(Boolean active, Pageable pageable);
 
     @Modifying
     @Query(value = "update mentoria set mentoriaActive = ?1 where mentoriaAluno in (select alunoId from aluno where alunoId = ?2)", nativeQuery = true)

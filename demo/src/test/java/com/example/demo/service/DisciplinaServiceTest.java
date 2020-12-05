@@ -13,6 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,19 +62,23 @@ public class DisciplinaServiceTest {
         disciplina2.setDescricao("testeteste2");
         disciplina2.setActive(true);
 
+        Pageable pageable = PageRequest.of(0, 5);
+
         List<Disciplina> disciplinas = new ArrayList<Disciplina>();
         disciplinas.add(disciplina);
         disciplinas.add(disciplina2);
 
-        Mockito.when(disciplinaRepository.findByActive(true)).thenReturn(disciplinas);
+        Page<Disciplina> pageDisciplinas = new PageImpl<>(disciplinas);
+
+        Mockito.when(disciplinaRepository.findByActive(true, pageable)).thenReturn(pageDisciplinas);
         Mockito.when(disciplinaMapper.toDisciplinaDTO(disciplina)).thenReturn(disciplinaDTO);
 
-        Optional<List<DisciplinaDTO>> all = this.disciplinaService.getDisciplinas();
+        Optional<Page<DisciplinaDTO>> all = this.disciplinaService.getDisciplinas(pageable);
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(all.isPresent()),
-                () -> Assertions.assertFalse(all.get().size() == 0),
-                () -> Assertions.assertEquals(all, Optional.of(disciplinas.stream().map(disciplinaMapper::toDisciplinaDTO).collect(Collectors.toList())))
+                () -> Assertions.assertFalse(all.get().getSize() == 0),
+                () -> Assertions.assertEquals(all, Optional.of(pageDisciplinas.map(disciplinaMapper::toDisciplinaDTO)))
         );
 
     }
@@ -98,20 +106,23 @@ public class DisciplinaServiceTest {
         disciplina2.setDescricao("testeteste2");
         disciplina2.setActive(false);
 
+        Pageable pageable = PageRequest.of(0,5);
 
         List<Disciplina> disciplinas = new ArrayList<Disciplina>();
         disciplinas.add(disciplina);
         disciplinas.add(disciplina2);
 
-        Mockito.when(disciplinaRepository.findByActive(false)).thenReturn(disciplinas);
+        Page<Disciplina> pageDisciplinas = new PageImpl<>(disciplinas);
+
+        Mockito.when(disciplinaRepository.findByActive(false, pageable)).thenReturn(pageDisciplinas);
         Mockito.when(disciplinaMapper.toDisciplinaDTO(disciplina)).thenReturn(disciplinaDTO);
 
-        Optional<List<DisciplinaDTO>> all = this.disciplinaService.getDisciplinasInativas();
+        Optional<Page<DisciplinaDTO>> all = this.disciplinaService.getDisciplinasInativas(pageable);
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(all.isPresent()),
-                () -> Assertions.assertFalse(all.get().size() == 0),
-                () -> Assertions.assertEquals(all, Optional.of(disciplinas.stream().map(disciplinaMapper::toDisciplinaDTO).collect(Collectors.toList())))
+                () -> Assertions.assertFalse(all.get().getSize() == 0),
+                () -> Assertions.assertEquals(all, Optional.of(pageDisciplinas.map(disciplinaMapper::toDisciplinaDTO)))
         );
     }
 

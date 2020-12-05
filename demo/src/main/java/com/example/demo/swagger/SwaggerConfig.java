@@ -34,9 +34,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.example.demo.controller"))
                 .paths(PathSelectors.any())
                 .build()
-                .apiInfo(metaInfo())
-                .ignoredParameterTypes(ModelAndView.class, RedirectAttributes.class,
-                        HttpServletRequest.class, HttpServletResponse.class);
+                .apiInfo(metaInfo());
 
         /*docket.ignoredParameterTypes(ModelAndView.class, RedirectAttributes.class,
                 HttpServletRequest.class, HttpServletResponse.class);
@@ -46,16 +44,17 @@ public class SwaggerConfig {
     private ApiInfo metaInfo(){
         ApiInfo apiInfo = new ApiInfo(
                 "Projeto Spring-React Escola",
-                "API REST",
+                "API Rest para estudo",
                 "1.0",
                 "Terms of Service",
                 new Contact("Thiago Regis", null, "..."),
-                "Apache License Version 2.0",
-                "https://www.apache.org/license.html", new ArrayList<VendorExtension>()
+                "License",
+                "url", new ArrayList<>()
         );
         return apiInfo;
     }
 }
+
 
 // http://localhost:8080/v2/api-docs
 // http://localhost:8080/swagger-ui/index.html#/

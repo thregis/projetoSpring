@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
-    //List<Aluno> findByActive(Boolean active);
-
+    List<Aluno> findListByActive(Boolean active);
     Page<Aluno> findByActive(Boolean active, Pageable pageable);
 }

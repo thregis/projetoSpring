@@ -7,6 +7,8 @@ import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Mentoria;
 import com.example.demo.repository.MentoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,19 +35,15 @@ public class MentoriaService {
     private MentorService mentorService;
 
     @Transactional(readOnly = true)
-    public Optional<List<MentoriaDTO>> getMentorias() {
-        return Optional.of(mentoriaRepository.findByActive(true)
-                .stream()
-                .map(mentoriaMapper::toMentoriaDTO)
-                .collect(Collectors.toList()));
+    public Optional<Page<MentoriaDTO>> getMentorias(Pageable pageable) {
+        return Optional.of(mentoriaRepository.findByActive(true, pageable)
+                .map(mentoriaMapper::toMentoriaDTO));
     }
 
     @Transactional(readOnly = true)
-    public Optional<List<MentoriaDTO>> getMentoriasInativas() {
-        return Optional.of(mentoriaRepository.findByActive(false)
-                .stream()
-                .map(mentoriaMapper::toMentoriaDTO)
-                .collect(Collectors.toList()));
+    public Optional<Page<MentoriaDTO>> getMentoriasInativas(Pageable pageable) {
+        return Optional.of(mentoriaRepository.findByActive(false, pageable)
+                .map(mentoriaMapper::toMentoriaDTO));
     }
 
     @Transactional

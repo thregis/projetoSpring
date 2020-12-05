@@ -6,7 +6,7 @@ const SelectMentor = ({ value, onChange, id, label, name }) => {
   const [mentores, setMentores] = useState([]);
 
   useEffect(() => {
-    httpService.get("/mentor").then(({ data }) => {
+    httpService.get("/mentor/lista").then(({ data }) => {
       setMentores(data);
     });
   }, []);

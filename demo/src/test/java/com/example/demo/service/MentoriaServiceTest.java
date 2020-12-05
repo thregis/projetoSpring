@@ -17,7 +17,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -79,19 +82,23 @@ public class MentoriaServiceTest {
         mentoria2.setMentor(mentor);
         mentoria2.setActive(true);
 
+        Pageable pageable = PageRequest.of(0, 5);
+
         List<Mentoria> mentorias = new ArrayList<Mentoria>();
         mentorias.add(mentoria);
         mentorias.add(mentoria2);
 
-        Mockito.when(mentoriaRepository.findByActive(true)).thenReturn(mentorias);
+        Page<Mentoria> pageMentorias = new PageImpl<>(mentorias);
+
+        Mockito.when(mentoriaRepository.findByActive(true, pageable)).thenReturn(pageMentorias);
         Mockito.when(mentoriaMapper.toMentoriaDTO(mentoria)).thenReturn(mentoriaDTO);
 
-        Optional<List<MentoriaDTO>> all = this.mentoriaService.getMentorias();
+        Optional<Page<MentoriaDTO>> all = this.mentoriaService.getMentorias(pageable);
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(all.isPresent()),
-                () -> Assertions.assertFalse(all.get().size() == 0),
-                () -> Assertions.assertEquals(all, Optional.of(mentorias.stream().map(mentoriaMapper::toMentoriaDTO).collect(Collectors.toList())))
+                () -> Assertions.assertFalse(all.get().getSize() == 0),
+                () -> Assertions.assertEquals(all, Optional.of(pageMentorias.map(mentoriaMapper::toMentoriaDTO)))
         );
 
     }
@@ -128,20 +135,23 @@ public class MentoriaServiceTest {
         mentoria2.setMentor(mentor);
         mentoria2.setActive(false);
 
+        Pageable pageable = PageRequest.of(0, 5);
+
         List<Mentoria> mentorias = new ArrayList<Mentoria>();
         mentorias.add(mentoria);
         mentorias.add(mentoria2);
 
+        Page<Mentoria> pageMentorias = new PageImpl<>(mentorias);
 
-        Mockito.when(mentoriaRepository.findByActive(false)).thenReturn(mentorias);
+        Mockito.when(mentoriaRepository.findByActive(false, pageable)).thenReturn(pageMentorias);
         Mockito.when(mentoriaMapper.toMentoriaDTO(mentoria)).thenReturn(mentoriaDTO);
 
-        Optional<List<MentoriaDTO>> all = this.mentoriaService.getMentoriasInativas();
+        Optional<Page<MentoriaDTO>> all = this.mentoriaService.getMentoriasInativas(pageable);
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(all.isPresent()),
-                () -> Assertions.assertFalse(all.get().size() == 0),
-                () -> Assertions.assertEquals(all, Optional.of(mentorias.stream().map(mentoriaMapper::toMentoriaDTO).collect(Collectors.toList())))
+                () -> Assertions.assertFalse(all.get().getSize() == 0),
+                () -> Assertions.assertEquals(all, Optional.of(pageMentorias.map(mentoriaMapper::toMentoriaDTO)))
         );
     }
 

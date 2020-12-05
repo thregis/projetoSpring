@@ -6,7 +6,7 @@ const SelectPrograma = ({ value, onChange, id, label, name }) => {
   const [programas, setProgramas] = useState([]);
 
   useEffect(() => {
-    httpService.get("/programa").then(({ data }) => {
+    httpService.get("/programa/lista").then(({ data }) => {
       setProgramas(data);
     });
   }, []);

@@ -7,6 +7,8 @@ import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Disciplina;
 import com.example.demo.repository.DisciplinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,19 +26,15 @@ public class DisciplinaService {
     private DisciplinaMapper disciplinaMapper;
 
     @Transactional(readOnly = true)
-    public Optional<List<DisciplinaDTO>> getDisciplinas() {
-        return Optional.of(disciplinaRepository.findByActive(true)
-                .stream()
-                .map(disciplinaMapper::toDisciplinaDTO)
-                .collect(Collectors.toList()));
+    public Optional<Page<DisciplinaDTO>> getDisciplinas(Pageable pageable) {
+        return Optional.of(disciplinaRepository.findByActive(true, pageable)
+                .map(disciplinaMapper::toDisciplinaDTO));
     }
 
     @Transactional(readOnly = true)
-    public Optional<List<DisciplinaDTO>> getDisciplinasInativas() {
-        return Optional.of(disciplinaRepository.findByActive(false)
-                .stream()
-                .map(disciplinaMapper::toDisciplinaDTO)
-                .collect(Collectors.toList()));
+    public Optional<Page<DisciplinaDTO>> getDisciplinasInativas(Pageable pageable) {
+        return Optional.of(disciplinaRepository.findByActive(false, pageable)
+                .map(disciplinaMapper::toDisciplinaDTO));
     }
 
     @Transactional
