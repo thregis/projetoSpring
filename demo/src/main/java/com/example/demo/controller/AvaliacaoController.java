@@ -27,13 +27,13 @@ public class AvaliacaoController {
     @Autowired
     private AvaliacaoService avaliacaoService;
 
-    @ApiOperation(value = "Lista de avaliações ativas", notes = "Retorna uma página contendo todas as avaliações ativas.")
+    @ApiOperation(value = "Página de avaliações ativas", notes = "Retorna uma página contendo avaliações ativas.")
     @GetMapping
     public ResponseEntity<Page<AvaliacaoDTO>> getAvaliacoes(@PageableDefault(size=5, sort="mentoriaAlunoName", direction= Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity.ok(avaliacaoService.getAvaliacoes(pageable).get());
     }
 
-    @ApiOperation(value = "Lista de avaliações inativas", notes = "Retorna uma página contendo todas as avaliações inativas.")
+    @ApiOperation(value = "Página de avaliações inativas", notes = "Retorna uma página contendo avaliações inativas.")
     @GetMapping("/reativacao")
     public ResponseEntity<Page<AvaliacaoDTO>> getAvaliacoesInativas(@PageableDefault(size=5, sort="mentoriaAlunoName", direction= Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity.ok(avaliacaoService.getAvaliacoesInativas(pageable).get());

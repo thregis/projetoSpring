@@ -1,25 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
 import MaterialTable from 'material-table'
 import { Visibility } from '@material-ui/icons'
 import { useHistory } from 'react-router-dom'
 import httpService from '../../../services/httpService'
-import {deserialize} from '../../../models/programa'
 
-
-const TablePrograma = () => {
+const TableAvaliacao = () => {
     let history = useHistory()
     return (
 
-        <MaterialTable title="Lista de programas"
+        <MaterialTable title="Lista de avaliações"
             localization={{
                 header: {
-                    actions: 'Ver programa',
+                    actions: 'Ver avaliação',
                 }
             }}
             data={
                 query => (
                     new Promise((resolve, reject) => {
-                        httpService.get('/programa', {
+                        httpService.get('/avaliacao', {
                             params: {
                                 page: query.page,
                                 size: query.pageSize
@@ -37,24 +35,36 @@ const TablePrograma = () => {
             }
             columns={[
                 {
-                    title: 'Nome', field: 'name',
+                    title: 'Aluno', field: 'mentoriaAlunoName',
                     headerStyle: {
                     }
                 },
 
                 {
-                    title: 'Data de início', field: 'dataInicio',
-                    //type: 'date',
+                    title: 'Mentor', field: 'mentoriaMentorName',
+                    headerStyle: {
+                    }
                 },
 
                 {
-                    title: 'Data de Término', field: 'dataFinal',
-                    //type: 'date',
+                    title: 'Disciplina', field: 'disciplinaName',
+                    headerStyle: {
+
+                    }
                 },
 
-                /*{
-                    title: 'Mentores vinculados', field: 'mentores',
-                }*/
+                {
+                    title: 'Nota', field: 'nota',
+                    headerStyle: {
+                    }
+                },
+
+                {
+                    title: 'Data', field: 'data',
+                    headerStyle: {
+
+                    }
+                },
 
             ]}
             options={{
@@ -68,11 +78,12 @@ const TablePrograma = () => {
             actions={[
                 {
                     icon: () => <Visibility color="primary" />,
-                    tooltip: 'Visualizar programa',
-                    onClick: (event, rowData) => history.push(`/programa/${rowData.id}`)
+                    tooltip: 'Visualizar avaliação',
+                    onClick: (event, rowData) => history.push(`/avaliacao/${rowData.id}`)
                 }
             ]}
         />
     )
 }
-export default TablePrograma
+
+export default TableAvaliacao

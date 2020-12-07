@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.AlunoDTO;
 import com.example.demo.dto.MentoriaDTO;
 import com.example.demo.dto.mapper.MentoriaMapper;
 import com.example.demo.exceptions.BadRequestException;
@@ -38,6 +39,14 @@ public class MentoriaService {
     public Optional<Page<MentoriaDTO>> getMentorias(Pageable pageable) {
         return Optional.of(mentoriaRepository.findByActive(true, pageable)
                 .map(mentoriaMapper::toMentoriaDTO));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<List<MentoriaDTO>> getMentoriasList() {
+        return Optional.of(mentoriaRepository.findListByActive(true)
+                .stream()
+                .map(mentoriaMapper::toMentoriaDTO)
+                .collect(Collectors.toList()));
     }
 
     @Transactional(readOnly = true)

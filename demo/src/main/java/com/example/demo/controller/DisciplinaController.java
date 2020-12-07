@@ -26,12 +26,19 @@ public class DisciplinaController {
     @Autowired
     private DisciplinaService disciplinaService;
 
-    @ApiOperation(value="Lista de disciplinas ativas", notes = "Retorna uma página contendo todas as disciplinas ativas.")
+    @ApiOperation(value="Página de disciplinas ativas", notes = "Retorna uma página contendo disciplinas ativas.")
     @GetMapping
     public ResponseEntity<Page<DisciplinaDTO>> getDisciplinas(@PageableDefault(size=5, sort="name", direction= Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity.ok(disciplinaService.getDisciplinas(pageable).get());
     }
-    @ApiOperation(value = "Lusta de disciplinas inativas", notes = "Retorna uma página contendo todas as disciplinas inativas.")
+
+    @ApiOperation(value = "Lista de disciplinas ativas", notes = "Retorna uma lista com todas as disciplinas ativas. Utilizado para select no front.")
+    @GetMapping("/lista")
+    public ResponseEntity<List<DisciplinaDTO>> getDisciplinasList(){
+        return ResponseEntity.ok(disciplinaService.getDisciplinasList().get());
+    }
+
+    @ApiOperation(value = "Página de disciplinas inativas", notes = "Retorna uma página contendo disciplinas inativas.")
     @GetMapping("/reativacao")
     public ResponseEntity<Page<DisciplinaDTO>> getDisciplinasInativas(@PageableDefault(size=5, sort="name", direction= Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity.ok(disciplinaService.getDisciplinasInativas(pageable).get());

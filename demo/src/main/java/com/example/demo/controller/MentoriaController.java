@@ -27,13 +27,19 @@ public class MentoriaController {
     @Autowired
     MentoriaService mentoriaService;
 
-    @ApiOperation(value = "Lista de mentorias ativas", notes = "Retorna uma página contendo todas as mentorias ativas.")
+    @ApiOperation(value = "Página de mentorias ativas", notes = "Retorna uma página contendo mentorias ativas.")
     @GetMapping
     public ResponseEntity<Page<MentoriaDTO>> getMentorias(@PageableDefault (size=5, sort="mentorName", direction= Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity.ok(mentoriaService.getMentorias(pageable).get());
     }
 
-    @ApiOperation(value = "Lista de mentorias inativas", notes = "Retorna uma página contendo todas as mentorias inativas.")
+    @ApiOperation(value = "Lista de mentorias ativas", notes = "Retorna uma lista com todas as mentorias ativas. Utilizado para select no front.")
+    @GetMapping("/lista")
+    public ResponseEntity<List<MentoriaDTO>> getMentoriasList(){
+        return ResponseEntity.ok(mentoriaService.getMentoriasList().get());
+    }
+
+    @ApiOperation(value = "Página de mentorias inativas", notes = "Retorna uma página contendo mentorias inativas.")
     @GetMapping("/reativacao")
     public ResponseEntity<Page<MentoriaDTO>> getMentoriasInativas(@PageableDefault (size=5, sort="mentorName", direction= Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity.ok(mentoriaService.getMentoriasInativas(pageable).get());

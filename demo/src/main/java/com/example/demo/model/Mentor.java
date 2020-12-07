@@ -3,6 +3,7 @@ package com.example.demo.model;
 import org.hibernate.mapping.Join;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "mentor")
@@ -14,6 +15,7 @@ public class Mentor {
     private Long id;
 
     @Column(name = "mentorName")
+    @Size(min = 3, max = 50, message = "Mínimo de 3 caracteres, máximo de 50.")
     private String name;
 
     @Column (name = "mentorIdade")

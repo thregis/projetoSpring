@@ -104,6 +104,56 @@ public class MentoriaServiceTest {
     }
 
     @Test
+    public void testGetMentoriasAtivasList() {
+
+        Long id = 1L;
+
+        Aluno aluno = new Aluno();
+        aluno.setId(id);
+        aluno.setName("teste");
+
+        Mentor mentor = new Mentor();
+        mentor.setId(id);
+        mentor.setName("teste");
+
+        Mentoria mentoria = new Mentoria();
+        mentoria.setId(id);
+        mentoria.setAluno(aluno);
+        mentoria.setMentor(mentor);
+        mentoria.setActive(true);
+
+        MentoriaDTO mentoriaDTO = new MentoriaDTO();
+        mentoriaDTO.setId(id);
+        mentoriaDTO.setAlunoId(aluno.getId());
+        mentoriaDTO.setAlunoName(aluno.getName());
+        mentoriaDTO.setMentorId(mentor.getId());
+        mentoriaDTO.setMentorName(mentor.getName());
+        mentoriaDTO.setActive(true);
+
+        Mentoria mentoria2 = new Mentoria();
+        mentoria2.setId(2L);
+        mentoria2.setAluno(aluno);
+        mentoria2.setMentor(mentor);
+        mentoria2.setActive(true);
+
+        List<Mentoria> mentorias = new ArrayList<Mentoria>();
+        mentorias.add(mentoria);
+        mentorias.add(mentoria2);
+
+        Mockito.when(mentoriaRepository.findListByActive(true)).thenReturn(mentorias);
+        Mockito.when(mentoriaMapper.toMentoriaDTO(mentoria)).thenReturn(mentoriaDTO);
+
+        Optional<List<MentoriaDTO>> all = this.mentoriaService.getMentoriasList();
+
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(all.isPresent()),
+                () -> Assertions.assertFalse(all.get().size() == 0),
+                () -> Assertions.assertEquals(all, Optional.of(mentorias.stream().map(mentoriaMapper::toMentoriaDTO).collect(Collectors.toList())))
+        );
+
+    }
+
+    @Test
     public void testGetMentoriasInativas() {
         Long id = 1L;
 

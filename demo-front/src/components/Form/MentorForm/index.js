@@ -1,5 +1,6 @@
 import { FormControl } from '@material-ui/core'
 import React, { useState } from 'react'
+import { color } from '../../../models/programa'
 import ButtonMentorHome from '../../Buttons/ButtonMentorHome'
 import ButtonSubmit from '../../Buttons/ButtonSubmit'
 import Input from '../../Input'
@@ -22,6 +23,9 @@ const MentorForm = ({ initialValues, handleSubmit }) => {
         event.preventDefault()
         console.log(mentor)
         handleSubmit(mentor)
+        if(mentor.name.length <3){
+            alert('Campo de "Nome" requer ao menos três dígitos')
+        }
     }
 
     return (
@@ -32,6 +36,7 @@ const MentorForm = ({ initialValues, handleSubmit }) => {
                     id="mentor[name]"
                     name="name"
                     onChange={handleChange}
+                    color={color(mentor.name)}
                     value={mentor.name}
                 />
 

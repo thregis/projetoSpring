@@ -84,6 +84,46 @@ public class DisciplinaServiceTest {
     }
 
     @Test
+    public void testGetDisciplinasAtivasList() {
+
+        Long id = 1L;
+        Disciplina disciplina = new Disciplina();
+        disciplina.setId(id);
+        disciplina.setName("tt");
+        disciplina.setDescricao("testeteste");
+        disciplina.setActive(true);
+
+
+        DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
+        disciplinaDTO.setId(id);
+        disciplinaDTO.setName("tt");
+        disciplinaDTO.setDescricao("testeteste");
+        disciplinaDTO.setActive(true);
+
+        Disciplina disciplina2 = new Disciplina();
+        disciplina2.setId(2L);
+        disciplina2.setName("t2");
+        disciplina2.setDescricao("testeteste2");
+        disciplina2.setActive(true);
+
+        List<Disciplina> disciplinas = new ArrayList<Disciplina>();
+        disciplinas.add(disciplina);
+        disciplinas.add(disciplina2);
+
+        Mockito.when(disciplinaRepository.findListByActive(true)).thenReturn(disciplinas);
+        Mockito.when(disciplinaMapper.toDisciplinaDTO(disciplina)).thenReturn(disciplinaDTO);
+
+        Optional<List<DisciplinaDTO>> all = this.disciplinaService.getDisciplinasList();
+
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(all.isPresent()),
+                () -> Assertions.assertFalse(all.get().size() == 0),
+                () -> Assertions.assertEquals(all, Optional.of(disciplinas.stream().map(disciplinaMapper::toDisciplinaDTO).collect(Collectors.toList())))
+        );
+
+    }
+
+    @Test
     public void testGetDisciplinasInativas() {
 
         Long id = 1L;

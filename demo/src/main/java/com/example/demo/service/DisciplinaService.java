@@ -32,6 +32,14 @@ public class DisciplinaService {
     }
 
     @Transactional(readOnly = true)
+    public Optional<List<DisciplinaDTO>> getDisciplinasList(){
+        return Optional.of(disciplinaRepository.findListByActive(true)
+        .stream()
+        .map(disciplinaMapper::toDisciplinaDTO)
+        .collect(Collectors.toList()));
+    }
+
+    @Transactional(readOnly = true)
     public Optional<Page<DisciplinaDTO>> getDisciplinasInativas(Pageable pageable) {
         return Optional.of(disciplinaRepository.findByActive(false, pageable)
                 .map(disciplinaMapper::toDisciplinaDTO));

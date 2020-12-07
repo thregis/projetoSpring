@@ -1,5 +1,6 @@
 import { FormControl } from '@material-ui/core'
 import React from 'react'
+import { color } from '../../../models/programa'
 import ButtonProgramaHome from '../../Buttons/ButtonProgramaHome'
 import ButtonSubmit from '../../Buttons/ButtonSubmit'
 import Input from '../../Input'
@@ -21,6 +22,10 @@ const ProgramaForm = ({ initialValues, handleSubmit }) => {
         event.preventDefault()
         console.log(programa)
         handleSubmit(programa)
+        if(programa.name.length <3){
+            alert('Campo de "Nome" requer ao menos três dígitos')
+        }
+
     }
 
     return (
@@ -31,6 +36,7 @@ const ProgramaForm = ({ initialValues, handleSubmit }) => {
                     id="programa[name]"
                     name="name"
                     onChange={handleChange}
+                    color={color(programa.name)}
                     value={programa.name}
                 />
 
@@ -38,6 +44,10 @@ const ProgramaForm = ({ initialValues, handleSubmit }) => {
                     label="Data de início"
                     id="programa[dataInicio]"
                     name="dataInicio"
+                    type="date"
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
                     onChange={handleChange}
                     value={programa.dataInicio}
                 />
@@ -46,6 +56,10 @@ const ProgramaForm = ({ initialValues, handleSubmit }) => {
                     label="Data de término"
                     id="programa[dataFinal]"
                     name="dataFinal"
+                    type="date"
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
                     onChange={handleChange}
                     value={programa.dataFinal}
                 />

@@ -32,7 +32,7 @@ public class ProgramaController {
         return ResponseEntity.ok(programaService.getProgramas(pageable).get());
     }
 
-    @ApiOperation(value = "Lista de programas ativos", notes = "Retorna todos os programas ativos. Utilizado para select no front.")
+    @ApiOperation(value = "Lista de programas ativos", notes = "Retorna uma lista com todos os programas ativos. Utilizado para select no front.")
     @GetMapping("/lista")
     public ResponseEntity<List<ProgramaDTO>> getProgramasList(){
         return ResponseEntity.ok(programaService.getProgramasList().get());

@@ -37,7 +37,7 @@ public class AlunoController {
        return ResponseEntity.ok(alunoService.getAlunos(pageable).get());
     }
 
-    @ApiOperation(value = "Lista de alunos ativos", notes = "Retorna todos os alunos ativos. Utilizado para select no front.")
+    @ApiOperation(value = "Lista de alunos ativos", notes = "Retorna uma lista com todos os alunos ativos. Utilizado para select no front.")
     @GetMapping("/lista")
     public ResponseEntity<List<AlunoDTO>> getAlunosList(){
         return ResponseEntity.ok(alunoService.getAlunosList().get());

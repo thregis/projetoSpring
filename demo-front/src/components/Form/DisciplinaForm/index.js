@@ -1,5 +1,6 @@
 import { FormControl } from '@material-ui/core'
 import React from 'react'
+import { color } from '../../../models/programa'
 import ButtonDisciplinaHome from '../../Buttons/ButtonDisciplinaHome'
 import ButtonSubmit from '../../Buttons/ButtonSubmit'
 import Input from '../../Input'
@@ -22,6 +23,9 @@ const DisciplinaForm = ({ initialValues, handleSubmit }) => {
         event.preventDefault()
         console.log(disciplina)
         handleSubmit(disciplina)
+        if(disciplina.name.length <3){
+            alert('Campo de "Nome" requer ao menos três dígitos')
+        }
     }
 
     return (
@@ -32,6 +36,7 @@ const DisciplinaForm = ({ initialValues, handleSubmit }) => {
                 id="disciplina[name]"
                 name="name"
                 onChange={handleChange}
+                color={color(disciplina.name)}
                 value={disciplina.name}
             />
 

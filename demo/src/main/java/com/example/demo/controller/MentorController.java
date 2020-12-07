@@ -37,7 +37,7 @@ public class MentorController {
         return ResponseEntity.ok(mentorService.getMentores(pageable).get());
     }
 
-    @ApiOperation(value = "Lista de mentores ativos", notes = "Retorna todos os mentores ativos. Utilizado para select no front.")
+    @ApiOperation(value = "Lista de mentores ativos", notes = "Retorna uma lista com todos os mentores ativos. Utilizado para select no front.")
     @GetMapping("/lista")
     public ResponseEntity<List<MentorDTO>> getMentoresList(){
         return ResponseEntity.ok(mentorService.getMentoresList().get());

@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface MentoriaRepository extends JpaRepository<Mentoria, Long> {
 
-    //List<Mentoria> findByActive(Boolean active);
+    List<Mentoria> findListByActive(Boolean active);
     Page<Mentoria> findByActive(Boolean active, Pageable pageable);
 
     @Modifying

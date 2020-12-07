@@ -31,6 +31,12 @@ import Programa from './pages/Programa/ListaProgramas'
 import ProgramaInativo from './pages/Programa/Inativos'
 import AddPrograma from './pages/Programa/PostPrograma'
 import ProgramaById from './pages/Programa/ProgramaById'
+import PutPrograma from './pages/Programa/PutPrograma'
+import Avaliacao from './pages/Avaliacao/ListaAvaliacao'
+import AvaliacaoInativa from './pages/Avaliacao/Inativas'
+import AvaliacaoById from './pages/Avaliacao/AvaliacaoById'
+import AddAvaliacao from './pages/Avaliacao/PostAvaliacao'
+import PutAvaliacao from './pages/Avaliacao/PutAvaliacao'
 
 function App() {
   return (
@@ -45,6 +51,7 @@ function App() {
                 <Link to="/mentoria"><Button variant="contained" color="primary">Mentorias</Button></Link>
                 <Link to="/disciplina"><Button variant="contained" color="primary">Disciplinas</Button></Link>
                 <Link to="/programa"><Button variant="contained" color="primary">Programas</Button></Link>
+                <Link to="/avaliacao"><Button variant="contained" color="primary">Avaliações</Button></Link>
             </Toolbar>
         </AppBar>
 
@@ -79,6 +86,13 @@ function App() {
           <Route path="/programa/reativacao" exact component={ProgramaInativo} />
           <Route path="/programa/add" exact component={AddPrograma} />
           <Route path="/programa/:id" exact component={ProgramaById} />
+          <Route path="/programa/:id/update" exact component={PutPrograma} />
+
+          <Route path="/avaliacao" exact component={Avaliacao} />
+          <Route path="/avaliacao/reativacao" exact component={AvaliacaoInativa} />
+          <Route path="/avaliacao/add" exact component={AddAvaliacao} />
+          <Route path="/avaliacao/:id" exact component={AvaliacaoById} />
+          <Route path="/avaliacao/:id/update" exact component={PutAvaliacao} />
         </Switch>
       </Router>
     </div>
