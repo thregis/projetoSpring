@@ -3,6 +3,7 @@ import MaterialTable from 'material-table'
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { useHistory } from 'react-router-dom'
 import httpService from '../../../services/httpService'
+import { deserializeAvaliacao } from '../../../models/programa';
 
 const TableAvaliacaoInativa = () => {
     let history = useHistory()
@@ -37,7 +38,7 @@ const TableAvaliacaoInativa = () => {
                         })
                             .then(({ data }) => {
                                 resolve({
-                                    data: data.content,
+                                    data: data.content.map(avaliacao => deserializeAvaliacao(avaliacao)),
                                     page: data.pageable.pageNumber,
                                     totalCount: data.totalElements,
                                 })
@@ -72,7 +73,7 @@ const TableAvaliacaoInativa = () => {
                 },
 
                 {
-                    title: 'Data', field: 'data',
+                    title: 'Data', field: 'dataFormatada',
                     headerStyle: {
 
                     }

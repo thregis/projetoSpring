@@ -3,6 +3,7 @@ import MaterialTable from 'material-table'
 import { Visibility } from '@material-ui/icons'
 import { useHistory } from 'react-router-dom'
 import httpService from '../../../services/httpService'
+import { deserializeAvaliacao } from '../../../models/programa'
 
 const TableAvaliacao = () => {
     let history = useHistory()
@@ -25,7 +26,7 @@ const TableAvaliacao = () => {
                         })
                             .then(({ data }) => {
                                 resolve({
-                                    data: data.content,
+                                    data: data.content.map(deserializeAvaliacao),
                                     page: data.pageable.pageNumber,
                                     totalCount: data.totalElements,
                                 })
@@ -60,7 +61,7 @@ const TableAvaliacao = () => {
                 },
 
                 {
-                    title: 'Data', field: 'data',
+                    title: 'Data', field: 'dataFormatada',
                     headerStyle: {
 
                     }

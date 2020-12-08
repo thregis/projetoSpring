@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import ButtonPostAdd from '../../../components/Buttons/ButtonPostAdd'
@@ -8,6 +8,8 @@ const Avaliacao = () => {
 
     return (
         <div>
+            <Typography variant="h1" color="primary">Avaliações ativas</Typography>
+
             <TableAvaliacao />
 
             <Link to="/avaliacao/reativacao"><Button variant="contained" color="primary" style={{ margin: 8 }} >Avaliações inativas</Button></Link>

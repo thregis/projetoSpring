@@ -51,7 +51,7 @@ const AvaliacaoById = () => {
                 <Typography color="primary">Aluno: {avaliacao.mentoriaAlunoName}</Typography>
                 <Typography color="primary">Mentor: {avaliacao.mentoriaMentorName}</Typography>
                 <Typography color="primary">Disciplina: {avaliacao.disciplinaName}</Typography>
-                <Typography color="primary">Data da avaliação: {avaliacao.data}</Typography>
+                <Typography color="primary">Data da avaliação: {avaliacao.dataFormatada}</Typography>
 
                 </CardContent>
                 <CardActions>

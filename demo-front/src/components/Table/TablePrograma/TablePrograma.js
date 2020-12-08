@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import MaterialTable from 'material-table'
 import { Visibility } from '@material-ui/icons'
 import { useHistory } from 'react-router-dom'
@@ -27,7 +27,7 @@ const TablePrograma = () => {
                         })
                             .then(({ data }) => {
                                 resolve({
-                                    data: data.content,
+                                    data: data.content.map(deserialize),
                                     page: data.pageable.pageNumber,
                                     totalCount: data.totalElements,
                                 })
@@ -43,12 +43,12 @@ const TablePrograma = () => {
                 },
 
                 {
-                    title: 'Data de início', field: 'dataInicio',
+                    title: 'Data de início', field: 'dataInicioFormatada',
                     //type: 'date',
                 },
 
                 {
-                    title: 'Data de Término', field: 'dataFinal',
+                    title: 'Data de Término', field: 'dataFinalFormatada',
                     //type: 'date',
                 },
 

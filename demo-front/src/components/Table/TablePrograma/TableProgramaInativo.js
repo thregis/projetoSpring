@@ -3,6 +3,7 @@ import MaterialTable from 'material-table'
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { useHistory } from 'react-router-dom'
 import httpService from '../../../services/httpService'
+import { deserialize } from '../../../models/programa';
 
 const TableProgramaInativo = () => {
     let history = useHistory()
@@ -37,7 +38,7 @@ const TableProgramaInativo = () => {
                         })
                             .then(({ data }) => {
                                 resolve({
-                                    data: data.content,
+                                    data: data.content.map(programa => deserialize(programa)),
                                     page: data.pageable.pageNumber,
                                     totalCount: data.totalElements,
                                 })
@@ -53,13 +54,13 @@ const TableProgramaInativo = () => {
                 },
 
                 {
-                    title: 'Data de início', field: 'dataInicio',
+                    title: 'Data de início', field: 'dataInicioFormatada',
                     headerStyle: {
                     }
                 },
 
                 {
-                    title: 'Data de término', field: 'dataFinal',
+                    title: 'Data de término', field: 'dataFinalFormatada',
                     headerStyle: {
                     }
                 },

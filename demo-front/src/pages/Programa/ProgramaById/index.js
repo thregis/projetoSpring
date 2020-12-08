@@ -48,8 +48,8 @@ const ProgramaById = () => {
                 <CardContent>
                 <Typography color="primary">ID: {programa.id}</Typography>
                 <Typography color="primary">Nome: {programa.name}</Typography>
-                <Typography color="primary">Data de início: {programa.dataInicio}</Typography>
-                <Typography color="primary">Data de término: {programa.dataFinal}</Typography>
+                <Typography color="primary">Data de início: {programa.dataInicioFormatada}</Typography>
+                <Typography color="primary">Data de término: {programa.dataFinalFormatada}</Typography>
 
                     {programa.mentores &&
                     <ul>
