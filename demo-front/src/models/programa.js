@@ -14,7 +14,7 @@ export const deserializeAvaliacao = avaliacao => ({
 })
 
 export const color = (event) =>{
-    if (event.length< 3){
+    if (event.length< 3 || event.length > 50){
         return "secondary"
     }
         return 'primary'

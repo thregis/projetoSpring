@@ -1,6 +1,5 @@
-import { FormControl } from '@material-ui/core'
+import { FormControl, Typography } from '@material-ui/core'
 import React from 'react'
-import { color } from '../../../models/programa'
 import ButtonProgramaHome from '../../Buttons/ButtonProgramaHome'
 import ButtonSubmit from '../../Buttons/ButtonSubmit'
 import Input from '../../Input'
@@ -8,6 +7,7 @@ import Input from '../../Input'
 const ProgramaForm = ({ initialValues, handleSubmit }) => {
     console.log(initialValues)
     const [programa, setPrograma] = React.useState(initialValues)
+    const [formErrors, setFormErrors] = React.useState({})
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -22,11 +22,22 @@ const ProgramaForm = ({ initialValues, handleSubmit }) => {
         event.preventDefault()
         console.log(programa)
         handleSubmit(programa)
-        if(programa.name.length <3){
-            alert('Campo de "Nome" requer ao menos três dígitos')
-        }
+        setFormErrors(validate(programa))
 
     }
+
+    const validate = (programa) => {
+        let errors = {}
+        if (!programa.name){
+            errors.name = "Campo precisa ser preenchido."
+        }else if(programa.name.length !== 0 && programa.name.length < 3){
+            errors.name = "O campo deve ter pelo menos 3 caracteres."
+        }else if (programa.name.length > 50){
+            errors.name = "O campo deve ter no máximo 50 caracteres."
+        }
+        return errors
+    }
+
 
     return (
         <form onSubmit={onSubmit}>
@@ -36,10 +47,10 @@ const ProgramaForm = ({ initialValues, handleSubmit }) => {
                     id="programa[name]"
                     name="name"
                     onChange={handleChange}
-                    color={color(programa.name)}
                     value={programa.name}
-                />
-
+                    error={formErrors.name && "true"}
+                    />
+                    {formErrors.name && (<Typography color="secondary">{formErrors.name}</Typography>)}
                 <Input
                     label="Data de início"
                     id="programa[dataInicio]"
@@ -63,7 +74,6 @@ const ProgramaForm = ({ initialValues, handleSubmit }) => {
                     onChange={handleChange}
                     value={programa.dataFinal}
                 />
-
 
                 <ButtonSubmit />
                 <ButtonProgramaHome />

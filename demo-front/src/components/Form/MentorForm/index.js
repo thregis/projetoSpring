@@ -1,6 +1,5 @@
-import { FormControl } from '@material-ui/core'
+import { FormControl, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
-import { color } from '../../../models/programa'
 import ButtonMentorHome from '../../Buttons/ButtonMentorHome'
 import ButtonSubmit from '../../Buttons/ButtonSubmit'
 import Input from '../../Input'
@@ -9,6 +8,7 @@ import SelectPrograma from '../../Select/SelectPrograma'
 
 const MentorForm = ({ initialValues, handleSubmit }) => {
     const [mentor, setMentor] = useState(initialValues)
+    const [formErrors, setFormErrors] = React.useState({})
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -23,9 +23,19 @@ const MentorForm = ({ initialValues, handleSubmit }) => {
         event.preventDefault()
         console.log(mentor)
         handleSubmit(mentor)
-        if(mentor.name.length <3){
-            alert('Campo de "Nome" requer ao menos três dígitos')
+        setFormErrors(validate(mentor))
+    }
+
+    const validate = (mentor) => {
+        let errors = {}
+        if (!mentor.name) {
+            errors.name = "Campo precisa ser preenchido."
+        } else if (mentor.name.length !== 0 && mentor.name.length < 3) {
+            errors.name = "O campo deve ter pelo menos 3 caracteres."
+        } else if (mentor.name.length > 50) {
+            errors.name = "O campo deve ter no máximo 50 caracteres."
         }
+        return errors
     }
 
     return (
@@ -36,9 +46,10 @@ const MentorForm = ({ initialValues, handleSubmit }) => {
                     id="mentor[name]"
                     name="name"
                     onChange={handleChange}
-                    color={color(mentor.name)}
+                    error={formErrors.name && "true"}
                     value={mentor.name}
                 />
+                {formErrors.name && (<Typography color="secondary">{formErrors.name}</Typography>)}
 
                 <Input
                     label="Idade"
@@ -72,8 +83,8 @@ const MentorForm = ({ initialValues, handleSubmit }) => {
                     onChange={handleChange}
                     value={mentor.programaId}
                 />
-                <ButtonSubmit/>
-                <ButtonMentorHome/>
+                <ButtonSubmit />
+                <ButtonMentorHome />
             </FormControl>
         </form>
     )

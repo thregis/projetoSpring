@@ -30,7 +30,7 @@ const TableMentorInativo = () => {
             data={
                 query => (
                     new Promise((resolve, reject) => {
-                        httpService.get('/aluno/reativacao', {
+                        httpService.get('/mentor/reativacao', {
                             params: {
                                 page: query.page,
                                 size: query.pageSize

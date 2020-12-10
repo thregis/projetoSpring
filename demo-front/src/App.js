@@ -15,7 +15,7 @@ import {
   Route,
   Link,
 } from "react-router-dom"
-import { Button, AppBar, IconButton, Toolbar} from '@material-ui/core/'
+import { Button, AppBar, IconButton, Toolbar } from '@material-ui/core/'
 import SchoolIcon from '@material-ui/icons/School';
 import Mentoria from './pages/Mentoria/ListaMentoria'
 import MentoriaInativa from './pages/Mentoria/Inativas'
@@ -43,16 +43,16 @@ function App() {
     <div>
       <Router>
 
-      <AppBar position="static">
-            <Toolbar>
+        <AppBar position="sticky">
+          <Toolbar>
             <Link to="/"><IconButton edge="start" color="default" aria-label="menu"><SchoolIcon /></IconButton></Link>
-                <Link to="/aluno"><Button variant="contained" color="primary">Alunos</Button></Link>
-                <Link to="/mentor"><Button variant="contained" color="primary">Mentores</Button></Link>
-                <Link to="/mentoria"><Button variant="contained" color="primary">Mentorias</Button></Link>
-                <Link to="/disciplina"><Button variant="contained" color="primary">Disciplinas</Button></Link>
-                <Link to="/programa"><Button variant="contained" color="primary">Programas</Button></Link>
-                <Link to="/avaliacao"><Button variant="contained" color="primary">Avaliações</Button></Link>
-            </Toolbar>
+            <Link to="/aluno"><Button variant="contained" color="primary">Alunos</Button></Link>
+            <Link to="/mentor"><Button variant="contained" color="primary">Mentores</Button></Link>
+            <Link to="/mentoria"><Button variant="contained" color="primary">Mentorias</Button></Link>
+            <Link to="/disciplina"><Button variant="contained" color="primary">Disciplinas</Button></Link>
+            <Link to="/programa"><Button variant="contained" color="primary">Programas</Button></Link>
+            <Link to="/avaliacao"><Button variant="contained" color="primary">Avaliações</Button></Link>
+          </Toolbar>
         </AppBar>
 
         <Switch>
@@ -65,10 +65,10 @@ function App() {
           <Route path="/aluno/:id/update" exact component={PutAluno} />
 
           <Route path="/mentor" exact component={Mentor} />
-          <Route path="/mentor/reativacao" exact component={MentorInativo}/>
-          <Route path="/mentor/add" exact component={AddMentor}/>
-          <Route path="/mentor/:id" exact component={MentorById}/>
-          <Route path="/mentor/:id/update" exact component={PutMentor}/>
+          <Route path="/mentor/reativacao" exact component={MentorInativo} />
+          <Route path="/mentor/add" exact component={AddMentor} />
+          <Route path="/mentor/:id" exact component={MentorById} />
+          <Route path="/mentor/:id/update" exact component={PutMentor} />
 
           <Route path="/mentoria" exact component={Mentoria} />
           <Route path="/mentoria/reativacao" exact component={MentoriaInativa} />

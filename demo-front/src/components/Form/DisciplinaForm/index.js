@@ -1,4 +1,4 @@
-import { FormControl } from '@material-ui/core'
+import { FormControl, Typography } from '@material-ui/core'
 import React from 'react'
 import { color } from '../../../models/programa'
 import ButtonDisciplinaHome from '../../Buttons/ButtonDisciplinaHome'
@@ -9,6 +9,7 @@ import Input from '../../Input'
 const DisciplinaForm = ({ initialValues, handleSubmit }) => {
     console.log(initialValues)
     const [disciplina, setDisciplina] = React.useState(initialValues)
+    const [formErrors, setFormErrors] = React.useState({})
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -23,9 +24,19 @@ const DisciplinaForm = ({ initialValues, handleSubmit }) => {
         event.preventDefault()
         console.log(disciplina)
         handleSubmit(disciplina)
-        if(disciplina.name.length <3){
-            alert('Campo de "Nome" requer ao menos três dígitos')
+        setFormErrors(validate(disciplina))
+    }
+
+    const validate = (disciplina) => {
+        let errors = {}
+        if (!disciplina.name){
+            errors.name = "Campo precisa ser preenchido."
+        }else if(disciplina.name.length !== 0 && disciplina.name.length < 3){
+            errors.name = "O campo deve ter pelo menos 3 caracteres."
+        }else if (disciplina.name.length > 50){
+            errors.name = "O campo deve ter no máximo 50 caracteres."
         }
+        return errors
     }
 
     return (
@@ -36,10 +47,10 @@ const DisciplinaForm = ({ initialValues, handleSubmit }) => {
                 id="disciplina[name]"
                 name="name"
                 onChange={handleChange}
-                color={color(disciplina.name)}
+                error={formErrors.name && "true"}
                 value={disciplina.name}
             />
-
+            {formErrors.name && (<Typography color="secondary">{formErrors.name}</Typography>)}
             <Input
                 label="Descrição"
                 id="disciplina[descricao]"
