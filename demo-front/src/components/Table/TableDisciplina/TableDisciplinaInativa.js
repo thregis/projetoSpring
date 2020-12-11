@@ -61,6 +61,7 @@ const TableDisciplinaInativa = () => {
             ]}
             options={{
                 search: false,
+                sorting: false,
                 exportButton: true,
                 rowStyle: {
                     backgroundColor: '#EEE',

@@ -43,7 +43,7 @@ const DisciplinaForm = ({ initialValues, handleSubmit }) => {
         <form onSubmit={onSubmit}>
             <FormControl style={{minWidth: 120}}>
             <Input
-                label="Nome"
+                label="Nome*"
                 id="disciplina[name]"
                 name="name"
                 onChange={handleChange}

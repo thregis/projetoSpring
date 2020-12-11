@@ -61,6 +61,7 @@ const TableAluno = () => {
                 search: false,
                 //paging: false,
                 //filtering: true,
+                sorting: false,
                 exportButton: true,
                 rowStyle: {
                     backgroundColor: '#EEE',

@@ -1,4 +1,4 @@
-import { FormControl, Typography } from '@material-ui/core'
+import { FormControl, FormHelperText, Typography } from '@material-ui/core'
 import React from 'react'
 import ButtonProgramaHome from '../../Buttons/ButtonProgramaHome'
 import ButtonSubmit from '../../Buttons/ButtonSubmit'
@@ -43,7 +43,7 @@ const ProgramaForm = ({ initialValues, handleSubmit }) => {
         <form onSubmit={onSubmit}>
             <FormControl style={{ minWidth: 120 }}>
                 <Input
-                    label="Nome"
+                    label="Nome*"
                     id="programa[name]"
                     name="name"
                     onChange={handleChange}
@@ -62,6 +62,7 @@ const ProgramaForm = ({ initialValues, handleSubmit }) => {
                     onChange={handleChange}
                     value={programa.dataInicio}
                 />
+                <FormHelperText style={{ margin: 8 }}>Requer uma data passada</FormHelperText>
 
                 <Input
                     label="Data de término"

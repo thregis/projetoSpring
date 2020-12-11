@@ -34,6 +34,16 @@ const MentorForm = ({ initialValues, handleSubmit }) => {
             errors.name = "O campo deve ter pelo menos 3 caracteres."
         } else if (mentor.name.length > 50) {
             errors.name = "O campo deve ter no máximo 50 caracteres."
+        } else if (!mentor.pais){
+            errors.pais = "Campo precisa ser preenchido."
+        } else if (mentor.pais.length > 50){
+            errors.pais = "O campo deve ter no máximo 50 caracteres."
+        } else if (!mentor.escola){
+            errors.escola = "Campo precisa ser preenchido."
+        }else if (mentor.escola.length > 50){
+            errors.escola = "O campo deve ter no máximo 50 caracteres."
+        }else if (!mentor.programaId){
+            errors.programa = "Campo precisa ser preenchido."
         }
         return errors
     }
@@ -42,7 +52,7 @@ const MentorForm = ({ initialValues, handleSubmit }) => {
         <form onSubmit={onSubmit}>
             <FormControl style={{ minWidth: 120 }}>
                 <Input
-                    label="Nome"
+                    label="Nome*"
                     id="mentor[name]"
                     name="name"
                     onChange={handleChange}
@@ -61,28 +71,35 @@ const MentorForm = ({ initialValues, handleSubmit }) => {
                 />
 
                 <Input
-                    label="País"
+                    label="País*"
                     id="mentor[pais]"
                     name="pais"
                     onChange={handleChange}
+                    error={formErrors.pais && "true"}
                     value={mentor.pais}
                 />
+                {formErrors.pais && (<Typography color="secondary">{formErrors.pais}</Typography>)}
+
 
                 <Input
-                    label="Escola"
+                    label="Escola*"
                     id="mentor[escola]"
                     name="escola"
                     onChange={handleChange}
+                    error={formErrors.escola && "true"}
                     value={mentor.escola}
                 />
+                {formErrors.escola && (<Typography color="secondary">{formErrors.escola}</Typography>)}
 
                 <SelectPrograma
-                    label="Programa"
+                    label="Programa*"
                     id="mentor[programaId]"
                     name="programaId"
                     onChange={handleChange}
                     value={mentor.programaId}
                 />
+                {formErrors.programa && (<Typography color="secondary">{formErrors.programa}</Typography>)}
+
                 <ButtonSubmit />
                 <ButtonMentorHome />
             </FormControl>

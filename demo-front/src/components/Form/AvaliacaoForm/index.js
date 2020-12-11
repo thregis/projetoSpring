@@ -1,4 +1,4 @@
-import { FormControl } from '@material-ui/core'
+import { FormControl, FormHelperText, Typography } from '@material-ui/core'
 import React from 'react'
 import ButtonAvaliacaoHome from '../../Buttons/ButtonAvaliacaoHome'
 import ButtonSubmit from '../../Buttons/ButtonSubmit'
@@ -9,6 +9,7 @@ import SelectMentoria from '../../Select/SelectMentoria'
 const AvaliacaoForm = ({ initialValues, handleSubmit }) => {
     console.log(initialValues)
     const [avaliacao, setAvaliacao] = React.useState(initialValues)
+    const [formErrors, setFormErrors] = React.useState({})
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -23,33 +24,54 @@ const AvaliacaoForm = ({ initialValues, handleSubmit }) => {
         event.preventDefault()
         console.log(avaliacao)
         handleSubmit(avaliacao)
+        setFormErrors(validate(avaliacao))
+    }
+
+    const validate = (avaliacao) => {
+        let errors = {}
+        if (!avaliacao.mentoriaId) {
+            errors.mentoria = "Campo necessário."
+        } else if (!avaliacao.disciplinaId) {
+            errors.disciplina = "Campo necessário."
+        } else if (!avaliacao.nota) {
+            errors.nota = "Campo necessário."
+        }
+        return errors
     }
 
     return (
         <form onSubmit={onSubmit}>
             <FormControl style={{ minWidth: 120 }}>
             <SelectMentoria
-                    label="Mentoria"
+                    label="Mentoria*"
                     id="avaliacao[mentoriaId]"
                     name="mentoriaId"
                     onChange={handleChange}
                     value={avaliacao.mentoriaId}
                 />
+                {formErrors.mentoria && (<Typography color="secondary">{formErrors.mentoria}</Typography>)}
+
                 <SelectDisciplina
-                    label="Disciplina"
+                    label="Disciplina*"
                     id="avaliacao[disciplinaId]"
                     name="disciplinaId"
                     onChange={handleChange}
                     value={avaliacao.disciplinaId}
                 />
+                {formErrors.disciplina && (<Typography color="secondary">{formErrors.disciplina}</Typography>)}
+
                 <Input
-                    label="Nota"
+                    label="Nota*"
                     id="avaliacao[nota]"
                     name="nota"
                     type="number"
                     onChange={handleChange}
                     value={avaliacao.nota}
+                    error={formErrors.nota && "true"}
                 />
+                <FormHelperText style={{ margin: 8 }}>Ex: 10,0</FormHelperText>
+                {formErrors.nota && (<Typography color="secondary">{formErrors.nota}</Typography>)}
+
 
                 <Input
                     label="Data"

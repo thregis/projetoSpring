@@ -45,7 +45,7 @@ const AlunoForm = ({ initialValues, handleSubmit }) => {
         <form onSubmit={onSubmit}>
             <FormControl style={{ minWidth: 120 }}>
                 <Input
-                    label="Nome"
+                    label="Nome*"
                     id="aluno[name]"
                     name="name"
                     onChange={handleChange}
