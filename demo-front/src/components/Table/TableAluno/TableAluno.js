@@ -25,6 +25,7 @@ const TableAluno = () => {
                             }
                         })
                             .then(({ data }) => {
+                                console.log(JSON.stringify(data, null, 4))
                                 resolve({
                                     data: data.content,
                                     page: data.pageable.pageNumber,

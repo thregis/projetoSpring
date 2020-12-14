@@ -19,7 +19,7 @@ function Index() {
         <Typography color="primary" style={{margin: 8}}>Integração do projeto com o front e aplicação de estilos.</Typography>
         <Typography color="primary" style={{margin: 8}}>Não sei mais o que colocar nessa página... <br/>
                                                         Olha esse panda vermelho.</Typography>
-        <img style= {{margin: 8}} src="http://2.bp.blogspot.com/-GQI5Fi3az0Y/TZ46hfWQ2II/AAAAAAAAJkI/HcGR4T8cjPs/s400/02.jpg"/>
+        <img style= {{margin: 8}} src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Ailurus_fulgens_RoterPanda_LesserPanda.jpg/800px-Ailurus_fulgens_RoterPanda_LesserPanda.jpg" width="20%" alt="panda vermelho"/>
         </>
     )
 }

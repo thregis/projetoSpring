@@ -13,6 +13,7 @@ export const deserializeAvaliacao = avaliacao => ({
     dataFormatada: new Date(avaliacao.data).toLocaleDateString(),
 })
 
+/*
 export const color = (event) =>{
     if (event.length< 3 || event.length > 50){
         return "secondary"
@@ -20,7 +21,7 @@ export const color = (event) =>{
         return 'primary'
 }
 
-/*
+
 export function validateInfo(value){
     let errors = {}
 
