@@ -27,6 +27,11 @@ const AvaliacaoForm = ({ initialValues, handleSubmit }) => {
         setFormErrors(validate(avaliacao))
     }
 
+    const onBlur = (event) => {
+        event.preventDefault()
+        setFormErrors(validate(avaliacao))
+    }
+
     const validate = (avaliacao) => {
         let errors = {}
         if (!avaliacao.mentoriaId) {
@@ -40,7 +45,7 @@ const AvaliacaoForm = ({ initialValues, handleSubmit }) => {
     }
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} onBlur={onBlur}>
             <FormControl style={{ minWidth: 120 }}>
             <SelectMentoria
                     label="Mentoria*"

@@ -29,6 +29,11 @@ const AlunoForm = ({ initialValues, handleSubmit }) => {
         setFormErrors(validate(aluno))
     }
 
+    const onBlur = (event) => {
+        event.preventDefault()
+        setFormErrors(validate(aluno))
+    }
+
     const validate = (aluno) => {
         let errors = {}
         if (!aluno.name) {
@@ -42,7 +47,7 @@ const AlunoForm = ({ initialValues, handleSubmit }) => {
     }
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} onBlur={onBlur}>
             <FormControl style={{ minWidth: 120 }}>
                 <Input
                     label="Nome*"

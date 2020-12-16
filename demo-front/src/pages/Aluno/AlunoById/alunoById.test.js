@@ -1,5 +1,6 @@
+import { Button } from '@material-ui/core';
 import '@testing-library/jest-dom/extend-expect';
-import { render, waitFor, screen } from '@testing-library/react'
+import { render, waitFor, screen, fireEvent } from '@testing-library/react'
 import {
     BrowserRouter as Router,
     Switch,
@@ -27,4 +28,15 @@ describe("Descrição de aluno", () => {
         await waitFor(() => expect(httpSpy).toHaveBeenCalledTimes(1))
         expect(getByText('Juca')).toBeInTheDocument()
     })*/
+
+
+    test('Chamada do evento de click em botões', () => {
+        const mockFunction = jest.fn()
+
+        const {getByText} = render(<Button onClick={mockFunction}>Remover aluno</Button>)
+
+        fireEvent.click(getByText('Remover aluno'))
+
+        expect(mockFunction).toHaveBeenCalled()
+    })
 })

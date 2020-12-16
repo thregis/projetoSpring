@@ -26,6 +26,11 @@ const MentorForm = ({ initialValues, handleSubmit }) => {
         setFormErrors(validate(mentor))
     }
 
+    const onBlur = (event) => {
+        event.preventDefault()
+        setFormErrors(validate(mentor))
+    }
+
     const validate = (mentor) => {
         let errors = {}
         if (!mentor.name) {
@@ -49,7 +54,7 @@ const MentorForm = ({ initialValues, handleSubmit }) => {
     }
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} onBlur={onBlur}>
             <FormControl style={{ minWidth: 120 }}>
                 <Input
                     label="Nome*"

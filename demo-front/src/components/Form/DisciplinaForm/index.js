@@ -27,6 +27,11 @@ const DisciplinaForm = ({ initialValues, handleSubmit }) => {
         setFormErrors(validate(disciplina))
     }
 
+    const onBlur = (event) => {
+        event.preventDefault()
+        setFormErrors(validate(disciplina))
+    }
+
     const validate = (disciplina) => {
         let errors = {}
         if (!disciplina.name){
@@ -40,7 +45,7 @@ const DisciplinaForm = ({ initialValues, handleSubmit }) => {
     }
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} onBlur={onBlur}>
             <FormControl style={{minWidth: 120}}>
             <Input
                 label="Nome*"

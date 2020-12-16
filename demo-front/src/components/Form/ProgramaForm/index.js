@@ -23,7 +23,11 @@ const ProgramaForm = ({ initialValues, handleSubmit }) => {
         console.log(programa)
         handleSubmit(programa)
         setFormErrors(validate(programa))
+    }
 
+    const onBlur = (event) => {
+        event.preventDefault()
+        setFormErrors(validate(programa))
     }
 
     const validate = (programa) => {
@@ -40,7 +44,7 @@ const ProgramaForm = ({ initialValues, handleSubmit }) => {
 
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} onBlur={onBlur}>
             <FormControl style={{ minWidth: 120 }}>
                 <Input
                     label="Nome*"
